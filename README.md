@@ -5,8 +5,50 @@
 ## Build Requirements
 
 * [JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2141151.html)
+* [Gradle](https://gradle.org)
 
 ## Setup
+
+Gradle can be acquired by direct download: [Gradle](https://gradle.org)
+
+...or through a Windows package manager like [Chocolatey](https://chocolatey.org)
+
+    choco install gradle
+
+...or through a Mac package manager like [Homebrew](https://brew.sh)
+
+    brew install gradle
+
+Once you have gradle installed jump to the 'Run the game' section and run those commands
+
+### Windows (IntelliJ)
+
+Additionally, many IDEs include Gradle by default. [IntelliJ IDEA](https://www.jetbrains.com/idea) is recommended.
+
+    choco install intellijidea-community
+
+To import the project into IntelliJ, follow these steps:
+
+- File -> New -> Project (from version control) -> GitHub
+- (or Check out from Version Control -> GitHub)
+    - Choose *Password* authorization and enter your GitHub username and password
+    - Git Repository URL: *https://github.com/bploeckelman/LudumDare41.git*
+    - Parent Directory: *{your choice}*
+    - Directory Name: *LudumDare41*
+    - *Clone*
+- 'Unlinked Gradle project' popup -> Import Gradle Project
+    - *Check* _'use auto-import'_
+    - *Uncheck* _'Create separate module per source set'_
+- Run -> Edit Configurations -> *+* -> Application
+    - Name: *desktop*
+    - Main class: *lando.systems.ld41.desktop.DesktopLauncher*
+    - Working Directory: {project root}*\core\assets*
+    - Use classpath of module: *desktop*
+    - Before Launch: *+* -> Run Gradle Task
+        - Gradle Project: *desktop*
+        - Tasks: *sprites*
+
+To setup the project in any other IDE, do something similar. (Feel free to open a pull request with details for other IDEs)
 
 ### Mac OS X
 
@@ -38,6 +80,12 @@ If you don't have a java IDE installed, you can easily download one
 Eclipse and Netbeans are also available through `brew cask`.
 
 ### Run the game!
+
+First, the images in the /sprites folder must be packed into a sprite atlas (re-run this command when images are added or removes from the /sprites folder):
+
+    ./gradlew desktop:sprites
+
+Then you can run the game!
 
     ./gradlew desktop:run
 
