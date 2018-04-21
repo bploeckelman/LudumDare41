@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import lando.systems.ld41.LudumDare41;
+
+import java.util.HashMap;
 
 public class Assets implements Disposable {
 
@@ -50,9 +53,8 @@ public class Assets implements Disposable {
     public BitmapFont font;
     public ShaderProgram fontShader;
 
-    // tank shit
-    public TextureRegion tankBody;
-    public TextureRegion tankTurret;
+    public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
+    public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
 
     public boolean initialized;
 
@@ -95,6 +97,8 @@ public class Assets implements Disposable {
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
 
+        loadTankAssets();
+
         // Initialize distance field font
         font = mgr.get(distanceFieldFontAsset);
         font.getData().setScale(.3f);
@@ -102,6 +106,25 @@ public class Assets implements Disposable {
         fontShader = mgr.get(distanceFieldShaderAsset);
 
         return 1f;
+    }
+
+    private void loadTankAssets() {
+        addTreads("lefttread");
+        addTreads("righttread");
+
+        addTank("browntank");
+    }
+
+    private void addTreads(String treadImage) {
+        Array treads = atlas.findRegions(treadImage);
+        tankAnimations.put(treadImage,
+                new Animation<TextureRegion>(0.15f, treads, Animation.PlayMode.LOOP));
+    }
+
+    private void addTank(String tankName) {
+        tanks.put(tankName, atlas.findRegion(tankName + "body"));
+        String turret = tankName + "turret";
+        tanks.put(turret, atlas.findRegion(turret));
     }
 
     @Override

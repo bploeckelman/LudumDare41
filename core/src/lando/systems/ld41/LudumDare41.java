@@ -67,10 +67,6 @@ public class LudumDare41 extends ApplicationAdapter {
         screen.render(assets.batch);
     }
 
-    public static TextureRegion getImage(String image) {
-        return game.assets.atlas.findRegion(image);
-    }
-
     @Override
     public void dispose () {
         tween = null;

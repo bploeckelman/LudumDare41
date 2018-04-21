@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import lando.systems.ld41.utils.TankAssets;
 
 public class Tank extends GameObject {
     public float speed = 200;
@@ -27,8 +27,11 @@ public class Tank extends GameObject {
     public float turretRotation;
     public Vector2 directionVector = new Vector2();
 
-    private TextureRegion body;
-    private TextureRegion turret;
+    private TankAssets tank;
+    private TextureRegion leftTread;
+    private TextureRegion rightTread;
+    private float leftTime;
+    private float rightTime;
 
     private float width;
     private float height;
@@ -38,9 +41,8 @@ public class Tank extends GameObject {
         this(screen, "browntank", 60, 60, new Vector2(100, 100));
     }
 
-    public Tank(GameScreen screen, String image, float width, float height, Vector2 startPosition) {
-        body = LudumDare41.getImage(image + "body");
-        turret = LudumDare41.getImage(image + "turret");
+    public Tank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition) {
+        tank = TankAssets.getTankAssets(tankName);
 
         this.width = width;
         this.height = height;
@@ -62,11 +64,18 @@ public class Tank extends GameObject {
             rotation -= rotationSpeed*dt;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            leftTime += dt;
+            rightTime += dt;
             updatePosition(speed*dt);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            leftTime -= dt;
+            rightTime -= dt;
             updatePosition(-speed*dt);
         }
+
+        leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
+        rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
 
         setTurretRotation();
     }
@@ -106,7 +115,17 @@ public class Tank extends GameObject {
 
     @Override
     public void render(SpriteBatch batch){
-        batch.draw(body, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation);
-        batch.draw(turret, position.x - width/2, position.y - height/2, width/2, height/2 , width, height, 1, 1, turretRotation);
+        float halfX = width/2;
+        float halfY = height/2;
+        float x = position.x - halfX;
+        float y = position.y - halfY;
+
+        if (leftTread != null) {
+            batch.draw(leftTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
+        }
+
+        batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
+        batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation);
     }
 }
