@@ -70,7 +70,7 @@ public class Tank extends GameObject {
     }
 
     private void updatePosition(float speed) {
-        //TODO make this use up stopped velocity so it can slide along edges found later in the boundry
+        //TODO make this use up stopped velocity so it can slide along edges found later in the boundary
         directionVector.set(1, 0);
         directionVector.setAngle(rotation + 90);
         directionVector.scl(speed);

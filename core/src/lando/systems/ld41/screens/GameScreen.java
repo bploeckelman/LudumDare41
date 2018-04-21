@@ -27,6 +27,8 @@ public class GameScreen extends BaseScreen {
         level = new Level("maps/test.tmx");
         showPowerMeter = false;
         powerMeter = new PowerMeter(2.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
+        worldCamera.position.set(playerTank.position, 0);
+        worldCamera.update();
     }
 
     @Override
