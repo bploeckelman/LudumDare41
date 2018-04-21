@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
-import lando.systems.ld41.utils.Assets;
 
 /**
  * Created by Brian Ploeckelman <brian.ploeckelman@wisc.edu> on 4/13/18.
@@ -19,8 +18,8 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
-        level = new Level();
         playerTank = new Tank();
+        level = new Level("maps/test.tmx");
     }
 
     @Override
@@ -31,7 +30,14 @@ public class GameScreen extends BaseScreen {
 
         playerTank.update(dt);
 
-        updateCamera();
+        // TODO: remove when proper camera controls are added
+        float moveSpeed = 200f * dt;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  worldCamera.translate(-moveSpeed, 0f);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) worldCamera.translate( moveSpeed, 0f);
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))    worldCamera.translate(0f,  moveSpeed);
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  worldCamera.translate(0f, -moveSpeed);
+        worldCamera.update();
+//        updateCamera();
     }
 
     @Override
@@ -42,13 +48,14 @@ public class GameScreen extends BaseScreen {
 
     private void renderGame(SpriteBatch batch) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        level.render(batch, worldCamera);
+
         batch.setProjectionMatrix(worldCamera.combined);
         batch.begin();
         {
-            level.render(batch);
             batch.setColor(Color.WHITE);
             playerTank.render(batch);
-
         }
         batch.end();
     }
