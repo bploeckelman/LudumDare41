@@ -17,6 +17,8 @@ import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
+import lando.systems.ld41.gameobjects.Turret;
+
 
 /**
  * Created by Brian Ploeckelman <brian.ploeckelman@wisc.edu> on 4/13/18.
@@ -27,15 +29,18 @@ public class GameScreen extends BaseScreen {
 
     public Tank playerTank;
     public Level level;
-    public ParticleSystem particleSystem;
     public PowerMeter powerMeter;
     public boolean showPowerMeter;
     public boolean levelZoomDone;
+    public ParticleSystem particleSystem;
+    public Turret turret1;
+    public Turret turret2;
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
         playerTank = new Tank(this);
         level = new Level("maps/test.tmx");
+
         showPowerMeter = false;
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
@@ -43,6 +48,10 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         enterLevelZoom();
+        turret1 = new Turret(this, playerTank, 20, 20, new Vector2(900, 100));
+        turret1.init(playerTank);
+        turret2 = new Turret(this, playerTank,20, 20, new Vector2(900, 500));
+        turret2.init(playerTank);
     }
 
     @Override
@@ -58,6 +67,8 @@ public class GameScreen extends BaseScreen {
 
         playerTank.update(dt);
         particleSystem.update(dt);
+        turret1.update(dt);
+        turret2.update(dt);
 
         cameraTargetPos.set(playerTank.position, 0f);
         if (levelZoomDone) {
@@ -84,6 +95,9 @@ public class GameScreen extends BaseScreen {
             batch.setColor(Color.WHITE);
             particleSystem.render(batch);
             playerTank.render(batch);
+            turret1.render(batch);
+            turret2.render(batch);
+
         }
         batch.end();
     }
@@ -156,5 +170,6 @@ public class GameScreen extends BaseScreen {
                            }))
                 .start(LudumDare41.game.tween);
     }
+
 
 }

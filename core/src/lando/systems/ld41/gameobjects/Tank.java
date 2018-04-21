@@ -17,6 +17,7 @@ public class Tank extends GameObject {
     private final float TRACK_OFFSET = 20f;
 
     private Vector3 camera = new Vector3();
+
     public Vector2 position;
     private Vector2 oldPosition;
     private Vector2 newPosition;
