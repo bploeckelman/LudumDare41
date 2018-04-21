@@ -36,7 +36,7 @@ public class GameScreen extends BaseScreen {
             game.screen = new TitleScreen();
         }
 
-        if (Gdx.input.isButtonPressed(0))
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
         {
             showPowerMeter = true;
         }
