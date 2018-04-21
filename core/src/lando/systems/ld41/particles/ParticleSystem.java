@@ -31,7 +31,7 @@ public class ParticleSystem {
 
                 particle.init(posX, posY, velX, velY, -velX, -velY,
                               0.5f, grayValue, grayValue, grayValue, 1f,
-                              grayValue, grayValue, grayValue, 1f, scale, ttl, LudumDare41.game.assets.whitePixel);
+                              grayValue, grayValue, grayValue, 1f, scale, ttl, LudumDare41.getImage("white-pixel"));
                 activeParticles.add(particle);
             }
         }
