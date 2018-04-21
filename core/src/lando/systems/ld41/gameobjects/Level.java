@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,8 +22,13 @@ import lando.systems.ld41.LudumDare41;
 public class Level {
 
     private boolean showDebug;
+
     TiledMap map;
     TiledMapRenderer mapRenderer;
+    MapLayer collisionLayer;
+    MapLayer groundLayer;
+    MapLayer wallsLayer;
+    MapLayer objectsLayer;
 
     Polyline boundary;
     Array<EllipseMapObject> circles;
@@ -44,17 +50,24 @@ public class Level {
         mapRenderer = new OrthoCachedTiledMapRenderer(map);
         ((OrthoCachedTiledMapRenderer) mapRenderer).setBlending(true);
 
-        // TODO: load map entities
+        // Validate that required map layers are available
+        MapLayers layers = map.getLayers();
+        collisionLayer = layers.get("collision");
+        groundLayer    = layers.get("ground");
+        wallsLayer     = layers.get("walls");
+        objectsLayer   = layers.get("objects");
+        if (collisionLayer == null || groundLayer == null || wallsLayer == null || objectsLayer == null) {
+            throw new GdxRuntimeException("Missing required map layer. (required: 'collision', 'ground', 'walls', 'objects'");
+        }
+
+        // TODO: load map objects
 
         // load collision polygons
-        MapLayer collisionLayer = map.getLayers().get("collision");
         Array<PolylineMapObject> bounds = collisionLayer.getObjects().getByType(PolylineMapObject.class);
         if (bounds.size < 1) throw new GdxRuntimeException("Forgot to add boundary layer to the map");
         boundary = bounds.get(0).getPolyline();
 
         circles = collisionLayer.getObjects().getByType(EllipseMapObject.class);
-
-
     }
 
     public void update(float dt){
