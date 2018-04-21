@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
-public class Tank {
+public class Tank extends GameObject {
     public float speed = 200;
     public static float rotationSpeed = 120;
 
@@ -51,6 +51,7 @@ public class Tank {
         this.screen = screen;
     }
 
+    @Override
     public void update(float dt){
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
             rotation += rotationSpeed*dt;
@@ -94,6 +95,7 @@ public class Tank {
                 camera.x - position.x) * 180 / Math.PI) - 90;
     }
 
+    @Override
     public void render(SpriteBatch batch){
         batch.draw(body, position.x - width/2, position.y - height/2, width/2, height/2, width, height, 1, 1, rotation);
         batch.draw(turret, position.x - width/2, position.y - height/2, width/2, height/2 , width, height, 1, 1, turretRotation);
