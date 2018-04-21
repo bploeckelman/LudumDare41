@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.utils.Assets;
 
@@ -14,9 +15,11 @@ import lando.systems.ld41.utils.Assets;
 public class GameScreen extends BaseScreen {
 
     public Tank playerTank;
+    public Level level;
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
+        level = new Level();
         playerTank = new Tank();
     }
 
@@ -42,6 +45,7 @@ public class GameScreen extends BaseScreen {
         batch.setProjectionMatrix(worldCamera.combined);
         batch.begin();
         {
+            level.render(batch);
             batch.setColor(Color.WHITE);
             playerTank.render(batch);
 
