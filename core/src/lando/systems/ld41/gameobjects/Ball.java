@@ -62,18 +62,18 @@ public class Ball {
     public void render(SpriteBatch batch){
         if (onTank) return;
 
-        batch.draw(LudumDare41.game.assets.whiteCircle, position.x -radius, position.y-radius, radius*2, radius*2);
+        batch.draw(LudumDare41.game.assets.ballBrown, position.x -radius, position.y-radius, radius*2, radius*2);
     }
 
     public void shootBall(Vector2 position, Vector2 velocity){
         this.position.set(position);
         this.velocity.set(velocity);
-        pickupDelay = 2f;
+        pickupDelay = 1f;
         onTank = false;
     }
 
     public void checkCollision(Tank tank){
-        if (onTank || pickupDelay > 0 || velocity.len() > 50) return;
+        if (onTank || pickupDelay > 0) return;
         if (position.dst(tank.position) < radius + tank.radius){
             onTank = true;
         }

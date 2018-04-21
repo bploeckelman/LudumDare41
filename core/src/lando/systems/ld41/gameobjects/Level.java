@@ -122,7 +122,7 @@ public class Level {
 
             // Check if the traveling path intersects the segment
             if (Intersector.intersectSegments(oldPosition, newPosition, tempVector, tempVector2, collisionPoint)){
-                normal.set((tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
                 normal.nor();
                 collisionPoint.add(normal.scl(radius));
                 normal.nor();

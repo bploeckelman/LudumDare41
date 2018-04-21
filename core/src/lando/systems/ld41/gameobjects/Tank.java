@@ -145,7 +145,7 @@ public class Tank extends GameObject {
             directionVector.setAngle(turretRotation);
 
             tempVector.set(position).add(directionVector.scl(30));
-            batch.draw(LudumDare41.game.assets.whiteCircle, position.x + directionVector.x - 5, position.y + directionVector.y -5,  5, 5, 10, 10, 1, 1, turretRotation - 90);
+            batch.draw(LudumDare41.game.assets.ballBrown, position.x + directionVector.x - 5, position.y + directionVector.y -5,  5, 5, 10, 10, 1, 1, turretRotation - 90);
         }
         ball.render(batch);
     }
