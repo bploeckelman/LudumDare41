@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
@@ -79,7 +80,33 @@ public class Level {
      * @return if there was an intersection
      */
     public boolean checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
-//        Intersector.intersectSegmentCircleDisplace()
+        int vertLength = boundry.getVertices().length;
+        for (int i = 0; i < vertLength; i+= 2){
+            tempVector.set(boundry.getTransformedVertices()[i], boundry.getTransformedVertices()[i+1]);
+            tempVector2.set(boundry.getTransformedVertices()[(i+2)%vertLength], boundry.getTransformedVertices()[(i+3)%vertLength]);
+
+            // Check if the traveling path intersects the segment
+            if (Intersector.intersectSegments(oldPosition, newPosition, tempVector, tempVector2, collisionPoint)){
+                normal.set((tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                normal.nor();
+                collisionPoint.add(normal.scl(radius));
+                normal.nor();
+
+                return true;
+            }
+
+            // Check if the segments are within the radius of the object
+            if (Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition) < radius){
+                Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
+                normal.set((tempVector2.y - tempVector.y),-1* (tempVector2.x - tempVector.x));
+                normal.nor();
+                collisionPoint.add(normal.scl(radius));
+                normal.nor();
+
+                return true;
+            }
+
+        }
         return false;
     }
 

@@ -23,7 +23,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
-        playerTank = new Tank();
+        playerTank = new Tank(this);
         level = new Level("maps/test.tmx");
         showPowerMeter = false;
         powerMeter = new PowerMeter(2.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
