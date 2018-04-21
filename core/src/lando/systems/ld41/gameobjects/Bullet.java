@@ -9,6 +9,7 @@ public class Bullet {
 
     private static int BULLET_WIDTH = 15;
     private static int BULLET_HEIGHT = 15;
+    private static int BULLET_VELOCITY = 100;
     public Vector2 velocity;
     public float radius;
     private GameScreen screen;
@@ -42,7 +43,7 @@ public class Bullet {
         directionVector.set(1, 0);
         oldPosition.set(position);
         newPosition.set(position);
-        newPosition.add(velocity.nor().x * 100 * dt, velocity.nor().y * 100 * dt);
+        newPosition.add(velocity.nor().x * BULLET_VELOCITY * dt, velocity.nor().y * BULLET_VELOCITY * dt);
         if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollision(playerTank)) {
             alive = false;
         } else {
