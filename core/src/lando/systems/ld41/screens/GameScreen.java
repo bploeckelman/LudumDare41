@@ -9,6 +9,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.Level;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.gameobjects.Tank;
+import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
 
 /**
@@ -20,12 +21,14 @@ public class GameScreen extends BaseScreen {
     public Level level;
     public PowerMeter powerMeter;
     public boolean showPowerMeter;
+    public ParticleSystem particleSystem;
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
         playerTank = new Tank(this);
         level = new Level("maps/test.tmx");
         showPowerMeter = false;
+        particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(2.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
         worldCamera.position.set(playerTank.position, 0);
         worldCamera.update();
@@ -53,6 +56,7 @@ public class GameScreen extends BaseScreen {
         }
 
         playerTank.update(dt);
+        particleSystem.update(dt);
 
         cameraTargetPos.set(playerTank.position, 0f);
         updateCamera();
@@ -73,9 +77,15 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             batch.setColor(Color.WHITE);
+            particleSystem.render(batch);
             playerTank.render(batch);
         }
         batch.end();
+    }
+
+    public void addTireTrack(float x, float y, float speed)
+    {
+        particleSystem.addTracks(x, y, speed);
     }
 
     private void renderUI(SpriteBatch batch) {

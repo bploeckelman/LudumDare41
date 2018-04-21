@@ -9,10 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class Tank extends GameObject {
     public float speed = 200;
     public static float rotationSpeed = 120;
+    private final float TRACK_OFFSET = 20f;
 
     private Vector3 camera = new Vector3();
     public Vector2 position;
@@ -83,6 +85,13 @@ public class Tank extends GameObject {
         }
 
         position.set(newPosition);
+
+        // Add track trail for both left and right tracks
+        float yTrackOffset = MathUtils.sinDeg(rotation) * TRACK_OFFSET;
+        float xTrackOffset = MathUtils.cosDeg(rotation) * TRACK_OFFSET;
+        
+        screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, 1f);
+        screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, 1f);
     }
 
     private void setTurretRotation() {
