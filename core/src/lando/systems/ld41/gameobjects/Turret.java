@@ -11,7 +11,7 @@ import lando.systems.ld41.screens.GameScreen;
 
 
 public class Turret {
-    public static float FIRE_RATE = 200;
+    public static float FIRE_RATE = 4;
     public static float TURRET_WIDTH = 30;
     public static float TURRET_HEIGHT = 30;
 
@@ -25,7 +25,7 @@ public class Turret {
     public Bullet newBullet;
     public Tank playerTank;
     public boolean alive = true;
-    private int timer = 0;
+    private float timer = 0;
     private GameScreen screen;
 
     public Turret(GameScreen screen, Tank playerTank, int width, int height, Vector2 startPosition){
@@ -41,8 +41,8 @@ public class Turret {
     }
 
     public void update(float dt){
-        timer++;
-        if (alive && timer > FIRE_RATE) {
+        timer+=dt;
+        if (playerTank.isFirstBallFired && alive && timer > FIRE_RATE) {
             fireBullet();
             timer = 0;
         }

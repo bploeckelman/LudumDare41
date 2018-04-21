@@ -52,7 +52,7 @@ public class Bullet {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(LudumDare41.game.assets.whitePixel, position.x, position.y, position.x, position.y , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
+        batch.draw(LudumDare41.game.assets.whitePixel, position.x, position.y, position.x/2, position.y/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
     }
 
     public boolean checkCollision(Tank tank){

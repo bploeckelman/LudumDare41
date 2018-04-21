@@ -43,6 +43,7 @@ public class Tank extends GameObject {
     private float height;
     private GameScreen screen;
     public Ball ball;
+    public boolean isFirstBallFired = false;
 
     public Tank(GameScreen screen) {
         this(screen, "browntank", 60, 60, new Vector2(100, 100));
@@ -242,6 +243,8 @@ public class Tank extends GameObject {
         directionVector.nor();
 
         directionVector.scl(20 + (5 * power));
+
+        isFirstBallFired = true;
 
         ball.shootBall(tempVector, directionVector);
     }
