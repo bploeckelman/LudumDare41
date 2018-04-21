@@ -28,9 +28,9 @@ public abstract class BaseScreen extends InputAdapter {
     private static final float DRAG_DELTA = 10f;
     private static final float ZOOM_LERP = .1f;
     private static final float PAN_LERP = .2f;
-    private boolean cancelTouchUp = false;
-    private Vector3 cameraTouchStart = new Vector3();
-    private Vector3 touchStart = new Vector3();
+    protected boolean cancelTouchUp = false;
+    protected Vector3 cameraTouchStart = new Vector3();
+    protected Vector3 touchStart = new Vector3();
 
     public Vector3 cameraTargetPos = new Vector3();
     public MutableFloat targetZoom = new MutableFloat(1f);
@@ -59,16 +59,8 @@ public abstract class BaseScreen extends InputAdapter {
         worldCamera.zoom = MathUtils.lerp(worldCamera.zoom, targetZoom.floatValue(), ZOOM_LERP);
         worldCamera.zoom = MathUtils.clamp(worldCamera.zoom, MIN_ZOOM, MAX_ZOOM);
 
-        // TODO: either override this method or pass these values in from whatever the world object is
-        float worldBoundsMinX = -1000f;
-        float worldBoundsMaxX =  1000f;
-        float worldBoundsMinY = -1000f;
-        float worldBoundsMaxY =  1000f;
-
         worldCamera.position.x = MathUtils.lerp(worldCamera.position.x, cameraTargetPos.x, PAN_LERP);
         worldCamera.position.y = MathUtils.lerp(worldCamera.position.y, cameraTargetPos.y, PAN_LERP);
-        worldCamera.position.x = MathUtils.clamp(worldCamera.position.x, worldBoundsMinX, worldBoundsMaxX);
-        worldCamera.position.y = MathUtils.clamp(worldCamera.position.y, worldBoundsMinY, worldBoundsMaxY);
         worldCamera.update();
     }
 

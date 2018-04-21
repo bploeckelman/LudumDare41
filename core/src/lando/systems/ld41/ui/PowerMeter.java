@@ -25,7 +25,7 @@ public class PowerMeter {
 
     public PowerMeter(float lifeTime, Vector2 position)
     {
-        interp = Interpolation.fade;
+        interp = Interpolation.pow2In;
         this.lifeTime = lifeTime;
         this.position = position;
         textureRegion = LudumDare41.game.assets.testTexture;

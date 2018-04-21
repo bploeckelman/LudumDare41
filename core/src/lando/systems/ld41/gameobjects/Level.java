@@ -14,7 +14,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
-import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.LudumDare41;
@@ -25,10 +28,10 @@ public class Level {
 
     TiledMap map;
     TiledMapRenderer mapRenderer;
-    MapLayer collisionLayer;
-    MapLayer groundLayer;
-    MapLayer wallsLayer;
-    MapLayer objectsLayer;
+    public MapLayer collisionLayer;
+    public TiledMapTileLayer groundLayer;
+    public TiledMapTileLayer wallsLayer;
+    public MapLayer objectsLayer;
 
     Polyline boundary;
     Array<EllipseMapObject> circles;
@@ -53,8 +56,8 @@ public class Level {
         // Validate that required map layers are available
         MapLayers layers = map.getLayers();
         collisionLayer = layers.get("collision");
-        groundLayer    = layers.get("ground");
-        wallsLayer     = layers.get("walls");
+        groundLayer    = (TiledMapTileLayer) layers.get("ground");
+        wallsLayer     = (TiledMapTileLayer) layers.get("walls");
         objectsLayer   = layers.get("objects");
         if (collisionLayer == null || groundLayer == null || wallsLayer == null || objectsLayer == null) {
             throw new GdxRuntimeException("Missing required map layer. (required: 'collision', 'ground', 'walls', 'objects'");
@@ -94,7 +97,7 @@ public class Level {
 
                 for (int i = 0; i < circles.size; i++){
                     Ellipse circle = circles.get(i).getEllipse();
-                    shapes.circle(circle.x, circle.y, circle.height);
+                    shapes.circle(circle.x, circle.y, circle.height / 2);
                 }
             }
             shapes.end();
@@ -119,7 +122,7 @@ public class Level {
 
             // Check if the traveling path intersects the segment
             if (Intersector.intersectSegments(oldPosition, newPosition, tempVector, tempVector2, collisionPoint)){
-                normal.set((tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
                 normal.nor();
                 collisionPoint.add(normal.scl(radius));
                 normal.nor();
@@ -142,12 +145,12 @@ public class Level {
 
         for (int i = 0; i < circles.size; i++){
             Ellipse circle = circles.get(i).getEllipse();
-            if (newPosition.dst(circle.x, circle.y) < radius + circle.height){
+            if (newPosition.dst(circle.x, circle.y) < radius + circle.height / 2f){
                 normal.set(newPosition);
                 normal.sub(circle.x, circle.y);
                 normal.nor();
                 collisionPoint.set(circle.x, circle.y);
-                normal.scl(radius + circle.height);
+                normal.scl(radius + circle.height / 2f);
                 collisionPoint.add(normal);
                 normal.nor();
                 return true;
