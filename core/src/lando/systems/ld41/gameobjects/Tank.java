@@ -26,6 +26,7 @@ public class Tank extends GameObject {
     public float rotation;
     public float turretRotation;
     public Vector2 directionVector = new Vector2();
+    public Vector2 tempVector;
 
     private TankAssets tank;
     private TextureRegion leftTread;
@@ -36,6 +37,7 @@ public class Tank extends GameObject {
     private float width;
     private float height;
     private GameScreen screen;
+    public Ball ball;
 
     public Tank(GameScreen screen) {
         this(screen, "browntank", 60, 60, new Vector2(100, 100));
@@ -53,6 +55,8 @@ public class Tank extends GameObject {
         collisionPoint = new Vector2();
         normal = new Vector2();
         this.screen = screen;
+        ball = new Ball(screen);
+        tempVector = new Vector2();
     }
 
     @Override
@@ -77,10 +81,15 @@ public class Tank extends GameObject {
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
         rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
 
+        ball.update(dt);
+        ball.checkCollision(this);
         setTurretRotation();
     }
 
     private void updatePosition(float speed) {
+        // Don't move if you have the ball
+        if (ball.onTank) return;
+
         //TODO make this use up stopped velocity so it can slide along edges found later in the boundary
         directionVector.set(1, 0);
         directionVector.setAngle(rotation + 90);
@@ -110,7 +119,7 @@ public class Tank extends GameObject {
 
         turretRotation = (float)(Math.atan2(
                 camera.y - position.y,
-                camera.x - position.x) * 180 / Math.PI) - 90;
+                camera.x - position.x) * 180 / Math.PI);
     }
 
     @Override
@@ -126,6 +135,27 @@ public class Tank extends GameObject {
         }
 
         batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
-        batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation);
+        batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+
+        if (ball.onTank){
+            directionVector.set(0, 1);
+            directionVector.setAngle(turretRotation);
+
+            tempVector.set(position).add(directionVector.scl(30));
+            batch.draw(LudumDare41.game.assets.whiteCircle, position.x + directionVector.x - 5, position.y + directionVector.y -5,  5, 5, 10, 10, 1, 1, turretRotation - 90);
+        }
+        ball.render(batch);
+    }
+
+    public void shootBall(float power){
+        directionVector.set(0, 1);
+        directionVector.setAngle(turretRotation);
+
+        tempVector.set(position).add(directionVector.scl(30));
+        directionVector.nor();
+
+        directionVector.scl(20 + (5 * power));
+
+        ball.shootBall(tempVector, directionVector);
     }
 }

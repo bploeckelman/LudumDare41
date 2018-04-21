@@ -28,9 +28,9 @@ public abstract class BaseScreen extends InputAdapter {
     private static final float DRAG_DELTA = 10f;
     private static final float ZOOM_LERP = .1f;
     private static final float PAN_LERP = .2f;
-    private boolean cancelTouchUp = false;
-    private Vector3 cameraTouchStart = new Vector3();
-    private Vector3 touchStart = new Vector3();
+    protected boolean cancelTouchUp = false;
+    protected Vector3 cameraTouchStart = new Vector3();
+    protected Vector3 touchStart = new Vector3();
 
     public Vector3 cameraTargetPos = new Vector3();
     public MutableFloat targetZoom = new MutableFloat(1f);

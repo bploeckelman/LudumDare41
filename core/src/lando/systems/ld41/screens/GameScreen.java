@@ -29,7 +29,7 @@ public class GameScreen extends BaseScreen {
         level = new Level("maps/test.tmx");
         showPowerMeter = false;
         particleSystem = new ParticleSystem();
-        powerMeter = new PowerMeter(2.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
+        powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
         worldCamera.position.set(playerTank.position, 0);
         worldCamera.update();
     }
@@ -39,16 +39,6 @@ public class GameScreen extends BaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
             game.screen = new TitleScreen();
-        }
-
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-        {
-            showPowerMeter = true;
-        }
-        else
-        {
-            showPowerMeter = false;
-            powerMeter.reset();
         }
 
         if (showPowerMeter) {
@@ -100,6 +90,28 @@ public class GameScreen extends BaseScreen {
 //            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         }
         batch.end();
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == 0 && playerTank.ball.onTank){
+            showPowerMeter = true;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (button == 0){
+            if (playerTank.ball.onTank && showPowerMeter){
+                playerTank.shootBall(powerMeter.power);
+            }
+
+            showPowerMeter = false;
+            powerMeter.reset();
+        }
+        return true;
     }
 
 }
