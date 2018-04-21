@@ -52,14 +52,8 @@ public class GameScreen extends BaseScreen {
 
         playerTank.update(dt);
 
-        // TODO: remove when proper camera controls are added
-        float moveSpeed = 200f * dt;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  worldCamera.translate(-moveSpeed, 0f);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) worldCamera.translate( moveSpeed, 0f);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))    worldCamera.translate(0f,  moveSpeed);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  worldCamera.translate(0f, -moveSpeed);
-        worldCamera.update();
-//        updateCamera();
+        cameraTargetPos.set(playerTank.position, 0f);
+        updateCamera();
     }
 
     @Override
