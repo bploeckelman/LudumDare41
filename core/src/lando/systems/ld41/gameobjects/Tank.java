@@ -83,7 +83,9 @@ public class Tank extends GameObject {
 
         ball.update(dt);
         ball.checkCollision(this);
-        setTurretRotation();
+        if (ball.onTank) {
+            setTurretRotation();
+        }
     }
 
     private void updatePosition(float speed) {
