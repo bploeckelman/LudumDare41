@@ -18,7 +18,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
-        playerTank = new Tank();
+        playerTank = new Tank(this);
         level = new Level("maps/test.tmx");
     }
 
