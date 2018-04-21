@@ -12,6 +12,10 @@ import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.TankAssets;
 
 public class Tank extends GameObject {
+    public enum TankMovement {
+        None, LeftForward, RightForward, Forward, LeftBack, RightBack, Back, SpinLeft, SpinRight
+    }
+
     public float speed = 200;
     public static float rotationSpeed = 120;
     private final float TRACK_OFFSET = 20f;
@@ -43,6 +47,8 @@ public class Tank extends GameObject {
 
     public Tank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition) {
         tank = TankAssets.getTankAssets(tankName);
+        leftTread = tank.leftTreads.getKeyFrame(0);
+        rightTread = tank.rightTreads.getKeyFrame(0);
 
         this.width = width;
         this.height = height;
@@ -57,34 +63,107 @@ public class Tank extends GameObject {
 
     @Override
     public void update(float dt){
-        if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            rotation += rotationSpeed*dt;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)){
-            rotation -= rotationSpeed*dt;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            leftTime += dt;
-            rightTime += dt;
-            updatePosition(speed*dt);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            leftTime -= dt;
-            rightTime -= dt;
-            updatePosition(-speed*dt);
-        }
-
-        leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
-        rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
-
+        setMovement(dt);
         setTurretRotation();
     }
 
-    private void updatePosition(float speed) {
+    private void setMovement(float dt) {
+        TankMovement movement = getTankMovement();
+
+        float speedDx = 0;
+        float rotationDx = 0;
+        float halfDt = dt/2;
+        float fullSpeed = speed*dt;
+
+        switch (movement) {
+            case RightForward:
+                rotationDx = rotationSpeed*halfDt;
+                rightTime += dt;
+                leftTime += halfDt;
+                speedDx = speed*halfDt;
+                break;
+            case Forward:
+                rightTime += dt;
+                leftTime += dt;
+                speedDx = fullSpeed;
+                break;
+            case LeftForward:
+                rotationDx = -rotationSpeed*halfDt;
+                rightTime += halfDt;
+                leftTime += dt;
+                speedDx = speed*halfDt;
+                break;
+            case RightBack:
+                rotationDx = -rotationSpeed*halfDt;
+                rightTime -= dt;
+                leftTime -= halfDt;
+                speedDx = -speed*halfDt;
+                break;
+            case Back:
+                rightTime -= dt;
+                leftTime -= dt;
+                speedDx = -(fullSpeed *0.75f);
+                break;
+            case LeftBack:
+                rotationDx = rotationSpeed*halfDt;
+                rightTime -= halfDt;
+                leftTime -= dt;
+                speedDx = -speed*halfDt;
+                break;
+            case SpinLeft:
+                rightTime += dt;
+                leftTime -= dt;
+                rotationDx = rotationSpeed*dt;
+                break;
+            case SpinRight:
+                rightTime -= dt;
+                leftTime += dt;
+                rotationDx = -rotationSpeed*dt;
+                break;
+            default:
+                return;
+        }
+
+        // temp - roll forward
+        if (leftTime < 0) {
+            leftTime = 0;
+        }
+        if (rightTime < 0) {
+            rightTime = 0;
+        }
+
+        updatePosition(speedDx, rotationDx);
+    }
+
+    private TankMovement getTankMovement() {
+        boolean leftForward = Gdx.input.isKeyPressed(Input.Keys.W);
+        boolean leftBack = !leftForward && Gdx.input.isKeyPressed(Input.Keys.S);
+        boolean rightForward = Gdx.input.isKeyPressed(Input.Keys.E);
+        boolean rightBack = !rightForward && Gdx.input.isKeyPressed(Input.Keys.D);
+
+        if (leftForward && rightForward) {
+            return TankMovement.Forward;
+        } else if (leftForward) {
+            return (rightBack) ? TankMovement.SpinRight : TankMovement.LeftForward;
+        } else if (rightForward) {
+            return (leftBack) ? TankMovement.SpinLeft : TankMovement.RightForward;
+        } else if (leftBack && rightBack) {
+            return TankMovement.Back;
+        } else if (leftBack) {
+            return TankMovement.LeftBack;
+        } else if (rightBack) {
+            return TankMovement.RightBack;
+        }
+        return TankMovement.None;
+    }
+
+    private void updatePosition(float speedUpdate, float rotationUpdate) {
+        rotation += rotationUpdate;
+
         //TODO make this use up stopped velocity so it can slide along edges found later in the boundary
         directionVector.set(1, 0);
         directionVector.setAngle(rotation + 90);
-        directionVector.scl(speed);
+        directionVector.scl(speedUpdate);
         oldPosition.set(position);
         newPosition.set(position);
         newPosition.add(directionVector);
@@ -101,6 +180,9 @@ public class Tank extends GameObject {
         
         screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, 1f);
         screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, 1f);
+
+        leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
+        rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
     }
 
     private void setTurretRotation() {
