@@ -2,6 +2,7 @@ package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.*;
@@ -34,7 +36,11 @@ public class Level {
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 
-        map = (new TmxMapLoader()).load(mapFileName);
+        map = (new TmxMapLoader()).load(mapFileName, new TmxMapLoader.Parameters() {{
+            generateMipMaps = true;
+            textureMinFilter = Texture.TextureFilter.MipMap;
+            textureMagFilter = Texture.TextureFilter.MipMap;
+        }});
         mapRenderer = new OrthoCachedTiledMapRenderer(map);
         ((OrthoCachedTiledMapRenderer) mapRenderer).setBlending(true);
 
