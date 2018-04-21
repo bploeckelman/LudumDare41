@@ -203,7 +203,7 @@ public class Tank extends GameObject {
     private void setTurretRotation() {
         camera.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
-        LudumDare41.game.screen.worldCamera.unproject(camera);
+        screen.worldCamera.unproject(camera);
 
         turretRotation = (float)(Math.atan2(
                 camera.y - position.y,

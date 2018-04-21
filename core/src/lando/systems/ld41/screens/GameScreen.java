@@ -16,6 +16,7 @@ import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
+import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
 import lando.systems.ld41.gameobjects.Catapult;
 
@@ -37,9 +38,8 @@ public class GameScreen extends BaseScreen {
     public Catapult catapult2;
 
     public GameScreen() {
-        Gdx.input.setInputProcessor(this);
         playerTank = new Tank(this);
-        level = new Level("maps/test.tmx");
+        level = new Level(this, "maps/test.tmx");
 
         showPowerMeter = false;
         particleSystem = new ParticleSystem();
@@ -58,7 +58,7 @@ public class GameScreen extends BaseScreen {
     public void update(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
-            game.screen = new TitleScreen();
+            game.setScreen(new TitleScreen());
         }
 
         if (showPowerMeter) {
@@ -80,6 +80,12 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(SpriteBatch batch) {
+        batch.begin();
+        batch.setProjectionMatrix(hudCamera.combined);
+        batch.setColor(Config.bgColor);
+        batch.draw(LudumDare41.game.assets.whitePixel,0,0, hudCamera.viewportWidth, hudCamera.viewportHeight);
+        batch.end();
+
         renderGame(batch);
         renderUI(batch);
     }
@@ -151,7 +157,7 @@ public class GameScreen extends BaseScreen {
                 level.groundLayer.getWidth()  * level.groundLayer.getTileWidth()  * CAMERA_ZOOM_MARGIN / worldCamera.viewportWidth,
                 level.groundLayer.getHeight() * level.groundLayer.getTileHeight() * CAMERA_ZOOM_MARGIN / worldCamera.viewportHeight);
         Timeline.createSequence()
-                .pushPause(0.5f)
+                .pushPause(1.1f)
                 .push(Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
                            .target(level.groundLayer.getWidth()  / 2 * level.groundLayer.getTileWidth(),
                                    level.groundLayer.getHeight() / 2 * level.groundLayer.getTileHeight(),

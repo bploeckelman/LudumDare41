@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.screens.GameScreen;
 
 public class Level {
 
@@ -37,11 +38,12 @@ public class Level {
     Array<EllipseMapObject> circles;
     Vector2 tempVector;
     Vector2 tempVector2;
+    GameScreen screen;
 
-
-    public Level(String mapFileName){
+    public Level(GameScreen screen, String mapFileName){
         showDebug = true;
 
+        this.screen = screen;
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 
@@ -84,7 +86,7 @@ public class Level {
             ShapeRenderer shapes = LudumDare41.game.assets.shapes;
             shapes.begin(ShapeRenderer.ShapeType.Line);
             shapes.setColor(Color.RED);
-            shapes.setProjectionMatrix(LudumDare41.game.screen.worldCamera.combined);
+            shapes.setProjectionMatrix(screen.worldCamera.combined);
             {
                 for (int j=0; j < boundaries.size; j++) {
                     Polyline boundary = boundaries.get(j).getPolyline();

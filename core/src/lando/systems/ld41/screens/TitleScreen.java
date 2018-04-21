@@ -3,8 +3,11 @@ package lando.systems.ld41.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Config;
 
 public class TitleScreen extends BaseScreen {
 
@@ -18,7 +21,7 @@ public class TitleScreen extends BaseScreen {
             Gdx.app.exit();
         }
         if (Gdx.input.justTouched()) {
-            game.screen = new GameScreen();
+            game.setScreen(new GameScreen());
         }
 
         // ...
@@ -26,9 +29,13 @@ public class TitleScreen extends BaseScreen {
 
     @Override
     public void render(SpriteBatch batch) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
         {
+            batch.setColor(Config.bgColor);
+            batch.draw(LudumDare41.game.assets.whitePixel,0,0, hudCamera.viewportWidth, hudCamera.viewportHeight);
             batch.setColor(Color.DARK_GRAY);
             batch.draw(game.assets.whitePixel, hudCamera.viewportWidth / 2f - 150f, hudCamera.viewportHeight / 2f - 150f, 300f, 300f);
 

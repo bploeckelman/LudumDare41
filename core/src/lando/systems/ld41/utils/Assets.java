@@ -1,5 +1,6 @@
 package lando.systems.ld41.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.LudumDare41;
 
 import java.util.HashMap;
@@ -53,6 +55,17 @@ public class Assets implements Disposable {
 
     public BitmapFont font;
     public ShaderProgram fontShader;
+
+    public static Array<ShaderProgram> randomTransitions;
+    public static ShaderProgram blindsShader;
+    public static ShaderProgram fadeShader;
+    public static ShaderProgram radialShader;
+    public static ShaderProgram doomShader;
+    public static ShaderProgram pizelizeShader;
+    public static ShaderProgram doorwayShader;
+    public static ShaderProgram crosshatchShader;
+    public static ShaderProgram rippleShader;
+    public static ShaderProgram heartShader;
 
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
@@ -107,6 +120,23 @@ public class Assets implements Disposable {
         font.setUseIntegerPositions(false);
         fontShader = mgr.get(distanceFieldShaderAsset);
 
+        randomTransitions = new Array<ShaderProgram>();
+        blindsShader = loadShader("shaders/default.vert", "shaders/blinds.frag");
+        fadeShader = loadShader("shaders/default.vert", "shaders/dissolve.frag");
+        radialShader = loadShader("shaders/default.vert", "shaders/radial.frag");
+        doomShader = loadShader("shaders/default.vert", "shaders/doomdrip.frag");
+        pizelizeShader = loadShader("shaders/default.vert", "shaders/pixelize.frag");
+        doorwayShader = loadShader("shaders/default.vert", "shaders/doorway.frag");
+        crosshatchShader = loadShader("shaders/default.vert", "shaders/crosshatch.frag");
+        rippleShader = loadShader("shaders/default.vert", "shaders/ripple.frag");
+        heartShader = loadShader("shaders/default.vert", "shaders/heart.frag");
+
+//        randomTransitions.add(blindsShader);
+//        randomTransitions.add(fadeShader);
+        randomTransitions.add(radialShader);
+        randomTransitions.add(pizelizeShader);
+//        randomTransitions.add(rippleShader);
+
         return 1f;
     }
 
@@ -140,6 +170,23 @@ public class Assets implements Disposable {
     // ------------------------------------------------------------------------
     // Static helpers methods
     // ------------------------------------------------------------------------
+
+    private static ShaderProgram loadShader(String vertSourcePath, String fragSourcePath) {
+        ShaderProgram.pedantic = false;
+        ShaderProgram shaderProgram = new ShaderProgram(
+                Gdx.files.internal(vertSourcePath),
+                Gdx.files.internal(fragSourcePath));
+        ShaderProgram.pedantic = true;
+
+        if (!shaderProgram.isCompiled()) {
+            Gdx.app.error("LoadShader", "compilation failed:\n" + shaderProgram.getLog());
+            throw new GdxRuntimeException("LoadShader: compilation failed:\n" + shaderProgram.getLog());
+        } else {
+            Gdx.app.debug("LoadShader", "ShaderProgram compilation log:\n" + shaderProgram.getLog());
+        }
+
+        return shaderProgram;
+    }
 
     public static void drawString(SpriteBatch batch, String text,
                                   float x, float y, Color c, float scale, BitmapFont font) {
