@@ -3,7 +3,9 @@ package lando.systems.ld41.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.utils.Assets;
 
 /**
@@ -11,8 +13,11 @@ import lando.systems.ld41.utils.Assets;
  */
 public class GameScreen extends BaseScreen {
 
+    public Tank playerTank;
+
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
+        playerTank = new Tank();
     }
 
     @Override
@@ -20,6 +25,8 @@ public class GameScreen extends BaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.screen = new TitleScreen();
         }
+
+        playerTank.update(dt);
 
         updateCamera();
     }
@@ -31,13 +38,13 @@ public class GameScreen extends BaseScreen {
     }
 
     private void renderGame(SpriteBatch batch) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(worldCamera.combined);
         batch.begin();
         {
-            float radius = 10f;
-            batch.setColor(Color.MAGENTA);
-            batch.draw(game.assets.whiteCircle, 0 - radius, 0 - radius, 2f * radius, 2f *radius);
             batch.setColor(Color.WHITE);
+            playerTank.render(batch);
+
         }
         batch.end();
     }
@@ -47,7 +54,7 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             batch.setColor(Color.WHITE);
-            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
+//            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         }
         batch.end();
     }
