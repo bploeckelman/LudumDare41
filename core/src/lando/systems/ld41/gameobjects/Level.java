@@ -145,12 +145,12 @@ public class Level {
 
         for (int i = 0; i < circles.size; i++){
             Ellipse circle = circles.get(i).getEllipse();
-            if (newPosition.dst(circle.x, circle.y) < radius + circle.height){
+            if (newPosition.dst(circle.x, circle.y) < radius + circle.height / 2f){
                 normal.set(newPosition);
                 normal.sub(circle.x, circle.y);
                 normal.nor();
                 collisionPoint.set(circle.x, circle.y);
-                normal.scl(radius + circle.height);
+                normal.scl(radius + circle.height / 2f);
                 collisionPoint.add(normal);
                 normal.nor();
                 return true;
