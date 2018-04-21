@@ -50,6 +50,10 @@ public class Assets implements Disposable {
     public BitmapFont font;
     public ShaderProgram fontShader;
 
+    // tank shit
+    public TextureRegion tankBody;
+    public TextureRegion tankTurret;
+
     public boolean initialized;
 
     public Assets() {

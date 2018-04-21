@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -64,6 +65,10 @@ public class LudumDare41 extends ApplicationAdapter {
         screen.update(dt);
 
         screen.render(assets.batch);
+    }
+
+    public static TextureRegion getImage(String image) {
+        return game.assets.atlas.findRegion(image);
     }
 
     @Override
