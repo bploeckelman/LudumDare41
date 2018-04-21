@@ -1,16 +1,13 @@
 package lando.systems.ld41.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.*;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
 
-public class Turret {
+public class Catapult {
     public static float FIRE_RATE = 4;
     public static float TURRET_WIDTH = 30;
     public static float TURRET_HEIGHT = 30;
@@ -28,7 +25,7 @@ public class Turret {
     private float timer = 0;
     private GameScreen screen;
 
-    public Turret(GameScreen screen, Tank playerTank, int width, int height, Vector2 startPosition){
+    public Catapult(GameScreen screen, Tank playerTank, int width, int height, Vector2 startPosition){
         this.screen = screen;
         this.position = startPosition;
         this.width = width;

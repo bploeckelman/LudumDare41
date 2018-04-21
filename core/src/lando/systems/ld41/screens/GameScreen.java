@@ -17,7 +17,7 @@ import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
-import lando.systems.ld41.gameobjects.Turret;
+import lando.systems.ld41.gameobjects.Catapult;
 
 
 /**
@@ -33,8 +33,8 @@ public class GameScreen extends BaseScreen {
     public boolean showPowerMeter;
     public boolean levelZoomDone;
     public ParticleSystem particleSystem;
-    public Turret turret1;
-    public Turret turret2;
+    public Catapult catapult1;
+    public Catapult catapult2;
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
@@ -48,10 +48,10 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         enterLevelZoom();
-        turret1 = new Turret(this, playerTank, 20, 20, new Vector2(900, 100));
-        turret1.init(playerTank);
-        turret2 = new Turret(this, playerTank,20, 20, new Vector2(900, 500));
-        turret2.init(playerTank);
+        catapult1 = new Catapult(this, playerTank, 20, 20, new Vector2(900, 100));
+        catapult1.init(playerTank);
+        catapult2 = new Catapult(this, playerTank,20, 20, new Vector2(900, 500));
+        catapult2.init(playerTank);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class GameScreen extends BaseScreen {
 
         playerTank.update(dt);
         particleSystem.update(dt);
-        turret1.update(dt);
-        turret2.update(dt);
+        catapult1.update(dt);
+        catapult2.update(dt);
 
         cameraTargetPos.set(playerTank.position, 0f);
         if (levelZoomDone) {
@@ -95,8 +95,8 @@ public class GameScreen extends BaseScreen {
             batch.setColor(Color.WHITE);
             particleSystem.render(batch);
             playerTank.render(batch);
-            turret1.render(batch);
-            turret2.render(batch);
+            catapult1.render(batch);
+            catapult2.render(batch);
 
         }
         batch.end();
