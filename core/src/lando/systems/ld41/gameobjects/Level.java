@@ -26,6 +26,7 @@ public class Level {
 
     private boolean showDebug;
 
+    public String name;
     TiledMap map;
     TiledMapRenderer mapRenderer;
     public MapLayer collisionLayer;
@@ -36,16 +37,16 @@ public class Level {
     public Tee tee;
     public Hole hole;
 
-    Array<PolylineMapObject> boundaries;
-    Array<EllipseMapObject> circles;
+    public Array<PolylineMapObject> boundaries;
+    public PolylineMapObject exteriorBoundry;
+    public Array<EllipseMapObject> circles;
     Vector2 tempVector;
     Vector2 tempVector2;
     GameScreen screen;
 
-    public Level(GameScreen screen, String mapFileName){
+    public Level(String mapFileName) {
         showDebug = true;
-
-        this.screen = screen;
+        name = "test";
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 
@@ -76,14 +77,14 @@ public class Level {
         if (obj != null) {
             MapProperties props = obj.getProperties();
             tee = new Tee(props.get("x", Float.class),
-                          props.get("y", Float.class),
-                          props.get("facing", Integer.class));
+                    props.get("y", Float.class),
+                    props.get("facing", Integer.class));
         }
         obj = objects.get("hole");
         if (obj != null) {
             MapProperties props = obj.getProperties();
             hole = new Hole(props.get("x", Float.class),
-                            props.get("y", Float.class));
+                    props.get("y", Float.class));
         }
 
         // load collision polygons
@@ -92,6 +93,7 @@ public class Level {
         for (PolylineMapObject boundary : boundaries) {
             String type = (String) boundary.getProperties().get("type");
             if (type != null && type.equalsIgnoreCase("exterior")) {
+                this.exteriorBoundry = boundary;
                 missingExterior = false;
                 break;
             }
@@ -101,6 +103,11 @@ public class Level {
         }
 
         circles = collisionLayer.getObjects().getByType(EllipseMapObject.class);
+    }
+
+    public Level(GameScreen screen, String mapFileName){
+        this(mapFileName);
+        this.screen = screen;
     }
 
     public void update(float dt){

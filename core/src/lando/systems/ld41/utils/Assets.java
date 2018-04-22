@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.ShaderProgramLoader;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -59,6 +60,9 @@ public class Assets implements Disposable {
     public TextureRegion ballOrange;
     public TextureRegion hole;
     public TextureRegion smoke;
+
+    public TextureRegion thumbnailBg;
+    public TextureRegion thumbnailBoundries;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -142,6 +146,16 @@ public class Assets implements Disposable {
         ballOrange = atlas.findRegion("ballorange");
         hole = atlas.findRegion("hole");
         smoke = atlas.findRegion("barrelsmoke");
+
+        Pixmap pixGreen = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixGreen.setColor(Color.GREEN);
+        pixGreen.fill();
+        thumbnailBg = new TextureRegion(new Texture(pixGreen));
+        Pixmap pixRed = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixRed.setColor(Color.RED);
+        pixRed.fill();
+        thumbnailBoundries = new TextureRegion(new Texture(pixRed));
+
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
         backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);

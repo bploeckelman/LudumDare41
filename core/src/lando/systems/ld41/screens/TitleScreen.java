@@ -22,6 +22,8 @@ public class TitleScreen extends BaseScreen {
         }
         if (Gdx.input.justTouched()) {
             game.setScreen(new GameScreen(), LudumDare41.game.assets.circleCropShader, 1f);
+            // Level select
+            //game.setScreen(new LevelSelectScreen());
         }
 
         // ...
