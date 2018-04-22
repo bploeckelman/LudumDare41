@@ -85,7 +85,7 @@ public class GameScreen extends BaseScreen {
         showPowerMeter = false;
         enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300), 200f, 150f));
         particleSystem = new ParticleSystem();
-        powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
+        powerMeter = new PowerMeter(1f, playerTank);
         worldCamera.position.set(playerTank.position, 0);
         worldCamera.update();
 
@@ -204,7 +204,10 @@ public class GameScreen extends BaseScreen {
                 b.render(batch);
             }
             particleSystem.render(batch);
-
+            if (showPowerMeter)
+            {
+                powerMeter.render(batch);
+            }
         }
         batch.end();
     }
@@ -220,10 +223,7 @@ public class GameScreen extends BaseScreen {
         {
             batch.setColor(Color.WHITE);
             hud.render(batch);
-            //if (showPowerMeter)
-            //{
-            //    powerMeter.render(batch);
-            //}
+
         }
         batch.end();
     }

@@ -75,6 +75,7 @@ public class Assets implements Disposable {
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
     public NinePatch backplateNinePatch;
+    public NinePatch boxNinePatch;
 
     public BitmapFont font;
     public ShaderProgram fontShader;
@@ -172,6 +173,8 @@ public class Assets implements Disposable {
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
         backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);
+        boxNinePatch = new NinePatch(atlas.findRegion("box-outline"), 4, 4, 4, 4);
+
         Array catapult = atlas.findRegions("catapulttower");
         catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         Array smoke = atlas.findRegions("smoke");

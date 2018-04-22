@@ -9,41 +9,51 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Utils;
 
 public class PowerMeter {
+    float width = 100;
+    float height = 20;
     public float power;
-    public Vector2 position;
     public Interpolation interp;
     public float elapsed = 0f;
     public float lifeTime;
     public int maxPower = 100;
     public boolean isGoingUp = true;
-    public TextureRegion textureRegion;
-    public Texture texture;
-    public ShapeRenderer shapeRenderer;
+    private Color color;
+    private Tank player;
 
-    public PowerMeter(float lifeTime, Vector2 position)
+    public PowerMeter(float lifeTime, Tank player)
     {
         interp = Interpolation.pow2In;
         this.lifeTime = lifeTime;
-        this.position = position;
-        textureRegion = LudumDare41.game.assets.testTexture;
-        shapeRenderer = new ShapeRenderer();
-        texture = textureRegion.getTexture();
+        this.player = player;
+        color = new Color();
     }
 
     public void render(SpriteBatch batch)
     {
-        batch.end();
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(position.x, position.y, 50, power);
-        shapeRenderer.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.rect(position.x, position.y, 50, 100);
-        shapeRenderer.end();
-        batch.begin();
+        float x = player.position.x - width/2f;
+        float y = player.position.y - player.radius - height - 5;
+        float n = power / (float) maxPower;
+        color = Utils.hsvToRgb(((n * 120f) - 20) / 365f, 1.0f, 1.0f, color);
+        batch.setColor(color);
+        batch.draw(LudumDare41.game.assets.whitePixel, x, y, width * (power/maxPower), height);
+        batch.setColor(Color.WHITE);
+        LudumDare41.game.assets.boxNinePatch.draw(batch, x, y, width, height);
+
+//        batch.end();
+//        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.rect(position.x, position.y, 50, power);
+//        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.rect(position.x, position.y, 50, 100);
+//        shapeRenderer.end();
+//        batch.begin();
+
     }
 
     public void update(float dt)
