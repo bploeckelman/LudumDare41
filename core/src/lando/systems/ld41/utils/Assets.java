@@ -141,7 +141,7 @@ public class Assets implements Disposable {
         ballBrown = atlas.findRegion("ballbrown");
         ballOrange = atlas.findRegion("ballorange");
         hole = atlas.findRegion("hole");
-        smoke = atlas.findRegion("smoke");
+        smoke = atlas.findRegion("barrelsmoke");
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
         backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);
