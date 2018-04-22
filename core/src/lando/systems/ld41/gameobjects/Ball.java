@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
@@ -16,6 +17,7 @@ public class Ball {
     private Vector2 collisionPoint;
     private Vector2 normal;
     private Vector2 tempVector;
+    private Vector3 tempVector3;
     public Vector2 velocity;
     public float radius;
     public float pickupDelay;
@@ -39,6 +41,7 @@ public class Ball {
         collisionPoint = new Vector2();
         normal = new Vector2();
         tempVector = new Vector2();
+        tempVector3 = new Vector3();
 
         radius = 5;
     }
@@ -84,8 +87,10 @@ public class Ball {
 
     public boolean isInWorldView()
     {
-        return (onTank || !(position.x > screen.worldCamera.position.x + screen.worldCamera.viewportWidth / 2 || position.x < screen.worldCamera.position.x - screen.worldCamera.viewportWidth / 2 ||
-                            position.y > screen.worldCamera.position.y + screen.worldCamera.viewportHeight / 2 || position.y < screen.worldCamera.position.y - screen.worldCamera.viewportHeight / 2));
+        tempVector3.set(position.x, position.y, 0);
+        screen.worldCamera.project(tempVector3);
+
+        return (onTank || (tempVector3.x > 0 && tempVector3.x < screen.hudCamera.viewportWidth && tempVector3.y > 0 && tempVector3.y < screen.hudCamera.viewportHeight));
     }
 
     private boolean isNotMoving()

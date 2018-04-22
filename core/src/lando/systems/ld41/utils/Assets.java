@@ -71,6 +71,7 @@ public class Assets implements Disposable {
     public TextureRegion thumbnailBoundries;
     public TextureRegion pinballBumperOff;
     public TextureRegion pinballBumperOn;
+    public TextureRegion arrow;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -156,6 +157,7 @@ public class Assets implements Disposable {
         ballOrange = atlas.findRegion("ballorange");
         hole = atlas.findRegion("hole");
         smoke = atlas.findRegion("barrelsmoke");
+        arrow = atlas.findRegion("arrow");
 
         pinballBumperOff = atlas.findRegion("pinballbumper-off");
         pinballBumperOn = atlas.findRegion("pinballbumper-on");
