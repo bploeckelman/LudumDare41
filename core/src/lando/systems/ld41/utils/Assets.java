@@ -66,6 +66,7 @@ public class Assets implements Disposable {
     public static ShaderProgram crosshatchShader;
     public static ShaderProgram rippleShader;
     public static ShaderProgram heartShader;
+    public static ShaderProgram circleCropShader;
 
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
@@ -130,11 +131,13 @@ public class Assets implements Disposable {
         crosshatchShader = loadShader("shaders/default.vert", "shaders/crosshatch.frag");
         rippleShader = loadShader("shaders/default.vert", "shaders/ripple.frag");
         heartShader = loadShader("shaders/default.vert", "shaders/heart.frag");
+        circleCropShader = loadShader("shaders/default.vert", "shaders/circlecrop.frag");
 
 //        randomTransitions.add(blindsShader);
 //        randomTransitions.add(fadeShader);
         randomTransitions.add(radialShader);
         randomTransitions.add(pizelizeShader);
+        randomTransitions.add(circleCropShader);
 //        randomTransitions.add(rippleShader);
 
         return 1f;
