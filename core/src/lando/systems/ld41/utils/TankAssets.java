@@ -15,14 +15,18 @@ public class TankAssets {
     public Animation<TextureRegion> rightTreads;
 
     public static TankAssets getTankAssets(String tankName) {
+        return getTankAssets(tankName, "");
+    }
+
+    public static TankAssets getTankAssets(String tankName, String treadType) {
         Assets gameAssets = LudumDare41.game.assets;
 
         TankAssets assets = new TankAssets();
         assets.body = gameAssets.tanks.get(tankName);
         assets.turret = gameAssets.tanks.get(tankName + "turret");
 
-        assets.leftTreads = gameAssets.tankAnimations.get("lefttread");
-        assets.rightTreads = gameAssets.tankAnimations.get("righttread");
+        assets.leftTreads = gameAssets.tankAnimations.get(treadType + "lefttread");
+        assets.rightTreads = gameAssets.tankAnimations.get(treadType + "righttread");
 
         return assets;
     }

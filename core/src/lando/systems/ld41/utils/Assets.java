@@ -144,16 +144,23 @@ public class Assets implements Disposable {
     }
 
     private void loadTankAssets() {
-        addTreads("lefttread");
-        addTreads("righttread");
+        addTreads("", 0.15f);
+        addTreads("green", 0.15f);
+        addTreads("greenpontoon", 0.15f);
 
+        addTank("greentank");
         addTank("browntank");
     }
 
-    private void addTreads(String treadImage) {
+    private void addTreads(String treadImage, float duration) {
+        addTread(treadImage + "lefttread", duration);
+        addTread(treadImage + "righttread", duration);
+    }
+
+    private void addTread(String treadImage, float duration) {
         Array treads = atlas.findRegions(treadImage);
         tankAnimations.put(treadImage,
-                new Animation<TextureRegion>(0.15f, treads, Animation.PlayMode.LOOP));
+                new Animation<TextureRegion>(duration, treads, Animation.PlayMode.LOOP));
     }
 
     private void addTank(String tankName) {

@@ -45,12 +45,12 @@ public class Tank extends GameObject {
     public Ball ball;
     public boolean isFirstBallFired = false;
 
-    public Tank(GameScreen screen) {
-        this(screen, "browntank", 60, 60, new Vector2(100, 100));
+    public Tank(GameScreen screen, String body, String treads) {
+        this(screen, body, treads, 60, 60, new Vector2(100, 100));
     }
 
-    public Tank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition) {
-        tank = TankAssets.getTankAssets(tankName);
+    public Tank(GameScreen screen, String tankName, String treadType, float width, float height, Vector2 startPosition) {
+        tank = TankAssets.getTankAssets(tankName, treadType);
         leftTread = tank.leftTreads.getKeyFrame(0);
         rightTread = tank.rightTreads.getKeyFrame(0);
 

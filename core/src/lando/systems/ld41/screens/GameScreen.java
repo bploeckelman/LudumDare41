@@ -10,8 +10,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.gameobjects.GameObject;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
@@ -37,9 +40,18 @@ public class GameScreen extends BaseScreen {
     public Catapult catapult1;
     public Catapult catapult2;
 
+    private Array<GameObject> gameObjects = new Array<GameObject>();
+
     public GameScreen() {
-        playerTank = new Tank(this);
         level = new Level(this, "maps/test.tmx");
+        Gdx.input.setInputProcessor(this);
+
+        addPlayer();
+
+        gameObjects.add(new Tank(this, "greentank", "green", 60, 60, new Vector2(200, 100)));
+        gameObjects.add(new Tank(this, "greentank", "", 60, 60, new Vector2(300, 100)));
+        gameObjects.add(new Tank(this, "browntank", "green", 60, 60, new Vector2(400, 100)));
+        gameObjects.add(new Tank(this, "browntank", "greenpontoon", 60, 60, new Vector2(500, 100)));
 
         showPowerMeter = false;
         particleSystem = new ParticleSystem();
@@ -54,6 +66,25 @@ public class GameScreen extends BaseScreen {
         catapult2.init(playerTank);
     }
 
+    private void addPlayer() {
+        float rando = MathUtils.random();
+
+        String body = (rando > 0.5) ? "browntank" : "greentank";
+        String treads = "";
+        if (rando > 0.6) {
+            treads = "green";
+        } else if (rando > 0.3) {
+            treads = "greenpontoon";
+        }
+
+        System.out.println("body: " + body + " treads: " + treads);
+
+        playerTank = new Tank(this, body, treads);
+
+
+        gameObjects.add(playerTank);
+    }
+
     @Override
     public void update(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
@@ -65,10 +96,12 @@ public class GameScreen extends BaseScreen {
             powerMeter.update(dt);
         }
 
-        playerTank.update(dt);
         particleSystem.update(dt);
         catapult1.update(dt);
         catapult2.update(dt);
+        for (GameObject gameObj : gameObjects) {
+            gameObj.update(dt);
+        }
 
         cameraTargetPos.set(playerTank.position, 0f);
         if (levelZoomDone) {
@@ -100,10 +133,11 @@ public class GameScreen extends BaseScreen {
         {
             batch.setColor(Color.WHITE);
             particleSystem.render(batch);
-            playerTank.render(batch);
             catapult1.render(batch);
             catapult2.render(batch);
-
+            for (GameObject gameObj : gameObjects) {
+                gameObj.render(batch);
+            }
         }
         batch.end();
     }
