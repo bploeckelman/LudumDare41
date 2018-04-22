@@ -21,6 +21,7 @@ import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
+import lando.systems.ld41.utils.TankAssets;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
 
 
@@ -47,13 +48,9 @@ public class GameScreen extends BaseScreen {
 
         level = new Level(this, "maps/test.tmx");
 
-        addPlayer();
-
-        gameObjects.add(new Tank(this, "greentank", "green", 60, 60, new Vector2(200, 100)));
-        gameObjects.add(new Tank(this, "greentank", "", 60, 60, new Vector2(300, 100)));
-        gameObjects.add(new Tank(this, "browntank", "green", 60, 60, new Vector2(400, 100)));
-        gameObjects.add(new Tank(this, "browntank", "greenpontoon", 60, 60, new Vector2(500, 100)));
-
+        playerTank = new Tank(this, "browntank", "");
+        gameObjects.add(playerTank);
+  
         showPowerMeter = false;
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
@@ -67,32 +64,14 @@ public class GameScreen extends BaseScreen {
         catapult2.init(playerTank);
     }
 
-    private void addPlayer() {
-        float rando = MathUtils.random();
-
-        String body = (rando > 0.5) ? "browntank" : "greentank";
-        String treads = "";
-        if (rando > 0.6) {
-            treads = "green";
-        } else if (rando > 0.3) {
-            treads = "greenpontoon";
-        }
-
-        System.out.println("body: " + body + " treads: " + treads);
-
-        playerTank = new Tank(this, body, treads);
-        playerTank.position.set(level.tee.pos.x, level.tee.pos.y);
-        playerTank.rotation = level.tee.facing;
-
-        gameObjects.add(playerTank);
-    }
-
     @Override
     public void update(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
         {
             game.setScreen(new TitleScreen());
         }
+
+        updateTank();
 
         if (showPowerMeter) {
             powerMeter.update(dt);
@@ -214,4 +193,25 @@ public class GameScreen extends BaseScreen {
     }
 
 
+    private String[] tankBodies = new String[] { "browntank", "greentank" };
+    private String[] tankTreads = new String[] { "", "green", "greenpontoon" };
+    private int bodyIndex = 0;
+    private int treadIndex = 0;
+
+    public void updateTank() {
+        // update tank look - temp
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            if (++bodyIndex == tankBodies.length) {
+                bodyIndex = 0;
+            }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            if (++treadIndex == tankTreads.length) {
+                treadIndex = 0;
+            }
+        } else {
+            return;
+        }
+
+        playerTank.setAssets(TankAssets.getTankAssets(tankBodies[bodyIndex], tankTreads[treadIndex]));
+    }
 }

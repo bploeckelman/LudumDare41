@@ -50,9 +50,7 @@ public class Tank extends GameObject {
     }
 
     public Tank(GameScreen screen, String tankName, String treadType, float width, float height, Vector2 startPosition) {
-        tank = TankAssets.getTankAssets(tankName, treadType);
-        leftTread = tank.leftTreads.getKeyFrame(0);
-        rightTread = tank.rightTreads.getKeyFrame(0);
+        setAssets(TankAssets.getTankAssets(tankName, treadType));
 
         this.width = width;
         this.height = height;
@@ -65,6 +63,12 @@ public class Tank extends GameObject {
         this.screen = screen;
         ball = new Ball(screen);
         tempVector = new Vector2();
+    }
+
+    public void setAssets(TankAssets assets) {
+        tank = assets;
+        leftTread = tank.leftTreads.getKeyFrame(0);
+        rightTread = tank.rightTreads.getKeyFrame(0);
     }
 
     @Override
