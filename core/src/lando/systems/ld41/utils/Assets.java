@@ -56,17 +56,17 @@ public class Assets implements Disposable {
     public BitmapFont font;
     public ShaderProgram fontShader;
 
-    public static Array<ShaderProgram> randomTransitions;
-    public static ShaderProgram blindsShader;
-    public static ShaderProgram fadeShader;
-    public static ShaderProgram radialShader;
-    public static ShaderProgram doomShader;
-    public static ShaderProgram pizelizeShader;
-    public static ShaderProgram doorwayShader;
-    public static ShaderProgram crosshatchShader;
-    public static ShaderProgram rippleShader;
-    public static ShaderProgram heartShader;
-    public static ShaderProgram circleCropShader;
+    public Array<ShaderProgram> randomTransitions;
+    public ShaderProgram blindsShader;
+    public ShaderProgram fadeShader;
+    public ShaderProgram radialShader;
+    public ShaderProgram doomShader;
+    public ShaderProgram crosshatchShader;
+    public ShaderProgram pizelizeShader;
+    public ShaderProgram doorwayShader;
+    public ShaderProgram rippleShader;
+    public ShaderProgram heartShader;
+    public ShaderProgram circleCropShader;
 
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
