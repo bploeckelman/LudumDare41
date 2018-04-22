@@ -83,7 +83,7 @@ public class GameScreen extends BaseScreen {
         catapults.add(catapult2);
 
         showPowerMeter = false;
-        enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300), 200f, 150f));
+        enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300)));
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1f, playerTank);
         worldCamera.position.set(playerTank.position, 0);

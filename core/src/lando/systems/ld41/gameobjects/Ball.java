@@ -1,6 +1,5 @@
 package lando.systems.ld41.gameobjects;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -70,7 +69,7 @@ public class Ball {
         newPosition.add(velocity.x * dt, velocity.y * dt);
 
 
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollisionWithCatapults()){
+        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollisionWithEnemies()){
             float currentSpeed = velocity.len();
             tempVector.set(newPosition.x - oldPosition.x, newPosition.y - oldPosition.y);
             // r=d−2(d⋅n)n
@@ -138,9 +137,9 @@ public class Ball {
         }
     }
 
-    public boolean checkCollisionWithCatapults() {
+    public boolean checkCollisionWithEnemies() {
         for(Catapult catapult : screen.catapults) {
-            if (catapult.position.dst(newPosition) < catapult.radius + radius) {
+            if (catapult.alive && catapult.position.dst(newPosition) < catapult.radius + radius) {
                 normal.set(newPosition);
                 normal.sub(catapult.position);
                 normal.nor();
@@ -149,6 +148,20 @@ public class Ball {
                 collisionPoint.add(normal);
                 normal.nor();
                 catapult.alive = false;
+                return true;
+            }
+        }
+
+        for (EnemyTank tank : screen.enemyTanks){
+            if (!tank.dead && tank.position.dst(newPosition) < tank.radius + radius ) {
+                normal.set(newPosition);
+                normal.sub(tank.position);
+                normal.nor();
+                collisionPoint.set(tank.position);
+                normal.scl(tank.radius + radius);
+                collisionPoint.add(normal);
+                normal.nor();
+                tank.dead = true;
                 return true;
             }
         }

@@ -52,14 +52,16 @@ public class EnemyTank extends GameObject {
     public StateMachine stateMachine;
     public float reloadTimer = 5f;
     public float reloadDelay = 5f;
+
+    public boolean dead;
+    private float accum;
     public EnemyType type;
 
-    public EnemyTank(GameScreen screen, EnemyType type, float width, float height, Vector2 startPosition, float aggro, float speed)
+    public EnemyTank(GameScreen screen, EnemyType type, float width, float height, Vector2 startPosition)
     {
         this.type = type;
         tempVec = new Vector2();
 
-        this.speed = speed;
 
         this.width = width;
         this.height = height;
@@ -71,24 +73,25 @@ public class EnemyTank extends GameObject {
         normal = new Vector2();
         this.screen = screen;
         this.directionVector = new Vector2();
+        this.speed = 100;
         this.bulletSpeed = 300;
+        dead = false;
         switch(type){
 
             case Orange:
                 initializeOrange();
                 break;
             case Green:
+                initializeOrange();
                 break;
             case Pink:
+                initializeOrange();
                 break;
             case Blue:
-                break;
-            default:
                 initializeOrange();
-
+                break;
 
         }
-        initializeOrange();
     }
 
     private void initializeOrange(){
@@ -125,6 +128,8 @@ public class EnemyTank extends GameObject {
 
     public void update(float dt)
     {
+        accum += dt;
+        if (dead) return;
         stateMachine.update(dt);
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
@@ -192,8 +197,14 @@ public class EnemyTank extends GameObject {
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
         }
 
-        batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
-        batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+        if (dead) {
+            batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            batch.draw(tank.smoke.getKeyFrame(accum), x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+        } else {
+            batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+        }
     }
 
     /**
