@@ -150,7 +150,8 @@ public class Level {
     public boolean checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
         for (int j=0; j < boundaries.size; j++) {
             Polyline boundary = boundaries.get(j).getPolyline();
-
+            boolean collided = false;
+            float nearestCollision = Float.MAX_VALUE;
             int vertLength = boundary.getVertices().length;
             for (int i = 0; i < vertLength; i += 2) {
                 tempVector.set(boundary.getTransformedVertices()[i], boundary.getTransformedVertices()[i + 1]);
@@ -158,25 +159,43 @@ public class Level {
 
                 // Check if the traveling path intersects the segment
                 if (Intersector.intersectSegments(oldPosition, newPosition, tempVector, tempVector2, collisionPoint)) {
-                    normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
+                    normal.set(-1*(tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                    if (Intersector.pointLineSide(tempVector, tempVector2, oldPosition) != Intersector.pointLineSide(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y, collisionPoint.x + normal.x, collisionPoint.y + normal.y)){
+                        normal.set((tempVector2.y - tempVector.y), -1*(tempVector2.x - tempVector.x));
+                    }
                     normal.nor();
                     collisionPoint.add(normal.scl(radius));
+
                     normal.nor();
 
-                    return true;
+                    collided = true;
+                    nearestCollision = 0;
                 }
 
                 // Check if the segments are within the radius of the object
-                if (Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition) < radius) {
+                float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition);
+                if (dist < nearestCollision && dist < radius) {
                     Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
-                    normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
+                    if (collisionPoint.epsilonEquals(tempVector) || collisionPoint.epsilonEquals(tempVector2)){
+                        normal.set(newPosition.x - collisionPoint.x, newPosition.y - collisionPoint.y);
+                    } else {
+                        normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                        if (Intersector.pointLineSide(tempVector, tempVector2, oldPosition) != Intersector.pointLineSide(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y, collisionPoint.x + normal.x, collisionPoint.y + normal.y)) {
+                            normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
+                        }
+                    }
                     normal.nor();
                     collisionPoint.add(normal.scl(radius));
+
                     normal.nor();
 
-                    return true;
+                    collided = true;
+                    nearestCollision = dist;
                 }
 
+            }
+            if (collided){
+                return true;
             }
         }
 

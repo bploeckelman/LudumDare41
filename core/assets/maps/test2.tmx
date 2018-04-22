@@ -32,7 +32,7 @@
   </object>
  </objectgroup>
  <objectgroup name="objects">
-  <object id="1" name="tee" type="tee" gid="183" x="704" y="864" width="32" height="32">
+  <object id="1" name="tee" type="tee" gid="183" x="714" y="864" width="32" height="32">
    <properties>
     <property name="facing" type="int" value="-45"/>
    </properties>

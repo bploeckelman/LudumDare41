@@ -152,6 +152,7 @@ public class GameScreen extends BaseScreen {
             {
                 powerMeter.render(batch);
             }
+            LudumDare41.game.assets.backplateNinePatch.draw(batch, 0, hudCamera.viewportHeight - 50, hudCamera.viewportWidth, 50);
 //            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         }
         batch.end();
