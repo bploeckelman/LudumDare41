@@ -38,33 +38,17 @@ public class EnemyTank extends GameObject {
     public Vector2 newPosition;
     public Vector2 collisionPoint;
     private Vector2 normal;
+    private Vector2 tempVec;
     public float radius;
 
-    public Vector3 camera = new Vector3();
-
-    public boolean moveForward = true;
-    public boolean moveBackward;
-    public boolean rotateLeft;
-    public boolean rotateRight;
-
-    public float leftRotateTime;
-    public float rightRotateTime;
-    public float moveForwardTime;
-    public float moveBackwardTime;
-
-    public float aggroRadius;
-    public boolean aggroPlayer;
     public Interpolation lerp = Interpolation.linear;
     public StateMachine stateMachine;
 
     public EnemyTank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition, float aggro, float speed)
     {
-
+        tempVec = new Vector2();
         tank = TankAssets.getTankAssets(tankName);
         this.speed = speed;
-
-        this.aggroRadius = aggro;
-        this.aggroPlayer = false;
 
         this.width = width;
         this.height = height;
@@ -94,7 +78,7 @@ public class EnemyTank extends GameObject {
         transitions.add(new Transition(wait, closerThan200, wander));
         transitions.add(new Transition(wander, furtherThanWanderRange, wait));
 
-        transitions.add(new Transition(wander, closerThan100, targetPlayer));
+//        transitions.add(new Transition(wander, closerThan100, targetPlayer));
         transitions.add(new Transition(targetPlayer, furtherThan150, wander));
 
         stateMachine = new StateMachine(wait, transitions);
@@ -176,5 +160,42 @@ public class EnemyTank extends GameObject {
 
         batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
         batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+    }
+
+    /**
+     *  Attempt to rotate and move towards a target point
+     * @param targetPos the target to move towards
+     * @param dt the delta time
+     * @return if it reached it's endpoint or ran into a wall
+     */
+    public boolean rotateAndMove(Vector2 targetPos, float dt){
+        float angleToLerp = (float)(Math.atan2(
+                targetPos.y - position.y,
+                targetPos.x - position.x) * 180 / Math.PI) - 90;
+        if (angleToLerp - rotation < -180) rotation -= 360;
+        if (angleToLerp - rotation > 180) rotation += 360;
+        float amountToRotate = Math.abs(angleToLerp - rotation);
+        if (angleToLerp != rotation){
+            float rotationAmount = 120 * dt;
+            if (amountToRotate < rotationAmount){
+                rotation = angleToLerp;
+            } else {
+                rotation += Math.signum(angleToLerp - rotation) * rotationAmount;
+            }
+        }
+        float distanceToTarget = position.dst(targetPos);
+
+        if (amountToRotate == 0 || amountToRotate < distanceToTarget / 5f){
+            float distanceToMove = speed * dt;
+            if (distanceToMove > distanceToTarget) {
+                distanceToMove = distanceToTarget;
+            }
+
+            if (distanceToMove == 0 || updatePosition(distanceToMove)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 }

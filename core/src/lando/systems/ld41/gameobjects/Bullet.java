@@ -38,7 +38,7 @@ public class Bullet {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(LudumDare41.game.assets.ballOrange, position.x - BULLET_WIDTH/2f, position.y - BULLET_HEIGHT/2f, BULLET_WIDTH/2, BULLET_HEIGHT/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
+        batch.draw(texture, position.x - BULLET_WIDTH/2f, position.y - BULLET_HEIGHT/2f, BULLET_WIDTH/2, BULLET_HEIGHT/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
     }
 
     public boolean checkCollision(Tank tank){
