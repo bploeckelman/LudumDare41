@@ -45,6 +45,8 @@ public class Ball {
         radius = 5;
     }
 
+
+
     public void update(float dt){
         if (onTank) return;
         pickupDelay = Math.max(pickupDelay - dt, 0);
@@ -80,6 +82,12 @@ public class Ball {
         position.set(newPosition);
 
         velocity.scl(.99f);
+    }
+
+    public boolean isInWorldView()
+    {
+        return (onTank || !(position.x > screen.worldCamera.position.x + screen.worldCamera.viewportWidth / 2 || position.x < screen.worldCamera.position.x - screen.worldCamera.viewportWidth / 2 ||
+                            position.y > screen.worldCamera.position.y + screen.worldCamera.viewportHeight / 2 || position.y < screen.worldCamera.position.y - screen.worldCamera.viewportHeight / 2));
     }
 
     private boolean isNotMoving()

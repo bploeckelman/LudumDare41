@@ -20,10 +20,12 @@ import lando.systems.ld41.gameobjects.Catapult;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
+import lando.systems.ld41.ui.BallIndicatorArrow;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 
 /**
@@ -42,14 +44,14 @@ public class GameScreen extends BaseScreen {
     public Catapult catapult1;
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
     public Catapult catapult2;
-
+    public BallIndicatorArrow ballIndicatorArrow;
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
 
         level = new Level(this, "maps/test.tmx");
-
+        ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "");
         playerTank.position.set(level.tee.pos);
         playerTank.rotation = level.tee.facing;
@@ -94,6 +96,7 @@ public class GameScreen extends BaseScreen {
         for (GameObject gameObj : gameObjects) {
             gameObj.update(dt);
         }
+        ballIndicatorArrow.update(dt);
 
         cameraTargetPos.set(playerTank.position, 0f);
         if (levelZoomDone) {
@@ -152,6 +155,7 @@ public class GameScreen extends BaseScreen {
             {
                 powerMeter.render(batch);
             }
+            ballIndicatorArrow.render(batch);
             LudumDare41.game.assets.backplateNinePatch.draw(batch, 0, hudCamera.viewportHeight - 50, hudCamera.viewportWidth, 50);
 //            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         }
