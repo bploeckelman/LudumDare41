@@ -27,6 +27,7 @@ public class Level {
     private boolean showDebug;
 
     public String name;
+    public int par;
     TiledMap map;
     TiledMapRenderer mapRenderer;
     public MapLayer collisionLayer;
@@ -47,7 +48,11 @@ public class Level {
 
     public Level(String mapFileName) {
         showDebug = true;
+
+        // TODO: Pull these out of the map
         name = "test";
+        par = 3;
+
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 

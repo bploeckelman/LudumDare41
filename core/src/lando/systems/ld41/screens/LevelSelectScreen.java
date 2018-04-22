@@ -8,32 +8,61 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
-import com.badlogic.gdx.math.EarClippingTriangulator;
-import com.badlogic.gdx.math.Ellipse;
-import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.utils.Assets;
+
+import java.util.Iterator;
 
 public class LevelSelectScreen extends BaseScreen {
     EarClippingTriangulator triangulator;
     PolygonSpriteBatch polyBatch = new PolygonSpriteBatch();
     Array<Level> levels;
     Array<TextureRegion> thumbnails;
+    int currentLevelIdx;
+
+    TextureRegion arrow;
+    float arrowSize = 64f;
+    Rectangle arrowLeftClickTarget;
+    Rectangle arrowRightClickTarget;
+
+    NinePatch signPatch;
+    float signSize;
+    float padBetween = 32f;
+    float currentWidth;
+    Rectangle currentClickTarget;
 
     public LevelSelectScreen() {
         Gdx.input.setInputProcessor(this);
         triangulator = new EarClippingTriangulator();
+        arrow = LudumDare41.game.assets.arrow;
 
         levels = new Array<Level>();
         thumbnails = new Array<TextureRegion>();
-        levels.add(new Level("maps/test.tmx"));
-        levels.add(new Level("maps/test2.tmx"));
+
+        Iterator<IntMap.Entry<String>> iterator = game.assets.levelNumberToFileNameMap.iterator();
+        while (iterator.hasNext()) {
+            IntMap.Entry<String> el = iterator.next();
+            levels.add(new Level(el.value));
+        }
 
         for (int i = 0; i < levels.size; i++) {
             thumbnails.add(getLevelThumbnail(levels.get(i)));
         }
+
+        currentLevelIdx = 0;
+        arrowLeftClickTarget = new Rectangle(10, (hudCamera.viewportHeight/2) - (arrowSize/2), arrowSize, arrowSize);
+        arrowRightClickTarget = new Rectangle(hudCamera.viewportWidth - 10f - arrowSize, (hudCamera.viewportHeight/2) - (arrowSize/2), arrowSize, arrowSize);
+
+        signPatch = LudumDare41.game.assets.backplateNinePatch;
+
+        signSize = (hudCamera.viewportWidth - (arrowLeftClickTarget.width + 20f + (padBetween * 2))) / 4;
+        float x = 10f + arrowSize + signSize + padBetween;
+        currentWidth = hudCamera.viewportWidth - (x * 2);
+        currentClickTarget = new Rectangle(x, (hudCamera.viewportHeight/2) - currentWidth, currentWidth, currentWidth);
     }
 
     @Override
@@ -43,15 +72,74 @@ public class LevelSelectScreen extends BaseScreen {
 
     @Override
     public void render(SpriteBatch batch) {
+        batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
 
-        for (int i = 0; i < levels.size; i++) {
-            float x = 10f + ((i + 1) * 200f);
-            batch.draw(thumbnails.get(i), x, 10f, 200f, 200f);
-            Assets.drawString(batch, levels.get(i).name, x, 210f, Color.CORAL, .5f, game.assets.font);
+        Assets.drawString(batch, "Tee Off", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
+        Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
+        float x = 10f + arrowSize;
+        float y = hudCamera.viewportHeight/2;
+
+        if (currentLevelIdx > 0) {
+            // Draw left arrow (reversed)
+            batch.draw(arrow, arrowLeftClickTarget.x + arrowSize, arrowLeftClickTarget.y, -arrowSize, arrowSize);
+
+            // Draw left box
+            renderSign(batch, currentLevelIdx - 1, x, y - (signSize/2));
+        }
+
+        // Draw current
+        renderSign(batch, currentLevelIdx, (hudCamera.viewportWidth/2) - signSize/2, y);
+        batch.draw(thumbnails.get(currentLevelIdx), currentClickTarget.x, currentClickTarget.y, currentWidth, currentWidth);
+
+        if (currentLevelIdx != levels.size - 1) {
+            x = 10f + arrowSize + signSize;
+
+            // Draw right box
+            renderSign(batch, currentLevelIdx + 1, hudCamera.viewportWidth - x, y - (signSize/2));
+
+            // Draw right arrow
+            batch.draw(arrow, arrowRightClickTarget.x, arrowRightClickTarget.y, arrowSize, arrowSize);
         }
 
         batch.end();
+    }
+
+    public void renderSign(SpriteBatch batch, int holeIdx, float x, float y) {
+        Level level = levels.get(holeIdx);
+
+        float top = y + signSize;
+
+        game.assets.layout.setText(
+            game.assets.font,
+            "Hole: " + (holeIdx + 1) + "\n" +
+                level.name + "\n" +
+                "Par: " + level.par,
+            Color.CORAL,
+            signSize,
+            1,
+            false
+        );
+
+        signPatch.draw(batch, x, y, signSize, signSize);
+        game.assets.font.draw(batch, game.assets.layout, x, top - 6f);
+        game.assets.layout.reset();
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        Vector3 unprojected = hudCamera.unproject(new Vector3(screenX, screenY, 0));
+        if (button == 0) {
+            if (currentLevelIdx > 0 && arrowLeftClickTarget.contains(screenX, screenY)) {
+                currentLevelIdx--;
+            } else if (currentLevelIdx != levels.size - 1 && arrowRightClickTarget.contains(screenX, screenY)) {
+                currentLevelIdx++;
+            } else if (currentClickTarget.contains(unprojected.x, unprojected.y)) {
+                game.setScreen(new GameScreen(currentLevelIdx), LudumDare41.game.assets.circleCropShader, 1f);
+            }
+        }
+
+        return true;
     }
 
     TextureRegion getLevelThumbnail(Level level) {
