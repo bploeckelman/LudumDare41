@@ -230,15 +230,18 @@ public class Assets implements Disposable {
         addTreads("green", 0.15f);
         addTreads("orange", 0.15f);
         addTreads("pink", 0.15f);
+        addTreads("blue", 0.15f);
         addTreads("greenpontoon", 0.15f);
         addTreads("brownpontoon", 0.15f);
         addTreads("orangepontoon", 0.15f);
         addTreads("pinkpontoon", 0.15f);
+        addTreads("bluepontoon", 0.15f);
 
         addTank("greentank");
         addTank("browntank");
         addTank("orangetank");
         addTank("pinktank");
+        addTank("bluetank");
 
         addAnimation("smoke", 0.15f, Animation.PlayMode.LOOP);
         addAnimation("forceshield", 0.1f, Animation.PlayMode.LOOP_PINGPONG);
