@@ -188,13 +188,16 @@ public class Assets implements Disposable {
         addTreads("brown", 0.15f);
         addTreads("green", 0.15f);
         addTreads("orange", 0.15f);
+        addTreads("pink", 0.15f);
         addTreads("greenpontoon", 0.15f);
         addTreads("brownpontoon", 0.15f);
         addTreads("orangepontoon", 0.15f);
+        addTreads("pinkpontoon", 0.15f);
 
         addTank("greentank");
         addTank("browntank");
         addTank("orangetank");
+        addTank("pinktank");
     }
 
     private void addTreads(String treadImage, float duration) {

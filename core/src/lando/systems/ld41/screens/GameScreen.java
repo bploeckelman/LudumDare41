@@ -214,8 +214,8 @@ public class GameScreen extends BaseScreen {
     }
 
 
-    private String[] tankBodies = new String[] { "browntank", "greentank", "orangetank" };
-    private String[] tankTreads = new String[] { "brown", "green", "orange", "greenpontoon", "brownpontoon", "orangepontoon" };
+    private String[] tankBodies = new String[] { "browntank", "greentank", "orangetank", "pinktank" };
+    private String[] tankTreads = new String[] { "brown", "green", "orange", "pink", "greenpontoon", "brownpontoon", "orangepontoon", "pinkpontoon" };
     private int bodyIndex = 0;
     private int treadIndex = 0;
 
