@@ -261,14 +261,13 @@ public class Tank extends GameObject {
         if (dead) return;
 
         camera.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-
         screen.worldCamera.unproject(camera);
 
         float tRotation = (float)(Math.atan2(
                 camera.y - position.y,
                 camera.x - position.x) * 180 / Math.PI);
 
-        turretRotation = MathUtils.lerp(turretRotation, tRotation, 0.05f);
+        turretRotation = MathUtils.lerpAngleDeg(turretRotation, tRotation, 0.05f);
     }
 
     @Override

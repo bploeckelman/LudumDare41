@@ -20,6 +20,13 @@ import lando.systems.ld41.LudumDare41;
 import java.util.HashMap;
 
 public class Assets implements Disposable {
+    public class Keys {
+        public static final String OrangeBall = "ballorange";
+        public static final String BrownBall = "ballbrown";
+        public static final String BlueBall = "ballblue";
+        public static final String PinkBall = "ballpink";
+        public static final String PurpleBall = "ballpurple";
+    }
 
     // Initialize descriptors for all assets
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
@@ -86,6 +93,7 @@ public class Assets implements Disposable {
 
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
+    public HashMap<String, TextureRegion> assetMap = new HashMap<String, TextureRegion>();
     public Animation<TextureRegion> catapultAnimation;
     public Animation<TextureRegion> smokeAnimation;
 
@@ -169,7 +177,7 @@ public class Assets implements Disposable {
         Array smoke = atlas.findRegions("smoke");
         smokeAnimation = new Animation<TextureRegion>(0.3f, smoke, Animation.PlayMode.LOOP);
 
-
+        loadBalls();
         loadTankAssets();
 
         // Initialize distance field font
@@ -204,6 +212,14 @@ public class Assets implements Disposable {
         );
 
         return 1f;
+    }
+
+    private void loadBalls() {
+        assetMap.put(Keys.OrangeBall, atlas.findRegion(Keys.OrangeBall));
+        assetMap.put(Keys.BlueBall, atlas.findRegion(Keys.BlueBall));
+        assetMap.put(Keys.PurpleBall, atlas.findRegion(Keys.PurpleBall));
+        assetMap.put(Keys.BrownBall, atlas.findRegion(Keys.BrownBall));
+        assetMap.put(Keys.PinkBall, atlas.findRegion(Keys.PinkBall));
     }
 
     private void loadTankAssets() {
@@ -250,6 +266,9 @@ public class Assets implements Disposable {
 
     @Override
     public void dispose() {
+        assetMap.clear();
+        tanks.clear();
+        tankAnimations.clear();
         mgr.clear();
         font.dispose();
         shapes.dispose();
