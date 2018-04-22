@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
+import com.badlogic.gdx.assets.loaders.ShaderProgramLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -29,12 +30,17 @@ public class Assets implements Disposable {
     );
     private final AssetDescriptor<ShaderProgram> distanceFieldShaderAsset = new AssetDescriptor<ShaderProgram>("shaders/dist.frag", ShaderProgram.class);
 
-    // NOTE: using a vertex shader with a different name than the fragment shader requires an extra parameter, like so...
-//    final AssetDescriptor<ShaderProgram> shaderAsset = new AssetDescriptor<ShaderProgram>("shaders/frag.frag", ShaderProgram.class,
-//            new ShaderProgramLoader.ShaderProgramParameter() {{
-//                vertexFile = "shaders/common.vert";
-//            }}
-//    );
+    private final ShaderProgramLoader.ShaderProgramParameter defaultVertParam = new ShaderProgramLoader.ShaderProgramParameter() {{ vertexFile = "shaders/default.vert"; }};
+    private final AssetDescriptor<ShaderProgram> shaderBlindsAsset     = new AssetDescriptor<ShaderProgram>("shaders/blinds.frag",     ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderFadeAsset       = new AssetDescriptor<ShaderProgram>("shaders/dissolve.frag",   ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderRadialAsset     = new AssetDescriptor<ShaderProgram>("shaders/radial.frag",     ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderDoomAsset       = new AssetDescriptor<ShaderProgram>("shaders/doomdrip.frag",   ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderPixelizeAsset   = new AssetDescriptor<ShaderProgram>("shaders/pixelize.frag",   ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderDoorwayAsset    = new AssetDescriptor<ShaderProgram>("shaders/doorway.frag",    ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderCrosshatchAsset = new AssetDescriptor<ShaderProgram>("shaders/crosshatch.frag", ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderRippleAsset     = new AssetDescriptor<ShaderProgram>("shaders/ripple.frag",     ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderHeartAsset      = new AssetDescriptor<ShaderProgram>("shaders/heart.frag",      ShaderProgram.class, defaultVertParam);
+    private final AssetDescriptor<ShaderProgram> shaderCircleCropAsset = new AssetDescriptor<ShaderProgram>("shaders/circlecrop.frag", ShaderProgram.class, defaultVertParam);
 
     public enum Loading { SYNC, ASYNC }
 
@@ -93,6 +99,16 @@ public class Assets implements Disposable {
         mgr.load(atlasAsset);
         mgr.load(distanceFieldFontAsset);
         mgr.load(distanceFieldShaderAsset);
+        mgr.load(shaderBlindsAsset);
+        mgr.load(shaderFadeAsset);
+        mgr.load(shaderRadialAsset);
+        mgr.load(shaderDoomAsset);
+        mgr.load(shaderPixelizeAsset);
+        mgr.load(shaderDoorwayAsset);
+        mgr.load(shaderCrosshatchAsset);
+        mgr.load(shaderRippleAsset);
+        mgr.load(shaderHeartAsset);
+        mgr.load(shaderCircleCropAsset);
         // ...
 
         if (loading == Loading.SYNC) {
@@ -127,24 +143,30 @@ public class Assets implements Disposable {
         font.setUseIntegerPositions(false);
         fontShader = mgr.get(distanceFieldShaderAsset);
 
-        randomTransitions = new Array<ShaderProgram>();
-        blindsShader = loadShader("shaders/default.vert", "shaders/blinds.frag");
-        fadeShader = loadShader("shaders/default.vert", "shaders/dissolve.frag");
-        radialShader = loadShader("shaders/default.vert", "shaders/radial.frag");
-        doomShader = loadShader("shaders/default.vert", "shaders/doomdrip.frag");
-        pizelizeShader = loadShader("shaders/default.vert", "shaders/pixelize.frag");
-        doorwayShader = loadShader("shaders/default.vert", "shaders/doorway.frag");
-        crosshatchShader = loadShader("shaders/default.vert", "shaders/crosshatch.frag");
-        rippleShader = loadShader("shaders/default.vert", "shaders/ripple.frag");
-        heartShader = loadShader("shaders/default.vert", "shaders/heart.frag");
-        circleCropShader = loadShader("shaders/default.vert", "shaders/circlecrop.frag");
+        blindsShader     = mgr.get(shaderBlindsAsset);
+        fadeShader       = mgr.get(shaderFadeAsset);
+        radialShader     = mgr.get(shaderRadialAsset);
+        doomShader       = mgr.get(shaderDoomAsset);
+        pizelizeShader   = mgr.get(shaderPixelizeAsset);
+        doorwayShader    = mgr.get(shaderDoorwayAsset);
+        crosshatchShader = mgr.get(shaderCrosshatchAsset);
+        rippleShader     = mgr.get(shaderRippleAsset);
+        heartShader      = mgr.get(shaderHeartAsset);
+        circleCropShader = mgr.get(shaderCircleCropAsset);
 
-//        randomTransitions.add(blindsShader);
-//        randomTransitions.add(fadeShader);
-        randomTransitions.add(radialShader);
-        randomTransitions.add(pizelizeShader);
-        randomTransitions.add(circleCropShader);
-//        randomTransitions.add(rippleShader);
+        randomTransitions = new Array<ShaderProgram>();
+        randomTransitions.addAll(
+//                blindsShader,
+//                fadeShader,
+                radialShader,
+//                doomShader,
+                pizelizeShader,
+//                doorwayShader,
+//                crosshatchShader,
+//                rippleShader,
+//                heartShader,
+                circleCropShader
+        );
 
         return 1f;
     }
