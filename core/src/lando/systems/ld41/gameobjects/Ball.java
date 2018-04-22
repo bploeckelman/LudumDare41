@@ -1,10 +1,13 @@
 package lando.systems.ld41.gameobjects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Ball {
 
@@ -20,11 +23,18 @@ public class Ball {
     public float pickupDelay;
     private GameScreen screen;
 
+    private ShapeRenderer shapeRenderer;
+    private int radiusCount = 0;
+
+    private float indicatorRadius = 0f;
+
     public Ball(GameScreen screen){
         this.screen = screen;
         onTank = true;
         position = new Vector2();
         velocity = new Vector2();
+
+        shapeRenderer = new ShapeRenderer();
 
         oldPosition = new Vector2();
         newPosition = new Vector2();
@@ -54,15 +64,44 @@ public class Ball {
             newPosition.set(collisionPoint);
         }
 
+        if (isNotMoving())
+        {
+            if (indicatorRadius == 30f)
+            {
+                indicatorRadius = 5f;
+            } else {
+                if (radiusCount == 0) {
+                    indicatorRadius += 5f;
+                }
+                radiusCount = radiusCount == 10 ? 0 : radiusCount + 1;
+            }
+        }
+
         position.set(newPosition);
 
         velocity.scl(.99f);
+    }
+
+    private boolean isNotMoving()
+    {
+        return !onTank;
     }
 
     public void render(SpriteBatch batch){
         if (onTank) return;
 
         batch.draw(LudumDare41.game.assets.ballBrown, position.x -radius, position.y-radius, radius*2, radius*2);
+
+        if (isNotMoving())
+        {
+            batch.end();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.circle(position.x, position.y, indicatorRadius);
+            shapeRenderer.end();
+            batch.begin();
+        }
     }
 
     public void shootBall(Vector2 position, Vector2 velocity){
