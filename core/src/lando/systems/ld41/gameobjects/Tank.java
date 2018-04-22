@@ -35,14 +35,19 @@ public class Tank extends GameObject {
     private TankAssets tank;
     private TextureRegion leftTread;
     private TextureRegion rightTread;
+    private TextureRegion smoke;
+    private TextureRegion forceShield;
     private float leftTime;
     private float rightTime;
+    private float time;
 
     private float width;
     private float height;
     private GameScreen screen;
     public Ball ball;
     public boolean isFirstBallFired = false;
+    public boolean dead;
+    public boolean hasShield;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));
@@ -75,6 +80,13 @@ public class Tank extends GameObject {
         handleMovement(dt);
         setTurretRotation();
 
+        time += dt;
+        if (dead) {
+            smoke = tank.smoke.getKeyFrame(time);
+        } else {
+            forceShield = tank.forceShield.getKeyFrame(time);
+        }
+
         ball.update(dt);
         ball.checkCollision(this);
         if (ball.onTank) {
@@ -84,7 +96,7 @@ public class Tank extends GameObject {
 
     private void handleMovement(float dt) {
         // Don't move if you have the ball
-        if (ball.onTank) return;
+        if (ball.onTank || dead) return;
 
         if (!handleManMovement(dt)) {
             handleNoobMovement(dt);
@@ -238,6 +250,8 @@ public class Tank extends GameObject {
     }
 
     private void setTurretRotation() {
+        if (dead) return;
+
         camera.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
         screen.worldCamera.unproject(camera);
@@ -249,27 +263,35 @@ public class Tank extends GameObject {
 
     @Override
     public void render(SpriteBatch batch){
-        float halfX = width/2;
-        float halfY = height/2;
+        float halfX = width / 2;
+        float halfY = height / 2;
         float x = position.x - halfX;
         float y = position.y - halfY;
 
-        if (leftTread != null) {
+        if (dead) {
+            batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            batch.draw(smoke, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+        } else {
             batch.draw(leftTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
+
+            batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+
+            if (ball.onTank) {
+                directionVector.set(0, 1);
+                directionVector.setAngle(turretRotation);
+
+                tempVector.set(position).add(directionVector.scl(30));
+                batch.draw(LudumDare41.game.assets.ballBrown, position.x + directionVector.x - 5, position.y + directionVector.y - 5, 5, 5, 10, 10, 1, 1, turretRotation - 90);
+            }
+            ball.render(batch);
+
+            if (hasShield) {
+                batch.draw(forceShield, x, y, halfX, halfY, width, height, 1, 1, rotation);
+            }
         }
-
-        batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
-        batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
-
-        if (ball.onTank){
-            directionVector.set(0, 1);
-            directionVector.setAngle(turretRotation);
-
-            tempVector.set(position).add(directionVector.scl(30));
-            batch.draw(LudumDare41.game.assets.ballBrown, position.x + directionVector.x - 5, position.y + directionVector.y -5,  5, 5, 10, 10, 1, 1, turretRotation - 90);
-        }
-        ball.render(batch);
     }
 
     public void shootBall(float power){

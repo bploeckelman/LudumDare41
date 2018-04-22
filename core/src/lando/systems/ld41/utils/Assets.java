@@ -212,23 +212,32 @@ public class Assets implements Disposable {
         addTank("browntank");
         addTank("orangetank");
         addTank("pinktank");
+
+        addAnimation("smoke", 0.15f, Animation.PlayMode.LOOP);
+        addAnimation("forceshield", 0.1f, Animation.PlayMode.LOOP_PINGPONG);
     }
 
     private void addTreads(String treadImage, float duration) {
-        addTread(treadImage + "lefttread", duration);
-        addTread(treadImage + "righttread", duration);
+        addAnimation(treadImage + "lefttread", duration, Animation.PlayMode.LOOP);
+        addAnimation(treadImage + "righttread", duration, Animation.PlayMode.LOOP);
     }
 
-    private void addTread(String treadImage, float duration) {
-        Array treads = atlas.findRegions(treadImage);
-        tankAnimations.put(treadImage,
-                new Animation<TextureRegion>(duration, treads, Animation.PlayMode.LOOP));
+    private void addAnimation(String animImage, float duration, Animation.PlayMode mode) {
+        Array anim = atlas.findRegions(animImage);
+        tankAnimations.put(animImage,
+                new Animation<TextureRegion>(duration, anim, mode));
     }
 
     private void addTank(String tankName) {
         tanks.put(tankName, atlas.findRegion(tankName + "body"));
         String turret = tankName + "turret";
         tanks.put(turret, atlas.findRegion(turret));
+        String dead = tankName + "broken";
+        tanks.put(dead, atlas.findRegion(dead));
+        String deadTurret = tankName + "turretbroken";
+        tanks.put(deadTurret, atlas.findRegion(deadTurret));
+        String recoil = tankName + "turrettecoil";
+        tanks.put(recoil, atlas.findRegion(recoil));
     }
 
     @Override

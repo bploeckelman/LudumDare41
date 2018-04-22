@@ -229,6 +229,10 @@ public class GameScreen extends BaseScreen {
             if (++treadIndex == tankTreads.length) {
                 treadIndex = 0;
             }
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            playerTank.dead = !playerTank.dead;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+            playerTank.hasShield = !playerTank.hasShield;
         } else {
             return;
         }
