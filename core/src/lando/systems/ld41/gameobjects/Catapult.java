@@ -9,16 +9,14 @@ import lando.systems.ld41.screens.GameScreen;
 
 
 public class Catapult {
-    public static float FIRE_RATE = 4;
-    public static float TURRET_WIDTH = 50;
-    public static float TURRET_HEIGHT = 50;
+    public final float FIRE_RATE = 4;
+    public final float TURRET_WIDTH = 50;
+    public final float TURRET_HEIGHT = 50;
 
     public Array<Bullet> activeBullets = new Array<Bullet>();
 
     public Vector2 position;
     public Vector2 directionVector;
-    public int width;
-    public int height;
     public float rotation;
     public Bullet newBullet;
     public Tank playerTank;
@@ -27,11 +25,9 @@ public class Catapult {
     private float timer = 0;
     private GameScreen screen;
 
-    public Catapult(GameScreen screen, Tank playerTank, int width, int height, Vector2 startPosition){
+    public Catapult(GameScreen screen, Tank playerTank, Vector2 startPosition){
         this.screen = screen;
         this.position = startPosition;
-        this.width = width;
-        this.height = height;
         this.playerTank = playerTank;
         directionVector = new Vector2();
         catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
@@ -45,15 +41,15 @@ public class Catapult {
         timer+=dt;
         rotation = (float)(Math.atan2(
                 playerTank.position.y - position.y,
-                playerTank.position.x - position.x) * 90 / Math.PI);
+                playerTank.position.x - position.x) * 180 / Math.PI);
         if (playerTank.isFirstBallFired && alive && timer > FIRE_RATE) {
             fireBullet();
             timer = 0;
         }
-        if (timer > 3) {
+        if (timer > 2) {
             catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
         }
-        else if (timer > 2) {
+        else if (timer > 1) {
             catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(1);
         }
         else {
@@ -73,7 +69,7 @@ public class Catapult {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
+        batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         for (Bullet bullet : activeBullets) {
             bullet.render(batch);
         }

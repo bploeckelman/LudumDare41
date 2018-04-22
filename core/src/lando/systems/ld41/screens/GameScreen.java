@@ -58,9 +58,9 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         enterLevelZoom();
-        catapult1 = new Catapult(this, playerTank, 20, 20, new Vector2(900, 100));
+        catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
         catapult1.init(playerTank);
-        catapult2 = new Catapult(this, playerTank,20, 20, new Vector2(900, 500));
+        catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
         catapult2.init(playerTank);
     }
 

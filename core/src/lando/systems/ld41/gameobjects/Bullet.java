@@ -7,9 +7,9 @@ import lando.systems.ld41.screens.GameScreen;
 
 public class Bullet {
 
-    private static int BULLET_WIDTH = 15;
-    private static int BULLET_HEIGHT = 15;
-    private static int BULLET_VELOCITY = 100;
+    private final int BULLET_WIDTH = 15;
+    private final int BULLET_HEIGHT = 15;
+    private final int BULLET_VELOCITY = 100;
     public Vector2 velocity;
     public float radius;
     private GameScreen screen;
