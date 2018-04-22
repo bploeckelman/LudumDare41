@@ -7,8 +7,8 @@ import lando.systems.ld41.screens.GameScreen;
 
 public class Bullet {
 
-    private final int BULLET_WIDTH = 15;
-    private final int BULLET_HEIGHT = 15;
+    private final int BULLET_WIDTH = 30;
+    private final int BULLET_HEIGHT = 30;
     private final int BULLET_VELOCITY = 100;
     public Vector2 velocity;
     public float radius;
@@ -52,7 +52,7 @@ public class Bullet {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(LudumDare41.game.assets.whitePixel, position.x, position.y, position.x/2, position.y/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
+        batch.draw(LudumDare41.game.assets.ballOrange, position.x, position.y, position.x/2, position.y/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
     }
 
     public boolean checkCollision(Tank tank){
