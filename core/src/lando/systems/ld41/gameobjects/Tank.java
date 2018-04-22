@@ -96,9 +96,6 @@ public class Tank extends GameObject {
 
         ball.update(dt);
         ball.checkCollision(this);
-        if (ball.onTank) {
-            setTurretRotation();
-        }
     }
 
     private void handleMovement(float dt) {
@@ -263,9 +260,11 @@ public class Tank extends GameObject {
 
         screen.worldCamera.unproject(camera);
 
-        turretRotation = (float)(Math.atan2(
+        float tRotation = (float)(Math.atan2(
                 camera.y - position.y,
                 camera.x - position.x) * 180 / Math.PI);
+
+        turretRotation = MathUtils.lerp(turretRotation, tRotation, 0.05f);
     }
 
     @Override
@@ -311,6 +310,7 @@ public class Tank extends GameObject {
     }
 
     public void shootBall(float power){
+        if (dead) return;
         recoilTime = 0.3f;
         directionVector.set(0, 1);
         directionVector.setAngle(turretRotation);
