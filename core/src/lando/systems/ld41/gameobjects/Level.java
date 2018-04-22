@@ -173,6 +173,22 @@ public class Level {
     }
 
 
+    public boolean canSeeBetween(Vector2 position1, Vector2 position2){
+        for (int i = 0; i < boundaries.size; i++){
+            Polyline boundary = boundaries.get(i).getPolyline();
+            int vertLength = boundary.getVertices().length;
+            for (int j = 0; j < vertLength; j += 2) {
+                tempVector.set(boundary.getTransformedVertices()[j], boundary.getTransformedVertices()[j + 1]);
+                tempVector2.set(boundary.getTransformedVertices()[(j + 2) % vertLength], boundary.getTransformedVertices()[(j + 3) % vertLength]);
+                if (Intersector.intersectSegments(position1, position2, tempVector, tempVector2, null)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      *
      * @param oldPosition the position last frame

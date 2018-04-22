@@ -51,7 +51,9 @@ public class Catapult extends GameObject {
                     playerTank.position.y - position.y,
                     playerTank.position.x - position.x) * 180 / Math.PI);
         }
-        if (playerTank.isFirstBallFired && !playerTank.dead && alive && timer > FIRE_RATE) {
+        if (playerTank.isFirstBallFired && !playerTank.dead && alive
+                && timer > FIRE_RATE
+                && screen.level.canSeeBetween(position, playerTank.position)) {
             updateBullet(dt);
             timer = 0;
         }
