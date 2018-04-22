@@ -8,20 +8,21 @@ import lando.systems.ld41.screens.GameScreen;
 
 
 public class Catapult extends GameObject {
-    public final float FIRE_RATE = 4;
+    public final float FIRE_RATE = 7;
     public final float TURRET_WIDTH = 50;
     public final float TURRET_HEIGHT = 50;
 
     public Vector2 position;
     public Vector2 directionVector;
     public float rotation;
-    public Bullet newBullet;
     public Tank playerTank;
     public boolean alive = true;
     private TextureRegion catapultFrame;
+    private TextureRegion smokeFrame;
     private float timer = 0;
     private GameScreen screen;
     private Vector2 bulletPosition;
+    public float radius;
 
 
 
@@ -32,6 +33,7 @@ public class Catapult extends GameObject {
         this.bulletPosition = new Vector2();
         directionVector = new Vector2();
         catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
+        this.radius = Math.max(TURRET_WIDTH, TURRET_HEIGHT)/2f;
 
     }
     @Override
@@ -53,7 +55,9 @@ public class Catapult extends GameObject {
         else {
             catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(2);
         }
-
+        if (!alive) {
+            smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
+        }
     }
 
     public void updateBullet(float dt) {
@@ -63,6 +67,15 @@ public class Catapult extends GameObject {
 
     @Override
     public void render(SpriteBatch batch){
-        batch.draw(catapultFrame, position.x - TURRET_WIDTH/2f, position.y - TURRET_HEIGHT/2f, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+        float halfX = TURRET_WIDTH / 2;
+        float halfY = TURRET_HEIGHT / 2;
+        float x = position.x - halfX;
+        float y = position.y - halfY;
+        if (!alive) {
+            batch.draw(LudumDare41.game.assets.catapultAnimation.getKeyFrame(2), x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
+            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
+        } else {
+            batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+        }
     }
 }

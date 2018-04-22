@@ -266,6 +266,8 @@ public class GameScreen extends BaseScreen {
             playerTank.hasShield = !playerTank.hasShield;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             playerTank.dead = false;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            catapult1.alive = false;
         } else {
             return;
         }
@@ -274,7 +276,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void updateObjects(float dt) {
-        for(int i = activeBullets.size - 1; i >= 0; i--){
+        for(int i = activeBullets.size - 1; i >= 0; i--) {
             Bullet b = activeBullets.get(i);
             b.update(dt);
             if (b.checkCollision(playerTank)) {
@@ -284,13 +286,21 @@ public class GameScreen extends BaseScreen {
             oldBulletPosition.set(b.position);
             newBulletPosition.set(b.position);
             newBulletPosition.add(b.velocity.x * b.bulletVelocityMultiplier * dt, b.velocity.y * b.bulletVelocityMultiplier * dt);
-
+            //check collision with the walls
             if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal)){
                 b.alive = false;
             }
             if (!b.alive){
                 activeBullets.removeIndex(i);
                 bulletsPool.free(b);
+            }
+        }
+
+        for(int i = catapults.size - 1; i>=0; i--) {
+            Catapult c = catapults.get(i);
+            c.update(dt);
+            if (playerTank.ball.position.dst(c.position) < playerTank.ball.radius + c.radius) {
+                c.alive = false;
             }
         }
 

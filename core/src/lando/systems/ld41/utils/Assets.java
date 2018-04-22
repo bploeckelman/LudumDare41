@@ -86,6 +86,7 @@ public class Assets implements Disposable {
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
     public Animation<TextureRegion> catapultAnimation;
+    public Animation<TextureRegion> smokeAnimation;
 
     public IntMap<String> levelNumberToFileNameMap;
 
@@ -161,6 +162,9 @@ public class Assets implements Disposable {
         backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);
         Array catapult = atlas.findRegions("catapulttower");
         catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
+        Array smoke = atlas.findRegions("smoke");
+        smokeAnimation = new Animation<TextureRegion>(0.3f, smoke, Animation.PlayMode.LOOP);
+
 
         loadTankAssets();
 
