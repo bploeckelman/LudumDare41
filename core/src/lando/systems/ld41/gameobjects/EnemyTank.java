@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
-import lando.systems.ld41.LudumDare41;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.ai.StateMachine;
 import lando.systems.ld41.ai.Transition;
 import lando.systems.ld41.ai.conditions.PlayerCloserThan;
@@ -23,7 +21,7 @@ import lando.systems.ld41.utils.Assets;
 import lando.systems.ld41.utils.TankAssets;
 
 public class EnemyTank extends GameObject {
-    public enum EnemyType {Orange, Green, Pink, Blue}
+    public enum EnemyType {orange, green, pink, blue}
 
     public static float rotationSpeed = 120;
     public static float TURRET_SPEED = 360;
@@ -58,6 +56,20 @@ public class EnemyTank extends GameObject {
     private float accum;
     public EnemyType type;
 
+    public static EnemyTank create(GameScreen screen, EnemyTankInfo info) {
+        EnemyType type;
+        if      (info.color.equalsIgnoreCase("orange"))  type = EnemyType.orange;
+        else if (info.color.equalsIgnoreCase("green"))   type = EnemyType.green;
+        else if (info.color.equalsIgnoreCase("magenta")) type = EnemyType.pink;
+        else if (info.color.equalsIgnoreCase("blue"))    type = EnemyType.blue;
+        else {
+                throw new GdxRuntimeException("Unable to create EnemyTank with color '" + info.color + "'");
+        }
+        EnemyTank tank = new EnemyTank(screen, type, 60, 60, new Vector2(info.x, info.y));
+        tank.rotation = info.facing;
+        return tank;
+    }
+
     public EnemyTank(GameScreen screen, EnemyType type, float width, float height, Vector2 startPosition)
     {
         this.type = type;
@@ -78,25 +90,15 @@ public class EnemyTank extends GameObject {
         this.bulletSpeed = 300;
         dead = false;
         switch(type){
-
-            case Orange:
-                initializeOrange();
-                break;
-            case Green:
-                initializeOrange();
-                break;
-            case Pink:
-                initializeOrange();
-                break;
-            case Blue:
-                initializeOrange();
-                break;
-
+            case orange: initializeOrange(); break;
+            case green:  initializeGreen(); break;
+            case pink:   initializePink(); break;
+            case blue:   initializeBlue(); break;
+            default:     initializeOrange();
         }
     }
 
     private void initializeOrange(){
-
         tank = TankAssets.getTankAssets("orangetank");
         bulletTexture = Assets.getImage(Assets.Balls.Orange);
 
@@ -125,7 +127,93 @@ public class EnemyTank extends GameObject {
         stateMachine = new StateMachine(wait, transitions);
     }
 
+    private void initializeGreen(){
+        tank = TankAssets.getTankAssets("greentank");
+        bulletTexture = Assets.getImage(Assets.Balls.Purple); // TODO: where's my green balls?
 
+        WaitState wait = new WaitState(this);
+        WanderState wander = new WanderState(this);
+        TargetPlayerState targetPlayer = new TargetPlayerState(this);
+        EvadePlayerState evadePlayer = new EvadePlayerState(this);
+
+        PlayerCloserThan insideWander = new PlayerCloserThan(this, 500);
+        PlayerCloserThan insideTarget = new PlayerCloserThan(this, 300);
+        PlayerCloserThan insideEvade = new PlayerCloserThan(this, 100);
+        PlayerFurtherThan outsideWander = new PlayerFurtherThan(this, 600);
+        PlayerFurtherThan outsideTarget = new PlayerFurtherThan(this, 400);
+        PlayerFurtherThan outsideEvade = new PlayerFurtherThan(this, 150);
+
+        Array<Transition> transitions = new Array<Transition>();
+        transitions.add(new Transition(wait, insideWander, wander));
+        transitions.add(new Transition(wander, outsideWander, wait));
+
+        transitions.add(new Transition(wander, insideTarget, targetPlayer));
+        transitions.add(new Transition(targetPlayer, outsideTarget, wander));
+
+        transitions.add(new Transition(targetPlayer, insideEvade, evadePlayer));
+        transitions.add(new Transition(evadePlayer, outsideEvade, targetPlayer));
+
+        stateMachine = new StateMachine(wait, transitions);
+    }
+
+
+    private void initializeBlue(){
+        tank = TankAssets.getTankAssets("bluetank");
+        bulletTexture = Assets.getImage(Assets.Balls.Blue);
+
+        WaitState wait = new WaitState(this);
+        WanderState wander = new WanderState(this);
+        TargetPlayerState targetPlayer = new TargetPlayerState(this);
+        EvadePlayerState evadePlayer = new EvadePlayerState(this);
+
+        PlayerCloserThan insideWander = new PlayerCloserThan(this, 500);
+        PlayerCloserThan insideTarget = new PlayerCloserThan(this, 300);
+        PlayerCloserThan insideEvade = new PlayerCloserThan(this, 100);
+        PlayerFurtherThan outsideWander = new PlayerFurtherThan(this, 600);
+        PlayerFurtherThan outsideTarget = new PlayerFurtherThan(this, 400);
+        PlayerFurtherThan outsideEvade = new PlayerFurtherThan(this, 150);
+
+        Array<Transition> transitions = new Array<Transition>();
+        transitions.add(new Transition(wait, insideWander, wander));
+        transitions.add(new Transition(wander, outsideWander, wait));
+
+        transitions.add(new Transition(wander, insideTarget, targetPlayer));
+        transitions.add(new Transition(targetPlayer, outsideTarget, wander));
+
+        transitions.add(new Transition(targetPlayer, insideEvade, evadePlayer));
+        transitions.add(new Transition(evadePlayer, outsideEvade, targetPlayer));
+
+        stateMachine = new StateMachine(wait, transitions);
+    }
+
+    private void initializePink(){
+        tank = TankAssets.getTankAssets("pinktank");
+        bulletTexture = Assets.getImage(Assets.Balls.Pink);
+
+        WaitState wait = new WaitState(this);
+        WanderState wander = new WanderState(this);
+        TargetPlayerState targetPlayer = new TargetPlayerState(this);
+        EvadePlayerState evadePlayer = new EvadePlayerState(this);
+
+        PlayerCloserThan insideWander = new PlayerCloserThan(this, 500);
+        PlayerCloserThan insideTarget = new PlayerCloserThan(this, 300);
+        PlayerCloserThan insideEvade = new PlayerCloserThan(this, 100);
+        PlayerFurtherThan outsideWander = new PlayerFurtherThan(this, 600);
+        PlayerFurtherThan outsideTarget = new PlayerFurtherThan(this, 400);
+        PlayerFurtherThan outsideEvade = new PlayerFurtherThan(this, 150);
+
+        Array<Transition> transitions = new Array<Transition>();
+        transitions.add(new Transition(wait, insideWander, wander));
+        transitions.add(new Transition(wander, outsideWander, wait));
+
+        transitions.add(new Transition(wander, insideTarget, targetPlayer));
+        transitions.add(new Transition(targetPlayer, outsideTarget, wander));
+
+        transitions.add(new Transition(targetPlayer, insideEvade, evadePlayer));
+        transitions.add(new Transition(evadePlayer, outsideEvade, targetPlayer));
+
+        stateMachine = new StateMachine(wait, transitions);
+    }
 
     public void update(float dt)
     {

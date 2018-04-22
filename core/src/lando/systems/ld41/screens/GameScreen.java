@@ -18,8 +18,6 @@ import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
-import lando.systems.ld41.stats.HoleStats;
-import lando.systems.ld41.ui.BallIndicatorArrow;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
@@ -89,7 +87,9 @@ public class GameScreen extends BaseScreen {
         enemyTurrets.add(enemyTurret1);
 
         showPowerMeter = false;
-        enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300)));
+        for (EnemyTankInfo info : level.enemyTankInfos) {
+            enemyTanks.add(EnemyTank.create(this, info));
+        }
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1f, playerTank);
         worldCamera.position.set(playerTank.position, 0);

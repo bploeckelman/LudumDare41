@@ -35,9 +35,11 @@ public class Level {
     public TiledMapTileLayer wallsLayer;
     public MapLayer objectsLayer;
 
+    // Map objects
     public Tee tee;
     public Hole hole;
     public Array<PinballBumper> pinballBumpers;
+    public Array<EnemyTankInfo> enemyTankInfos;
 
     public Array<PolylineMapObject> boundaries;
     public PolylineMapObject exteriorBoundry;
@@ -76,20 +78,32 @@ public class Level {
 
         // load map objects
         MapObjects objects = objectsLayer.getObjects();
-
-        // load required objects
         if (objects.getCount() < 2) {
             throw new GdxRuntimeException("Map must have at least 2 objects ('tee' and 'hole')");
         }
 
         // load objects
         pinballBumpers = new Array<PinballBumper>();
+        enemyTankInfos = new Array<EnemyTankInfo>();
         for (MapObject object : objects) {
-            MapProperties props = object.getProperties();
+            final MapProperties props = object.getProperties();
             String type = (String) props.get("type");
+//            Gdx.app.log("Obj Type", "" + type);
             if (type == null) continue;
             if (type.equalsIgnoreCase("bumper")) {
                 pinballBumpers.add(new PinballBumper(props.get("x", Float.class), props.get("y", Float.class)));
+            }
+            if (type.equalsIgnoreCase("tank")) {
+                if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on tank");
+                if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on tank");
+                if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on tank");
+                if (props.get("color")  == null) throw new GdxRuntimeException("Missing 'color' property on tank");
+                enemyTankInfos.add(new EnemyTankInfo() {{
+                    x      = props.get("x", Float.class);
+                    y      = props.get("y", Float.class);
+                    facing = props.get("facing", Integer.class);
+                    color  = props.get("color", String.class);
+                }});
             }
             if (type.equalsIgnoreCase("tee")) {
                 tee = new Tee(props.get("x", Float.class),
