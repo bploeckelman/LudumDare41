@@ -152,6 +152,20 @@ public class Ball {
             }
         }
 
+        for(EnemyTurret turret : screen.enemyTurrets) {
+            if (turret.alive && turret.position.dst(newPosition) < turret.radius + radius) {
+                normal.set(newPosition);
+                normal.sub(turret.position);
+                normal.nor();
+                collisionPoint.set(turret.position);
+                normal.scl(turret.radius + radius);
+                collisionPoint.add(normal);
+                normal.nor();
+                turret.alive = false;
+                return true;
+            }
+        }
+
         for (EnemyTank tank : screen.enemyTanks){
             if (!tank.dead && tank.position.dst(newPosition) < tank.radius + radius ) {
                 normal.set(newPosition);

@@ -71,6 +71,8 @@ public class Assets implements Disposable {
     public TextureRegion pinballBumperOn;
     public TextureRegion arrow;
     public TextureRegion indicator;
+    public TextureRegion enemyTurret;
+    public TextureRegion enemyTurretRecoil;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -179,6 +181,8 @@ public class Assets implements Disposable {
         catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         Array smoke = atlas.findRegions("smoke");
         smokeAnimation = new Animation<TextureRegion>(0.3f, smoke, Animation.PlayMode.LOOP);
+        enemyTurret = atlas.findRegion("greentankturret");
+        enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
 
         loadBalls();
         loadTankAssets();

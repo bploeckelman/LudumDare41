@@ -44,7 +44,9 @@ public class GameScreen extends BaseScreen {
     public Catapult catapult1;
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
     public Catapult catapult2;
+    public EnemyTurret enemyTurret1;
     public Array<Catapult> catapults = new Array<Catapult>();
+    public Array<EnemyTurret> enemyTurrets = new Array<EnemyTurret>();
     private Vector2 oldBulletPosition;
     private Vector2 newBulletPosition;
     private Vector2 bulletCollisionPoint;
@@ -68,6 +70,7 @@ public class GameScreen extends BaseScreen {
 
         catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
         catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
+        enemyTurret1 = new EnemyTurret(this, playerTank, new Vector2(500, 500), new Vector2(500, 510));
 
         oldBulletPosition = new Vector2();
         newBulletPosition = new Vector2();
@@ -78,9 +81,12 @@ public class GameScreen extends BaseScreen {
         gameObjects.add(playerTank);
         gameObjects.add(catapult1);
         gameObjects.add(catapult2);
+        gameObjects.add(enemyTurret1);
 
         catapults.add(catapult1);
         catapults.add(catapult2);
+
+        enemyTurrets.add(enemyTurret1);
 
         showPowerMeter = false;
         enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300)));
