@@ -11,6 +11,8 @@
     -->
     <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.objects.PolylineMapObject" />
     <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.objects.EllipseMapObject" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion" />
+    <extend-configuration-property name="gdx.reflect.include" value="lando.systems.ld41.particles.Particle" />
 
     <collapse-all-properties />
     
