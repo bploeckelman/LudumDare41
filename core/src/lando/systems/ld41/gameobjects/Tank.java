@@ -72,7 +72,7 @@ public class Tank extends GameObject {
 
     @Override
     public void update(float dt){
-        setMovement(dt);
+        handleMovement(dt);
         setTurretRotation();
 
         ball.update(dt);
@@ -82,8 +82,18 @@ public class Tank extends GameObject {
         }
     }
 
-    private void setMovement(float dt) {
+    private void handleMovement(float dt) {
+        if (!handleManMovement(dt)) {
+            handleNoobMovement(dt);
+        }
+    }
+
+    private boolean handleManMovement(float dt) {
         TankMovement movement = getTankMovement();
+        if (movement == TankMovement.None) return false;
+
+        // manly bonus
+        dt *= 1.5f;
 
         float speedDx = 0;
         float rotationDx = 0;
@@ -135,25 +145,24 @@ public class Tank extends GameObject {
                 leftTime += dt;
                 rotationDx = -rotationSpeed * dt;
                 break;
-            default:
-                return;
         }
-            if (leftTime < 0)
-            {
-                leftTime = 0;
-            }
-            if (rightTime < 0) {
-                rightTime = 0;
-            }
+        if (leftTime < 0)
+        {
+            leftTime = 0;
+        }
+        if (rightTime < 0) {
+            rightTime = 0;
+        }
 
         updatePosition(speedDx, rotationDx);
+        return true;
     }
 
     private TankMovement getTankMovement() {
-        boolean leftForward = Gdx.input.isKeyPressed(Input.Keys.W);
-        boolean leftBack = !leftForward && Gdx.input.isKeyPressed(Input.Keys.S);
-        boolean rightForward = Gdx.input.isKeyPressed(Input.Keys.E);
-        boolean rightBack = !rightForward && Gdx.input.isKeyPressed(Input.Keys.D);
+        boolean leftForward = Gdx.input.isKeyPressed(Input.Keys.R);
+        boolean leftBack = !leftForward && Gdx.input.isKeyPressed(Input.Keys.F);
+        boolean rightForward = Gdx.input.isKeyPressed(Input.Keys.T);
+        boolean rightBack = !rightForward && Gdx.input.isKeyPressed(Input.Keys.G);
 
         if (leftForward && rightForward) {
             return TankMovement.Forward;
@@ -169,6 +178,30 @@ public class Tank extends GameObject {
             return TankMovement.RightBack;
         }
         return TankMovement.None;
+    }
+
+    private void handleNoobMovement(float dt) {
+        float rotationDx = 0;
+        float speedDx = 0;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            rotationDx = rotationSpeed*dt;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            rotationDx = -rotationSpeed * dt;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            leftTime += dt;
+            rightTime += dt;
+            speedDx = speed*dt;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            leftTime -= dt;
+            rightTime -= dt;
+            speedDx = -speed*dt;
+        }
+        updatePosition(speedDx, rotationDx);
     }
 
     private void updatePosition(float speedUpdate, float rotationUpdate) {
