@@ -109,11 +109,8 @@ public class GameScreen extends BaseScreen {
         playerTank = new Tank(this, "browntank", "brown");
 
         playerTank.setStats(LudumDare41.game.gameStats.getLevelStats(currentLevelNum));
-
         playerTank.position.set(level.tee.pos);
         playerTank.rotation = level.tee.facing;
-
-
     }
 
     @Override

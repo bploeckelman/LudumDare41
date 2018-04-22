@@ -76,21 +76,8 @@ public class Level {
         if (objects.getCount() < 2) {
             throw new GdxRuntimeException("Map must have at least 2 objects ('tee' and 'hole')");
         }
-        MapObject obj = objects.get("tee");
-        if (obj != null) {
-            MapProperties props = obj.getProperties();
-            tee = new Tee(props.get("x", Float.class),
-                    props.get("y", Float.class),
-                    props.get("facing", Integer.class));
-        }
-        obj = objects.get("hole");
-        if (obj != null) {
-            MapProperties props = obj.getProperties();
-            hole = new Hole(props.get("x", Float.class),
-                    props.get("y", Float.class));
-        }
 
-        // load additional objects
+        // load objects
         pinballBumpers = new Array<PinballBumper>();
         for (MapObject object : objects) {
             MapProperties props = object.getProperties();
@@ -99,6 +86,21 @@ public class Level {
             if (type.equalsIgnoreCase("bumper")) {
                 pinballBumpers.add(new PinballBumper(props.get("x", Float.class), props.get("y", Float.class)));
             }
+            if (type.equalsIgnoreCase("tee")) {
+                tee = new Tee(props.get("x", Float.class),
+                              props.get("y", Float.class),
+                              props.get("facing", Integer.class));
+            }
+            if (type.equalsIgnoreCase("hole")) {
+                hole = new Hole(props.get("x", Float.class),
+                                props.get("y", Float.class));
+            }
+        }
+        if (tee == null) {
+            throw new GdxRuntimeException("Map missing 'tee' object");
+        }
+        if (hole == null) {
+            throw new GdxRuntimeException("Map missing 'hole' object");
         }
 
         // load collision polygons
@@ -149,7 +151,7 @@ public class Level {
             ShapeRenderer shapes = LudumDare41.game.assets.shapes;
             shapes.begin(ShapeRenderer.ShapeType.Line);
             shapes.setColor(Color.RED);
-            shapes.setProjectionMatrix(screen.worldCamera.combined);
+            shapes.setProjectionMatrix(camera.combined);
             {
                 for (int j=0; j < boundaries.size; j++) {
                     Polyline boundary = boundaries.get(j).getPolyline();
