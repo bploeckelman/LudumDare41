@@ -39,7 +39,7 @@ public class LudumDare41 extends ApplicationAdapter {
     Texture transitionTexture;
     ShaderProgram transitionShader;
 
-    GameStats gameStats = new GameStats();
+    public GameStats gameStats = new GameStats();
 
     @Override
     public void create () {
@@ -150,16 +150,6 @@ public class LudumDare41 extends ApplicationAdapter {
                     }))
                     .start(tween);
         }
-    }
-
-    public void setGameStats(int level, Tank playerTank) {
-        HoleStats stats = new HoleStats();
-        stats.deaths = playerTank.deaths;
-        stats.distance = playerTank.ball.totalDistance;
-        stats.kills = 0;
-        stats.score = playerTank.shots;
-
-        gameStats.setStats(level, stats);
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
+import lando.systems.ld41.stats.HoleStats;
 import lando.systems.ld41.ui.BallIndicatorArrow;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
@@ -53,18 +54,14 @@ public class GameScreen extends BaseScreen {
     public static final Array<Bullet> activeBullets = new Array<Bullet>();
     public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
 
-
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
     public GameScreen(int currentLevelNum) {
         Gdx.input.setInputProcessor(this);
-        setLevel(currentLevelNum);
-
         ballIndicatorArrow  = new BallIndicatorArrow(this);
-        playerTank = new Tank(this, "browntank", "brown");
 
-        playerTank.position.set(level.tee.pos);
-        playerTank.rotation = level.tee.facing;
+        setLevel(currentLevelNum);
+        addPlayer();
 
         catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
         catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
@@ -104,6 +101,17 @@ public class GameScreen extends BaseScreen {
         level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(mapIndex));
     }
 
+    private void addPlayer() {
+        playerTank = new Tank(this, "browntank", "brown");
+
+        playerTank.setStats(LudumDare41.game.gameStats.getLevelStats(currentLevelNum));
+
+        playerTank.position.set(level.tee.pos);
+        playerTank.rotation = level.tee.facing;
+
+
+    }
+
     @Override
     public void update(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -117,7 +125,7 @@ public class GameScreen extends BaseScreen {
             if (level.hole.isInside(playerTank.ball)) {
                 // TODO: fancy up the level transition
                 levelTransitioning = true;
-                LudumDare41.game.setGameStats(currentLevelNum, playerTank);
+                addStats(false);
                 int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
                 LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
             }
@@ -153,6 +161,10 @@ public class GameScreen extends BaseScreen {
 //                bumper.checkForHit(bullet);
 //            }
         }
+    }
+
+    private void addStats(boolean isDead) {
+        LudumDare41.game.gameStats.addStats(currentLevelNum, playerTank.ball.totalDistance, 0, playerTank.shots, isDead);
     }
 
     @Override
@@ -298,6 +310,10 @@ public class GameScreen extends BaseScreen {
             if (b.checkCollision(playerTank)) {
                 b.alive = false;
                 playerTank.takeHit();
+                if (playerTank.dead) {
+                    addStats(true);
+                    LudumDare41.game.setScreen(new GameScreen(currentLevelNum));
+                }
             }
             oldBulletPosition.set(b.position);
             newBulletPosition.set(b.position);

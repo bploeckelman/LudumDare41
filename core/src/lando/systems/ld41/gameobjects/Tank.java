@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.screens.GameScreen;
+import lando.systems.ld41.stats.HoleStats;
 import lando.systems.ld41.utils.TankAssets;
 
 public class Tank extends GameObject {
@@ -50,8 +51,8 @@ public class Tank extends GameObject {
     public boolean dead;
     public boolean hasShield;
 
-    public int deaths;
     public int shots;
+    public int deaths;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));
@@ -313,7 +314,6 @@ public class Tank extends GameObject {
             hasShield = false;
         } else {
             dead = true;
-            deaths++;
         }
     }
 
@@ -332,5 +332,10 @@ public class Tank extends GameObject {
         isFirstBallFired = true;
         ball.shootBall(tempVector, directionVector);
         shots++;
+    }
+
+    public void setStats(HoleStats stats) {
+        deaths = stats.deaths;
+        shots = stats.score;
     }
 }
