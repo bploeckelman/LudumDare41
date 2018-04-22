@@ -72,7 +72,7 @@ public class Ball {
         if (collision != Level.CollisionType.None || checkCollisionWithEnemies()){
             if (collision == Level.CollisionType.Bumper) velocity.scl(1.3f);
             float currentSpeed = velocity.len();
-            tempVector.set(newPosition.x - oldPosition.x, newPosition.y - oldPosition.y);
+            tempVector.set(velocity);
             // r=d−2(d⋅n)n
             float dot = 2f * tempVector.dot(normal);
             tempVector.sub(dot * normal.x, dot * normal.y);
@@ -112,15 +112,6 @@ public class Ball {
         if (isNotMoving())
         {
             batch.draw(LudumDare41.game.assets.indicator, position.x - indicatorRadius, position.y - indicatorRadius, indicatorRadius * 2f, indicatorRadius * 2f);
-//            batch.end();
-//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-//            shapeRenderer.setColor(Color.BLACK);
-//            shapeRenderer.circle(position.x, position.y, indicatorRadius);
-//            shapeRenderer.end();
-//            batch.begin();
-
-
         }
     }
 
