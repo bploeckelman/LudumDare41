@@ -165,11 +165,7 @@ public class GameScreen extends BaseScreen {
 
 
         for (PinballBumper bumper : level.pinballBumpers) {
-            bumper.checkForHit(playerTank.ball);
             bumper.checkForHit(playerTank);
-//            for (Bullet bullet : activeBullets) {
-//                bumper.checkForHit(bullet);
-//            }
         }
     }
 
@@ -237,6 +233,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (!levelZoomDone) return false;
+
         if (button == 0 && playerTank.ball.onTank){
             showPowerMeter = true;
         }
@@ -328,7 +326,7 @@ public class GameScreen extends BaseScreen {
             newBulletPosition.set(b.position);
             newBulletPosition.add(b.velocity.x * b.bulletSpeed * dt, b.velocity.y * b.bulletSpeed * dt);
             //check collision with the walls
-            if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal)){
+            if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal) != Level.CollisionType.None){
                 b.alive = false;
             }
             if (!b.alive){

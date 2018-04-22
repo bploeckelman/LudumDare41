@@ -68,8 +68,9 @@ public class Ball {
         newPosition.set(position);
         newPosition.add(velocity.x * dt, velocity.y * dt);
 
-
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollisionWithEnemies()){
+        Level.CollisionType collision = screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal);
+        if (collision != Level.CollisionType.None || checkCollisionWithEnemies()){
+            if (collision == Level.CollisionType.Bumper) velocity.scl(1.3f);
             float currentSpeed = velocity.len();
             tempVector.set(newPosition.x - oldPosition.x, newPosition.y - oldPosition.y);
             // r=d−2(d⋅n)n
@@ -137,7 +138,9 @@ public class Ball {
         }
     }
 
+
     public boolean checkCollisionWithEnemies() {
+        if (velocity.len() < 30) return false;
         for(Catapult catapult : screen.catapults) {
             if (catapult.alive && catapult.position.dst(newPosition) < catapult.radius + radius) {
                 normal.set(newPosition);

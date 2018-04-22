@@ -23,6 +23,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
 public class Level {
+    public enum CollisionType {None, Wall, Bumper}
 
     private boolean showDebug;
 
@@ -217,9 +218,9 @@ public class Level {
      * @param radius the radius of the collision object
      * @param collisionPoint this is filled with the intersection point
      * @param normal the normal of the collision for reflections
-     * @return if there was an intersection
+     * @return the Type of Collision
      */
-    public boolean checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
+    public CollisionType checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
         for (int j=0; j < boundaries.size; j++) {
             Polyline boundary = boundaries.get(j).getPolyline();
             boolean collided = false;
@@ -270,7 +271,7 @@ public class Level {
 
             }
             if (collided){
-                return true;
+                return CollisionType.Wall;
             }
         }
 
@@ -284,10 +285,24 @@ public class Level {
                 normal.scl(radius + circle.height / 2f);
                 collisionPoint.add(normal);
                 normal.nor();
-                return true;
+                return CollisionType.Wall;
             }
         }
-        return false;
+
+        for(PinballBumper bumper : pinballBumpers){
+                if (newPosition.dst(bumper.position) < radius + bumper.radius) {
+                    bumper.isOn = true;
+                    normal.set(newPosition);
+                    normal.sub(bumper.position);
+                    normal.nor();
+                    collisionPoint.set(bumper.position);
+                    normal.scl(bumper.radius + radius + 10);
+                    collisionPoint.add(normal);
+                    normal.nor();
+                    return CollisionType.Bumper;
+                }
+        }
+        return CollisionType.None;
     }
 
 

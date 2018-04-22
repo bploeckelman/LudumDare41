@@ -9,11 +9,11 @@ import lando.systems.ld41.utils.Utils;
 
 public class PinballBumper extends GameObject {
 
-    private Vector2 position;
-    private float radius;
+    public Vector2 position;
+    public float radius;
     private float resetDelay;
     private float resetTimer;
-    private boolean isOn;
+    public boolean isOn;
     private Interpolation interp;
     private TextureRegion texOff;
     private TextureRegion texOn;
@@ -29,11 +29,13 @@ public class PinballBumper extends GameObject {
         this.texOn = LudumDare41.game.assets.pinballBumperOn;
     }
 
-    public void checkForHit(Ball ball) {
-        if (ball.onTank) return;
+    public boolean checkForHit(Ball ball) {
+        if (ball.onTank) return false;
         if (Utils.doCirclesIntersect(position, radius, ball.position, ball.radius)) {
             isOn = true;
+            return true;
         }
+        return false;
     }
 
     public void checkForHit(Tank tank) {

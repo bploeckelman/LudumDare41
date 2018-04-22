@@ -258,7 +258,7 @@ public class EnemyTank extends GameObject {
         newPosition.set(position);
         newPosition.add(directionVector);
         boolean collision = false;
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal )){
+        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal ) != Level.CollisionType.None){
             newPosition.set(collisionPoint);
             collision = true;
         }

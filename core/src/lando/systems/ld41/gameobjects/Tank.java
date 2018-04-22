@@ -243,7 +243,7 @@ public class Tank extends GameObject {
         newPosition.set(position);
         newPosition.add(directionVector);
 
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal )){
+        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal ) != Level.CollisionType.None){
             newPosition.set(collisionPoint);
         }
 
