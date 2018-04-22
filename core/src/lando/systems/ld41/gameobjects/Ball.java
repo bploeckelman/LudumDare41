@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
 
@@ -29,6 +30,8 @@ public class Ball {
     private int radiusCount = 0;
 
     private float indicatorRadius = 0f;
+    private Interpolation indicatorInterp;
+    private float accum;
 
     public TextureRegion image;
 
@@ -50,6 +53,8 @@ public class Ball {
         tempVector3 = new Vector3();
 
         radius = 5;
+        indicatorInterp = Interpolation.pow2;
+        accum = 0;
     }
 
     public void setImage(String ballImage) {
@@ -77,15 +82,8 @@ public class Ball {
 
         if (isNotMoving())
         {
-            if (indicatorRadius == 30f)
-            {
-                indicatorRadius = 5f;
-            } else {
-                if (radiusCount == 0) {
-                    indicatorRadius += 5f;
-                }
-                radiusCount = radiusCount == 10 ? 0 : radiusCount + 1;
-            }
+            accum += dt;
+            indicatorRadius = 10 + 10 * indicatorInterp.apply((accum/.5f)%1f);
         }
 
         position.set(newPosition);
@@ -103,7 +101,7 @@ public class Ball {
 
     private boolean isNotMoving()
     {
-        return !onTank;
+        return !onTank && velocity.len() < 30;
     }
 
     public void render(SpriteBatch batch){
@@ -113,13 +111,16 @@ public class Ball {
 
         if (isNotMoving())
         {
-            batch.end();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            shapeRenderer.setColor(Color.BLACK);
-            shapeRenderer.circle(position.x, position.y, indicatorRadius);
-            shapeRenderer.end();
-            batch.begin();
+            batch.draw(LudumDare41.game.assets.indicator, position.x - indicatorRadius, position.y - indicatorRadius, indicatorRadius * 2f, indicatorRadius * 2f);
+//            batch.end();
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+//            shapeRenderer.setColor(Color.BLACK);
+//            shapeRenderer.circle(position.x, position.y, indicatorRadius);
+//            shapeRenderer.end();
+//            batch.begin();
+
+
         }
     }
 
