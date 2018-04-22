@@ -10,15 +10,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld41.LudumDare41;
-import lando.systems.ld41.gameobjects.GameObject;
-import lando.systems.ld41.gameobjects.EnemyTank;
-import lando.systems.ld41.gameobjects.Catapult;
-import lando.systems.ld41.gameobjects.Level;
-import lando.systems.ld41.gameobjects.Tank;
+import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.BallIndicatorArrow;
 import lando.systems.ld41.ui.PowerMeter;
@@ -35,10 +30,12 @@ public class GameScreen extends BaseScreen {
     private static final float CAMERA_ZOOM_MARGIN = 1.2f;
 
     public Tank playerTank;
+    public int currentLevelNum;
     public Level level;
     public PowerMeter powerMeter;
     public boolean showPowerMeter;
     public boolean levelZoomDone;
+    private boolean levelTransitioning;
     public ParticleSystem particleSystem;
     public Catapult catapult1;
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
@@ -46,10 +43,12 @@ public class GameScreen extends BaseScreen {
     public BallIndicatorArrow ballIndicatorArrow;
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
-    public GameScreen() {
+    public GameScreen(int currentLevelNum) {
         Gdx.input.setInputProcessor(this);
 
-        level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(1));
+        this.levelTransitioning = false;
+        this.currentLevelNum = currentLevelNum;
+        level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(currentLevelNum));
 
         ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "brown");
@@ -82,6 +81,15 @@ public class GameScreen extends BaseScreen {
         }
 
         updateTank();
+        final float velThreshold = 20f;
+        if (!playerTank.ball.onTank && !levelTransitioning && playerTank.ball.velocity.len() <= velThreshold) {
+            if (level.hole.isInside(playerTank.ball)) {
+                // TODO: fancy up the level transition
+                levelTransitioning = true;
+                int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
+                LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
+            }
+        }
 
         if (showPowerMeter) {
             powerMeter.update(dt);

@@ -122,8 +122,8 @@ public class Assets implements Disposable {
         // ...
 
         levelNumberToFileNameMap = new IntMap<String>();
-        levelNumberToFileNameMap.put(1, "maps/test.tmx");
-        levelNumberToFileNameMap.put(2, "maps/test2.tmx");
+        levelNumberToFileNameMap.put(0, "maps/test.tmx");
+        levelNumberToFileNameMap.put(1, "maps/test2.tmx");
         // TODO: add other maps here
 
         if (loading == Loading.SYNC) {
