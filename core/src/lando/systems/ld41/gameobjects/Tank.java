@@ -83,6 +83,9 @@ public class Tank extends GameObject {
     }
 
     private void handleMovement(float dt) {
+        // Don't move if you have the ball
+        if (ball.onTank) return;
+
         if (!handleManMovement(dt)) {
             handleNoobMovement(dt);
         }
@@ -93,7 +96,7 @@ public class Tank extends GameObject {
         if (movement == TankMovement.None) return false;
 
         // manly bonus
-        dt *= 1.5f;
+        dt *= 3f;
 
         float speedDx = 0;
         float rotationDx = 0;
@@ -145,13 +148,6 @@ public class Tank extends GameObject {
                 leftTime += dt;
                 rotationDx = -rotationSpeed * dt;
                 break;
-        }
-        if (leftTime < 0)
-        {
-            leftTime = 0;
-        }
-        if (rightTime < 0) {
-            rightTime = 0;
         }
 
         updatePosition(speedDx, rotationDx);
@@ -205,10 +201,18 @@ public class Tank extends GameObject {
     }
 
     private void updatePosition(float speedUpdate, float rotationUpdate) {
-        // Don't move if you have the ball
-        if (ball.onTank) return;
 
         rotation += rotationUpdate;
+
+        // handle negative time for key frame
+        if (leftTime < 0) {
+            leftTime += tank.leftLoopTime;
+        }
+        if (rightTime < 0) {
+            rightTime += tank.rightLoopTime;
+        }
+
+        System.out.println("left: " + leftTime);
 
         //TODO make this use up stopped velocity so it can slide along edges found later in the boundary
         directionVector.set(1, 0);

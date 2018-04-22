@@ -12,7 +12,9 @@ public class TankAssets {
     public TextureRegion turret;
 
     public Animation<TextureRegion> leftTreads;
+    public float leftLoopTime;
     public Animation<TextureRegion> rightTreads;
+    public float rightLoopTime;
 
     public static TankAssets getTankAssets(String tankName) {
         return getTankAssets(tankName, "");
@@ -27,6 +29,9 @@ public class TankAssets {
 
         assets.leftTreads = gameAssets.tankAnimations.get(treadType + "lefttread");
         assets.rightTreads = gameAssets.tankAnimations.get(treadType + "righttread");
+
+        assets.leftLoopTime = assets.leftTreads.getAnimationDuration();
+        assets.rightLoopTime = assets.rightTreads.getAnimationDuration();
 
         return assets;
     }
