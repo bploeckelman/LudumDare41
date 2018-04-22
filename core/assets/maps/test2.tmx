@@ -17,7 +17,7 @@
   </data>
  </layer>
  <objectgroup name="collision">
-  <object id="3" x="160" y="96">
+  <object id="3" type="exterior" x="160" y="96">
    <polyline points="0,0 512,0 768,256 768,800 736,832 576,832 480,736 480,608 640,448 544,352 224,352 192,384 192,512 224,512 320,608 320,736 224,832 32,832 -128,672 -128,128 0,0"/>
   </object>
   <object id="4" x="160" y="224" width="32" height="32">
