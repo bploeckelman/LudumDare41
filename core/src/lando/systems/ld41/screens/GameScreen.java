@@ -266,8 +266,6 @@ public class GameScreen extends BaseScreen {
             playerTank.hasShield = !playerTank.hasShield;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             playerTank.dead = false;
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            catapult1.alive = false;
         } else {
             return;
         }
