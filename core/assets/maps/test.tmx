@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="7">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="10">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer name="ground" width="30" height="30">
   <data encoding="base64">
@@ -19,5 +19,12 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="objects"/>
+ <objectgroup name="objects">
+  <object id="7" name="tee" type="tee" gid="183" x="96" y="864" width="32" height="32">
+   <properties>
+    <property name="facing" type="int" value="-45"/>
+   </properties>
+  </object>
+  <object id="8" name="hole" type="hole" gid="184" x="832" y="128" width="32" height="32"/>
+ </objectgroup>
 </map>

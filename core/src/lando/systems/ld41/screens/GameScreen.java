@@ -15,13 +15,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.GameObject;
+import lando.systems.ld41.gameobjects.Catapult;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
-import lando.systems.ld41.gameobjects.Catapult;
 
 
 /**
@@ -43,8 +43,9 @@ public class GameScreen extends BaseScreen {
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
     public GameScreen() {
-        level = new Level(this, "maps/test.tmx");
         Gdx.input.setInputProcessor(this);
+
+        level = new Level(this, "maps/test.tmx");
 
         addPlayer();
 
@@ -80,7 +81,8 @@ public class GameScreen extends BaseScreen {
         System.out.println("body: " + body + " treads: " + treads);
 
         playerTank = new Tank(this, body, treads);
-
+        playerTank.position.set(level.tee.pos.x, level.tee.pos.y);
+        playerTank.rotation = level.tee.facing;
 
         gameObjects.add(playerTank);
     }

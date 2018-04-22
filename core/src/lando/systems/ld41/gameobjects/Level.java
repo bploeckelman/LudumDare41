@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,6 +32,9 @@ public class Level {
     public TiledMapTileLayer groundLayer;
     public TiledMapTileLayer wallsLayer;
     public MapLayer objectsLayer;
+
+    public Tee tee;
+    public Hole hole;
 
     Array<PolylineMapObject> boundaries;
     Array<EllipseMapObject> circles;
@@ -65,7 +67,24 @@ public class Level {
             throw new GdxRuntimeException("Missing required map layer. (required: 'collision', 'ground', 'walls', 'objects'");
         }
 
-        // TODO: load map objects
+        // load map objects
+        MapObjects objects = objectsLayer.getObjects();
+        if (objects.getCount() < 2) {
+            throw new GdxRuntimeException("Map must have at least 2 objects ('tee' and 'hole')");
+        }
+        MapObject obj = objects.get("tee");
+        if (obj != null) {
+            MapProperties props = obj.getProperties();
+            tee = new Tee(props.get("x", Float.class),
+                          props.get("y", Float.class),
+                          props.get("facing", Integer.class));
+        }
+        obj = objects.get("hole");
+        if (obj != null) {
+            MapProperties props = obj.getProperties();
+            hole = new Hole(props.get("x", Float.class),
+                            props.get("y", Float.class));
+        }
 
         // load collision polygons
         boundaries = collisionLayer.getObjects().getByType(PolylineMapObject.class);
@@ -81,6 +100,15 @@ public class Level {
     public void render(SpriteBatch batch, OrthographicCamera camera){
         mapRenderer.setView(camera);
         mapRenderer.render();
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        {
+            if (hole != null) {
+                hole.render(batch);
+            }
+        }
+        batch.end();
 
         if (showDebug){
             ShapeRenderer shapes = LudumDare41.game.assets.shapes;
