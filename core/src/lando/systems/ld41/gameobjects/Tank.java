@@ -230,8 +230,8 @@ public class Tank extends GameObject {
         float yTrackOffset = MathUtils.sinDeg(rotation) * TRACK_OFFSET;
         float xTrackOffset = MathUtils.cosDeg(rotation) * TRACK_OFFSET;
         
-        screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, 1f);
-        screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, 1f);
+        screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, directionVector.len());
+        screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, directionVector.len());
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
         rightTread = tank.rightTreads.getKeyFrame(rightTime, true);

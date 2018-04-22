@@ -48,11 +48,11 @@ public class ParticleSystem {
                 float velY = 0;
                 float scale = MathUtils.random(1f, 2f);
                 float ttl = MathUtils.random(.5f, 2f);
-                float grayValue = MathUtils.random(.2f);
+                float grayValue = MathUtils.random(.3f);
 
                 particle.init(posX, posY, velX, velY, -velX, -velY,
                               0.5f, grayValue, grayValue, grayValue, 1f,
-                              grayValue, grayValue, grayValue, 1f, scale, ttl, LudumDare41.game.assets.whitePixel);
+                              grayValue, grayValue, grayValue, 0f, scale, ttl, LudumDare41.game.assets.whitePixel);
                 activeGroundParticles.add(particle);
             }
         }
