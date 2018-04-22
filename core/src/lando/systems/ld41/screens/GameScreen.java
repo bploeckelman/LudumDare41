@@ -48,9 +48,12 @@ public class GameScreen extends BaseScreen {
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
 
-        level = new Level(this, "maps/test.tmx");
+        level = new Level(this, "maps/test2.tmx");
 
         playerTank = new Tank(this, "browntank", "");
+        playerTank.position.set(level.tee.pos);
+        playerTank.rotation = level.tee.facing;
+
         gameObjects.add(playerTank);
   
         showPowerMeter = false;
