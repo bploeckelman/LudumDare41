@@ -36,6 +36,7 @@ public class Level {
 
     public Tee tee;
     public Hole hole;
+    public Array<PinballBumper> pinballBumpers;
 
     public Array<PolylineMapObject> boundaries;
     public PolylineMapObject exteriorBoundry;
@@ -70,6 +71,8 @@ public class Level {
 
         // load map objects
         MapObjects objects = objectsLayer.getObjects();
+
+        // load required objects
         if (objects.getCount() < 2) {
             throw new GdxRuntimeException("Map must have at least 2 objects ('tee' and 'hole')");
         }
@@ -85,6 +88,17 @@ public class Level {
             MapProperties props = obj.getProperties();
             hole = new Hole(props.get("x", Float.class),
                     props.get("y", Float.class));
+        }
+
+        // load additional objects
+        pinballBumpers = new Array<PinballBumper>();
+        for (MapObject object : objects) {
+            MapProperties props = object.getProperties();
+            String type = (String) props.get("type");
+            if (type == null) continue;
+            if (type.equalsIgnoreCase("bumper")) {
+                pinballBumpers.add(new PinballBumper(props.get("x", Float.class), props.get("y", Float.class)));
+            }
         }
 
         // load collision polygons
@@ -111,7 +125,9 @@ public class Level {
     }
 
     public void update(float dt){
-
+        for (PinballBumper bumper : pinballBumpers) {
+            bumper.update(dt);
+        }
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera){
@@ -123,6 +139,9 @@ public class Level {
         {
             hole.render(batch);
             tee.render(batch);
+            for (PinballBumper bumper : pinballBumpers) {
+                bumper.render(batch);
+            }
         }
         batch.end();
 

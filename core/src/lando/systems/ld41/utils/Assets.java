@@ -60,9 +60,10 @@ public class Assets implements Disposable {
     public TextureRegion ballOrange;
     public TextureRegion hole;
     public TextureRegion smoke;
-
     public TextureRegion thumbnailBg;
     public TextureRegion thumbnailBoundries;
+    public TextureRegion pinballBumperOff;
+    public TextureRegion pinballBumperOn;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -147,6 +148,9 @@ public class Assets implements Disposable {
         ballOrange = atlas.findRegion("ballorange");
         hole = atlas.findRegion("hole");
         smoke = atlas.findRegion("barrelsmoke");
+
+        pinballBumperOff = atlas.findRegion("pinballbumper-off");
+        pinballBumperOn = atlas.findRegion("pinballbumper-on");
 
         Pixmap pixGreen = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixGreen.setColor(Color.GREEN);

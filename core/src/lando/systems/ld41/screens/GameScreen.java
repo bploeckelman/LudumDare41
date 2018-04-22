@@ -96,11 +96,11 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void update(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-        {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new TitleScreen());
         }
 
+        level.update(dt);
         updateTank();
         final float velThreshold = 20f;
         if (!playerTank.ball.onTank && !levelTransitioning && playerTank.ball.velocity.len() <= velThreshold) {
@@ -117,8 +117,7 @@ public class GameScreen extends BaseScreen {
             powerMeter.update(dt);
         }
 
-        for (EnemyTank tank : enemyTanks)
-        {
+        for (EnemyTank tank : enemyTanks) {
             tank.update(dt);
         }
         particleSystem.update(dt);
@@ -134,6 +133,14 @@ public class GameScreen extends BaseScreen {
             updateCamera();
         } else {
             worldCamera.update();
+        }
+
+        for (PinballBumper bumper : level.pinballBumpers) {
+            bumper.checkForHit(playerTank.ball);
+            bumper.checkForHit(playerTank);
+//            for (Bullet bullet : activeBullets) {
+//                bumper.checkForHit(bullet);
+//            }
         }
     }
 

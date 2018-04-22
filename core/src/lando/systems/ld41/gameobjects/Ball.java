@@ -3,11 +3,9 @@ package lando.systems.ld41.gameobjects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Ball {
 
