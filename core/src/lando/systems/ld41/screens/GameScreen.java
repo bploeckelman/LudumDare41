@@ -124,7 +124,7 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             batch.setColor(Color.WHITE);
-            particleSystem.render(batch);
+            particleSystem.renderGround(batch);
             for (GameObject gameObj : gameObjects) {
                 gameObj.render(batch);
             }
@@ -132,6 +132,8 @@ public class GameScreen extends BaseScreen {
             {
                 tank.render(batch);
             }
+            particleSystem.render(batch);
+
         }
         batch.end();
     }

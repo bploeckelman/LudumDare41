@@ -129,7 +129,7 @@ public class Level {
 
                 for (int i = 0; i < circles.size; i++){
                     Ellipse circle = circles.get(i).getEllipse();
-                    shapes.circle(circle.x, circle.y, circle.height / 2);
+                    shapes.circle(circle.x + circle.height/2f, circle.y + circle.height/2f, circle.height / 2);
                 }
             }
             shapes.end();
@@ -203,11 +203,11 @@ public class Level {
 
         for (int i = 0; i < circles.size; i++){
             Ellipse circle = circles.get(i).getEllipse();
-            if (newPosition.dst(circle.x, circle.y) < radius + circle.height / 2f){
+            if (newPosition.dst(circle.x + circle.height/2f, circle.y + circle.height/2f) < radius + circle.height / 2f){
                 normal.set(newPosition);
-                normal.sub(circle.x, circle.y);
+                normal.sub(circle.x + circle.height/2f, circle.y + circle.height/2f);
                 normal.nor();
-                collisionPoint.set(circle.x, circle.y);
+                collisionPoint.set(circle.x + circle.height/2f, circle.y + circle.height/2f);
                 normal.scl(radius + circle.height / 2f);
                 collisionPoint.add(normal);
                 normal.nor();

@@ -9,6 +9,7 @@ import lando.systems.ld41.LudumDare41;
 
 public class ParticleSystem {
     private final Array<Particle> activeParticles = new Array<Particle>();
+    private final Array<Particle> activeGroundParticles = new Array<Particle>();
     private final Pool<Particle> particlePool = Pools.get(Particle.class, 500);
 
     public ParticleSystem() { }
@@ -32,7 +33,7 @@ public class ParticleSystem {
                 particle.init(posX, posY, velX, velY, -velX, -velY,
                               0.5f, grayValue, grayValue, grayValue, 1f,
                               grayValue, grayValue, grayValue, 1f, scale, ttl, LudumDare41.game.assets.whitePixel);
-                activeParticles.add(particle);
+                activeGroundParticles.add(particle);
             }
         }
     }
@@ -49,6 +50,26 @@ public class ParticleSystem {
                 activeParticles.removeIndex(i);
                 particlePool.free(part);
             }
+        }
+
+        len = activeGroundParticles.size;
+        for (int i = len - 1; i >= 0; i--)
+        {
+            Particle part = activeGroundParticles.get(i);
+            part.update(dt);
+            if (part.timeToLive <= 0)
+            {
+                activeGroundParticles.removeIndex(i);
+                particlePool.free(part);
+            }
+        }
+    }
+
+    public void renderGround(SpriteBatch batch)
+    {
+        for (Particle part : activeGroundParticles)
+        {
+            part.render(batch);
         }
     }
 
