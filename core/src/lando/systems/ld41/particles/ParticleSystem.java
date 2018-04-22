@@ -14,6 +14,26 @@ public class ParticleSystem {
 
     public ParticleSystem() { }
 
+    public void addBarrelSmoke(float x, float y, float dx, float dy){
+        int smokeParticles = 50;
+        for (int i = 0; i < smokeParticles; i++){
+            Particle particle = particlePool.obtain();
+            float posX = x + MathUtils.random(-10f, 10f);
+            float posY = y + MathUtils.random(-10f, 10f);
+
+            float velX = dx * MathUtils.random(2, 10f) + MathUtils.random(-20f, 20f);
+            float velY = dy * MathUtils.random(2, 10f) + MathUtils.random(-20f, 20f);
+            float scale = MathUtils.random(5f, 20f);
+            float ttl = MathUtils.random(.5f, 1.5f);
+            float grayValue = MathUtils.random(.5f) + .5f;
+
+            particle.init(posX, posY, velX, velY, -velX, -velY,
+                    0.5f, grayValue, grayValue, grayValue, 1f,
+                    grayValue, grayValue, grayValue, 0f, scale, ttl, LudumDare41.game.assets.smoke);
+            activeParticles.add(particle);
+        }
+    }
+
     public void addTracks(float x, float y, float speed)
     {
         for (int dX = -2; dX < 2; dX++)
@@ -75,6 +95,7 @@ public class ParticleSystem {
 
     public void render(SpriteBatch batch)
     {
+        batch.enableBlending();
         for (Particle part : activeParticles)
         {
             part.render(batch);

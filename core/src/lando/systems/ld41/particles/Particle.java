@@ -102,7 +102,7 @@ public class Particle {
         a = (a < 0) ? 0 : (a > 1) ? 1 : a;
 
         batch.setColor(r, g, b, a);
-        batch.draw(region, pos.x, pos.y, scale.floatValue(), scale.floatValue());
+        batch.draw(region, pos.x - scale.floatValue()/2f, pos.y - scale.floatValue()/2f, scale.floatValue(), scale.floatValue());
         batch.setColor(Color.WHITE);
     }
 }

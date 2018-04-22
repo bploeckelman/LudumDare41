@@ -278,11 +278,11 @@ public class Tank extends GameObject {
 
         tempVector.set(position).add(directionVector.scl(30));
         directionVector.nor();
+        screen.particleSystem.addBarrelSmoke(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
 
         directionVector.scl(20 + (5 * power));
 
         isFirstBallFired = true;
-
         ball.shootBall(tempVector, directionVector);
     }
 }
