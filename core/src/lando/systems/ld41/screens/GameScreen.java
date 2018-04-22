@@ -25,7 +25,6 @@ import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 
 /**
@@ -50,7 +49,7 @@ public class GameScreen extends BaseScreen {
     public GameScreen() {
         Gdx.input.setInputProcessor(this);
 
-        level = new Level(this, "maps/test.tmx");
+        level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(1));
 
         ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "brown");
@@ -66,7 +65,7 @@ public class GameScreen extends BaseScreen {
         gameObjects.add(catapult2);
   
         showPowerMeter = false;
-        enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
+//        enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
         worldCamera.position.set(playerTank.position, 0);

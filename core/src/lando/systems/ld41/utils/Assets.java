@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.IntMap;
 import lando.systems.ld41.LudumDare41;
 
 import java.util.HashMap;
@@ -81,6 +82,9 @@ public class Assets implements Disposable {
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
     public Animation<TextureRegion> catapultAnimation;
+
+    public IntMap<String> levelNumberToFileNameMap;
+
     public boolean initialized;
 
     public Assets() {
@@ -112,6 +116,11 @@ public class Assets implements Disposable {
         mgr.load(shaderHeartAsset);
         mgr.load(shaderCircleCropAsset);
         // ...
+
+        levelNumberToFileNameMap = new IntMap<String>();
+        levelNumberToFileNameMap.put(1, "maps/test.tmx");
+        levelNumberToFileNameMap.put(2, "maps/test2.tmx");
+        // TODO: add other maps here
 
         if (loading == Loading.SYNC) {
             mgr.finishLoading();
