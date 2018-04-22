@@ -39,9 +39,13 @@ public class Catapult extends GameObject {
     @Override
     public void update(float dt){
         timer+=dt;
-        rotation = (float)(Math.atan2(
-                playerTank.position.y - position.y,
-                playerTank.position.x - position.x) * 180 / Math.PI);
+        if (!alive) {
+            smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
+        } else {
+            rotation = (float)(Math.atan2(
+                    playerTank.position.y - position.y,
+                    playerTank.position.x - position.x) * 180 / Math.PI);
+        }
         if (playerTank.isFirstBallFired && alive && timer > FIRE_RATE) {
             updateBullet(dt);
             timer = 0;
@@ -55,9 +59,7 @@ public class Catapult extends GameObject {
         else {
             catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(2);
         }
-        if (!alive) {
-            smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
-        }
+
     }
 
     public void updateBullet(float dt) {
@@ -72,10 +74,10 @@ public class Catapult extends GameObject {
         float x = position.x - halfX;
         float y = position.y - halfY;
         if (!alive) {
-            batch.draw(LudumDare41.game.assets.catapultAnimation.getKeyFrame(2), x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
-            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
+            batch.draw(LudumDare41.game.assets.catapultAnimation.getKeyFrame(2), x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         } else {
-            batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+            batch.draw(catapultFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         }
     }
 }
