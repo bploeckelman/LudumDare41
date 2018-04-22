@@ -54,7 +54,12 @@ public class GameScreen extends BaseScreen {
         playerTank.position.set(level.tee.pos);
         playerTank.rotation = level.tee.facing;
 
+        catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
+        catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
+
         gameObjects.add(playerTank);
+        gameObjects.add(catapult1);
+        gameObjects.add(catapult2);
   
         showPowerMeter = false;
         enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
@@ -64,10 +69,8 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         enterLevelZoom();
-        catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
-        catapult1.init(playerTank);
-        catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
-        catapult2.init(playerTank);
+
+
     }
 
     @Override
@@ -124,8 +127,6 @@ public class GameScreen extends BaseScreen {
         {
             batch.setColor(Color.WHITE);
             particleSystem.render(batch);
-            catapult1.render(batch);
-            catapult2.render(batch);
             for (GameObject gameObj : gameObjects) {
                 gameObj.render(batch);
             }

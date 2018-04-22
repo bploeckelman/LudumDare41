@@ -8,7 +8,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
 
-public class Catapult {
+public class Catapult extends GameObject {
     public final float FIRE_RATE = 4;
     public final float TURRET_WIDTH = 50;
     public final float TURRET_HEIGHT = 50;
@@ -33,10 +33,7 @@ public class Catapult {
         catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
 
     }
-
-    public void init(Tank playerTank){
-    }
-
+    @Override
     public void update(float dt){
         timer+=dt;
         rotation = (float)(Math.atan2(
@@ -67,7 +64,7 @@ public class Catapult {
         newBullet = new Bullet(screen, playerTank, position.x, position.y, playerTank.position.x, playerTank.position.y);
         activeBullets.add(newBullet);
     }
-
+    @Override
     public void render(SpriteBatch batch){
         batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         for (Bullet bullet : activeBullets) {
