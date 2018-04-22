@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
+import lando.systems.ld41.utils.Assets;
 
 
 public class Catapult extends GameObject {
@@ -64,7 +65,7 @@ public class Catapult extends GameObject {
 
     public void updateBullet(float dt) {
         bulletPosition.set(position.x, position.y);
-        screen.addBullet(this, 100, bulletPosition, LudumDare41.game.assets.ballOrange);
+        screen.addBullet(this, 100, bulletPosition, Assets.getImage(Assets.Balls.Orange));
     }
 
     @Override

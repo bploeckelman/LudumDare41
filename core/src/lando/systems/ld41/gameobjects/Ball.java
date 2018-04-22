@@ -2,11 +2,12 @@ package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
+import lando.systems.ld41.utils.Assets;
 
 public class Ball {
 
@@ -28,8 +29,12 @@ public class Ball {
 
     private float indicatorRadius = 0f;
 
-    public Ball(GameScreen screen){
+    public TextureRegion image;
+
+    public Ball(GameScreen screen, String ballImage){
         this.screen = screen;
+        setImage(ballImage);
+
         onTank = true;
         position = new Vector2();
         velocity = new Vector2();
@@ -46,7 +51,9 @@ public class Ball {
         radius = 5;
     }
 
-
+    public void setImage(String ballImage) {
+        this.image = Assets.getImage(ballImage);
+    }
 
     public void update(float dt){
         if (onTank) return;
@@ -101,7 +108,7 @@ public class Ball {
     public void render(SpriteBatch batch){
         if (onTank) return;
 
-        batch.draw(LudumDare41.game.assets.ballBrown, position.x -radius, position.y-radius, radius*2, radius*2);
+        batch.draw(image, position.x -radius, position.y-radius, radius*2, radius*2);
 
         if (isNotMoving())
         {

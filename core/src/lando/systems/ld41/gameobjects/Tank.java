@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.TankAssets;
 
@@ -67,7 +66,7 @@ public class Tank extends GameObject {
         collisionPoint = new Vector2();
         normal = new Vector2();
         this.screen = screen;
-        ball = new Ball(screen);
+        ball = new PlayerBall(screen);
         tempVector = new Vector2();
         dead = false;
     }
@@ -293,7 +292,7 @@ public class Tank extends GameObject {
                 directionVector.setAngle(turretRotation);
 
                 tempVector.set(position).add(directionVector.scl(30));
-                batch.draw(LudumDare41.game.assets.ballBrown, position.x + directionVector.x - 5, position.y + directionVector.y - 5, 5, 5, 10, 10, 1, 1, turretRotation - 90);
+                batch.draw(ball.image, position.x + directionVector.x - 5, position.y + directionVector.y - 5, 5, 5, 10, 10, 1, 1, turretRotation - 90);
             }
 
             if (hasShield) {

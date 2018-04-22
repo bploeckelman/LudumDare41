@@ -20,12 +20,12 @@ import lando.systems.ld41.LudumDare41;
 import java.util.HashMap;
 
 public class Assets implements Disposable {
-    public class Keys {
-        public static final String OrangeBall = "ballorange";
-        public static final String BrownBall = "ballbrown";
-        public static final String BlueBall = "ballblue";
-        public static final String PinkBall = "ballpink";
-        public static final String PurpleBall = "ballpurple";
+    public class Balls {
+        public static final String Orange = "ballorange";
+        public static final String Brown = "ballbrown";
+        public static final String Blue = "ballblue";
+        public static final String Pink = "ballpink";
+        public static final String Purple = "ballpurple";
     }
 
     // Initialize descriptors for all assets
@@ -63,8 +63,6 @@ public class Assets implements Disposable {
     public TextureRegion whitePixel;
     public TextureRegion whiteCircle;
     public TextureRegion testTexture;
-    public TextureRegion ballBrown;
-    public TextureRegion ballOrange;
     public TextureRegion hole;
     public TextureRegion smoke;
     public TextureRegion thumbnailBg;
@@ -153,8 +151,6 @@ public class Assets implements Disposable {
         whitePixel = atlas.findRegion("white-pixel");
         whiteCircle = atlas.findRegion("white-circle");
         testTexture = atlas.findRegion("badlogic");
-        ballBrown = atlas.findRegion("ballbrown");
-        ballOrange = atlas.findRegion("ballorange");
         hole = atlas.findRegion("hole");
         smoke = atlas.findRegion("barrelsmoke");
         arrow = atlas.findRegion("arrow");
@@ -217,11 +213,11 @@ public class Assets implements Disposable {
     }
 
     private void loadBalls() {
-        assetMap.put(Keys.OrangeBall, atlas.findRegion(Keys.OrangeBall));
-        assetMap.put(Keys.BlueBall, atlas.findRegion(Keys.BlueBall));
-        assetMap.put(Keys.PurpleBall, atlas.findRegion(Keys.PurpleBall));
-        assetMap.put(Keys.BrownBall, atlas.findRegion(Keys.BrownBall));
-        assetMap.put(Keys.PinkBall, atlas.findRegion(Keys.PinkBall));
+        assetMap.put(Balls.Orange, atlas.findRegion(Balls.Orange));
+        assetMap.put(Balls.Blue, atlas.findRegion(Balls.Blue));
+        assetMap.put(Balls.Purple, atlas.findRegion(Balls.Purple));
+        assetMap.put(Balls.Brown, atlas.findRegion(Balls.Brown));
+        assetMap.put(Balls.Pink, atlas.findRegion(Balls.Pink));
     }
 
     private void loadTankAssets() {
@@ -325,4 +321,7 @@ public class Assets implements Disposable {
         batch.setShader(null);
     }
 
+    public static TextureRegion getImage(String imageKey) {
+        return LudumDare41.game.assets.assetMap.get(imageKey);
+    }
 }
