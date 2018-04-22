@@ -88,7 +88,17 @@ public class Level {
 
         // load collision polygons
         boundaries = collisionLayer.getObjects().getByType(PolylineMapObject.class);
-        if (boundaries.size < 1) throw new GdxRuntimeException("Forgot to add boundary layer to the map");
+        boolean missingExterior = true;
+        for (PolylineMapObject boundary : boundaries) {
+            String type = (String) boundary.getProperties().get("type");
+            if (type != null && type.equalsIgnoreCase("exterior")) {
+                missingExterior = false;
+                break;
+            }
+        }
+        if (missingExterior || boundaries.size < 1) {
+            throw new GdxRuntimeException("Forgot to add boundary layer to the map");
+        }
 
         circles = collisionLayer.getObjects().getByType(EllipseMapObject.class);
     }
