@@ -330,14 +330,6 @@ public class GameScreen extends BaseScreen {
             }
         }
 
-        for(int i = catapults.size - 1; i>=0; i--) {
-            Catapult c = catapults.get(i);
-            c.update(dt);
-            if (playerTank.ball.position.dst(c.position) < playerTank.ball.radius + c.radius) {
-                c.alive = false;
-            }
-        }
-
         if (playerTank.dead){
             removeAllBullets();
         }

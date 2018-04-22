@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.screens.GameScreen;
@@ -64,7 +65,7 @@ public class Ball {
         newPosition.add(velocity.x * dt, velocity.y * dt);
 
 
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal )){
+        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollisionWithCatapults()){
             float currentSpeed = velocity.len();
             tempVector.set(newPosition.x - oldPosition.x, newPosition.y - oldPosition.y);
             // r=d−2(d⋅n)n
@@ -134,5 +135,22 @@ public class Ball {
         if (position.dst(tank.position) < radius + tank.radius){
             onTank = true;
         }
+    }
+
+    public boolean checkCollisionWithCatapults() {
+        for(Catapult catapult : screen.catapults) {
+            if (catapult.position.dst(newPosition) < catapult.radius + radius) {
+                normal.set(newPosition);
+                normal.sub(catapult.position);
+                normal.nor();
+                collisionPoint.set(catapult.position);
+                normal.scl(catapult.radius + radius);
+                collisionPoint.add(normal);
+                normal.nor();
+                catapult.alive = false;
+                return true;
+            }
+        }
+        return false;
     }
 }
