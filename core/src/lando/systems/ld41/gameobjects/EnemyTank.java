@@ -13,25 +13,32 @@ import lando.systems.ld41.ai.StateMachine;
 import lando.systems.ld41.ai.Transition;
 import lando.systems.ld41.ai.conditions.PlayerCloserThan;
 import lando.systems.ld41.ai.conditions.PlayerFurtherThan;
+import lando.systems.ld41.ai.states.EvadePlayerState;
 import lando.systems.ld41.ai.states.TargetPlayerState;
 import lando.systems.ld41.ai.states.WaitState;
 import lando.systems.ld41.ai.states.WanderState;
 import lando.systems.ld41.screens.GameScreen;
+import lando.systems.ld41.utils.Assets;
 import lando.systems.ld41.utils.TankAssets;
 
 public class EnemyTank extends GameObject {
+    public enum EnemyType {Orange, Green, Pink, Blue}
+
     public static float rotationSpeed = 120;
+    public static float TURRET_SPEED = 360;
     private final float TRACK_OFFSET = 20f;
 
     public TankAssets tank;
     private TextureRegion leftTread;
     private TextureRegion rightTread;
+    private TextureRegion bulletTexture;
     private float leftTime;
     private float rightTime;
 
     private float width;
     private float height;
     public float turretRotation;
+    public float turrentTargetRotation;
 
     public Vector2 directionVector;
     public Vector2 oldPosition;
@@ -43,11 +50,15 @@ public class EnemyTank extends GameObject {
 
     public Interpolation lerp = Interpolation.linear;
     public StateMachine stateMachine;
+    public float reloadTimer = 5f;
+    public float reloadDelay = 5f;
+    public EnemyType type;
 
-    public EnemyTank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition, float aggro, float speed)
+    public EnemyTank(GameScreen screen, EnemyType type, float width, float height, Vector2 startPosition, float aggro, float speed)
     {
+        this.type = type;
         tempVec = new Vector2();
-        tank = TankAssets.getTankAssets(tankName);
+
         this.speed = speed;
 
         this.width = width;
@@ -60,26 +71,52 @@ public class EnemyTank extends GameObject {
         normal = new Vector2();
         this.screen = screen;
         this.directionVector = new Vector2();
+        this.bulletSpeed = 300;
+        switch(type){
 
-        initializeStates();
+            case Orange:
+                initializeOrange();
+                break;
+            case Green:
+                break;
+            case Pink:
+                break;
+            case Blue:
+                break;
+            default:
+                initializeOrange();
+
+
+        }
+        initializeOrange();
     }
 
-    private void initializeStates(){
+    private void initializeOrange(){
+
+        tank = TankAssets.getTankAssets("orangetank");
+        bulletTexture = Assets.getImage(Assets.Balls.Orange);
+
         WaitState wait = new WaitState(this);
         WanderState wander = new WanderState(this);
         TargetPlayerState targetPlayer = new TargetPlayerState(this);
+        EvadePlayerState evadePlayer = new EvadePlayerState(this);
 
-        PlayerCloserThan closerThan200 = new PlayerCloserThan(this, 200);
-        PlayerCloserThan closerThan100 = new PlayerCloserThan(this, 100);
-        PlayerFurtherThan furtherThanWanderRange = new PlayerFurtherThan(this, 500);
-        PlayerFurtherThan furtherThan150 = new PlayerFurtherThan(this, 150);
+        PlayerCloserThan insideWander = new PlayerCloserThan(this, 500);
+        PlayerCloserThan insideTarget = new PlayerCloserThan(this, 300);
+        PlayerCloserThan insideEvade = new PlayerCloserThan(this, 100);
+        PlayerFurtherThan outsideWander = new PlayerFurtherThan(this, 600);
+        PlayerFurtherThan outsideTarget = new PlayerFurtherThan(this, 400);
+        PlayerFurtherThan outsideEvade = new PlayerFurtherThan(this, 150);
 
         Array<Transition> transitions = new Array<Transition>();
-        transitions.add(new Transition(wait, closerThan200, wander));
-        transitions.add(new Transition(wander, furtherThanWanderRange, wait));
+        transitions.add(new Transition(wait, insideWander, wander));
+        transitions.add(new Transition(wander, outsideWander, wait));
 
-//        transitions.add(new Transition(wander, closerThan100, targetPlayer));
-        transitions.add(new Transition(targetPlayer, furtherThan150, wander));
+        transitions.add(new Transition(wander, insideTarget, targetPlayer));
+        transitions.add(new Transition(targetPlayer, outsideTarget, wander));
+
+        transitions.add(new Transition(targetPlayer, insideEvade, evadePlayer));
+        transitions.add(new Transition(evadePlayer, outsideEvade, targetPlayer));
 
         stateMachine = new StateMachine(wait, transitions);
     }
@@ -92,33 +129,30 @@ public class EnemyTank extends GameObject {
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
         rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
-
-        setTurretPosition();
+        updateTurretRotation(dt);
+//        setTurretPosition();
     }
 
-    private  void moveAggro(float dt)
+
+    private void updateTurretRotation(float dt)
     {
-        float angleToLerp = (float)(Math.atan2(
-                screen.playerTank.position.y - position.y,
-                screen.playerTank.position.x - position.x) * 180 / Math.PI) - 90;
+        if (turrentTargetRotation - turretRotation < -180) turretRotation -= 360;
+        if (turrentTargetRotation - turretRotation > 180) turretRotation += 360;
 
-        if (angleToLerp == rotation) {
-
-        } else {
-            rotation = angleToLerp;
+        float amountToRotate = Math.abs(turrentTargetRotation - turretRotation);
+        if (turrentTargetRotation != turretRotation){
+            float rotationAmount = TURRET_SPEED * dt;
+            if (amountToRotate < rotationAmount){
+                turretRotation = turrentTargetRotation;
+            } else {
+                turretRotation += Math.signum(turrentTargetRotation - rotation) * rotationAmount;
+            }
         }
-
-        updatePosition(speed * dt);
-
-    }
-
-
-    private void setTurretPosition()
-    {
-        // Track player
-        turretRotation = (float)(Math.atan2(
-                screen.playerTank.position.y - position.y,
-                screen.playerTank.position.x - position.x) * 180 / Math.PI);
+//
+//        // Track player
+//        turretRotation = (float)(Math.atan2(
+//                screen.playerTank.position.y - position.y,
+//                screen.playerTank.position.x - position.x) * 180 / Math.PI);
     }
 
     public boolean updatePosition(float speed)
@@ -197,5 +231,23 @@ public class EnemyTank extends GameObject {
 
         }
         return false;
+    }
+
+    public void shoot(float dt){
+        reloadTimer -= dt;
+        if (reloadTimer > 0){
+            return;
+        }
+        reloadTimer += reloadDelay;
+        directionVector.set(0, 1);
+        directionVector.setAngle(turretRotation + MathUtils.random(-10f, 10f));
+
+        tempVec.set(position).add(directionVector.scl(30));
+        directionVector.nor();
+        screen.particleSystem.addBarrelSmoke(tempVec.x, tempVec.y, directionVector.x, directionVector.y);
+
+
+        screen.addBullet(this, tempVec, directionVector, bulletTexture );
+//        ball.shootBall(tempVector, directionVector);
     }
 }

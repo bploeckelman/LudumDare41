@@ -10,6 +10,8 @@ public abstract class GameObject {
     public GameScreen screen;
     public float rotation;
     public float speed;
+    public float bulletSize = 10;
+    public float bulletSpeed = 200;
 
 
 

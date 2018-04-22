@@ -1,5 +1,6 @@
 package lando.systems.ld41.ai.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.gameobjects.EnemyTank;
@@ -21,12 +22,17 @@ public class WanderState extends State{
         if (((EnemyTank)owner).rotateAndMove(targetPos, dt)){
             findNewTarget();
         }
-
+        ((EnemyTank)owner).turrentTargetRotation += 100*dt;
+        if (((EnemyTank)owner).turrentTargetRotation > 360){
+            ((EnemyTank)owner).turrentTargetRotation -= 360;
+        }
     }
 
     @Override
     public void onEnter() {
         findNewTarget();
+        Gdx.app.log("AI:", "Enter Wander");
+
     }
 
     @Override

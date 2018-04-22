@@ -50,6 +50,7 @@ public class GameScreen extends BaseScreen {
     private Vector2 newBulletPosition;
     private Vector2 bulletCollisionPoint;
     private Vector2 normal;
+    private Vector2 tempVec;
 
     public static final Array<Bullet> activeBullets = new Array<Bullet>();
     public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
@@ -70,6 +71,7 @@ public class GameScreen extends BaseScreen {
         newBulletPosition = new Vector2();
         bulletCollisionPoint = new Vector2();
         normal = new Vector2();
+        tempVec = new Vector2();
 
         gameObjects.add(playerTank);
         gameObjects.add(catapult1);
@@ -79,7 +81,7 @@ public class GameScreen extends BaseScreen {
         catapults.add(catapult2);
 
         showPowerMeter = false;
-        enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
+        enemyTanks.add(new EnemyTank(this, EnemyTank.EnemyType.Orange, 60, 60, new Vector2(400, 300), 200f, 150f));
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
         worldCamera.position.set(playerTank.position, 0);
@@ -317,7 +319,7 @@ public class GameScreen extends BaseScreen {
             }
             oldBulletPosition.set(b.position);
             newBulletPosition.set(b.position);
-            newBulletPosition.add(b.velocity.x * b.bulletVelocityMultiplier * dt, b.velocity.y * b.bulletVelocityMultiplier * dt);
+            newBulletPosition.add(b.velocity.x * b.bulletSpeed * dt, b.velocity.y * b.bulletSpeed * dt);
             //check collision with the walls
             if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal)){
                 b.alive = false;
@@ -347,9 +349,9 @@ public class GameScreen extends BaseScreen {
         activeBullets.clear();
     }
 
-    public void addBullet(Catapult owner, int velocityMultiplier, Vector2 position, TextureRegion tex){
+    public void addBullet(GameObject owner, Vector2 position, Vector2 dir, TextureRegion tex){
         Bullet b = bulletsPool.obtain();
-        b.init(playerTank, position, velocityMultiplier, owner, tex);
+        b.init(position, dir, owner, tex);
         activeBullets.add(b);
     }
 }

@@ -25,6 +25,7 @@ public class Catapult extends GameObject {
     private Vector2 bulletPosition;
     public float radius;
 
+    private Vector2 tempVec;
 
 
     public Catapult(GameScreen screen, Tank playerTank, Vector2 startPosition){
@@ -32,7 +33,10 @@ public class Catapult extends GameObject {
         this.position = startPosition;
         this.playerTank = playerTank;
         this.bulletPosition = new Vector2();
+        this.bulletSpeed = 100;
+        this.bulletSize = 15f;
         directionVector = new Vector2();
+        tempVec = new Vector2();
         catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
         this.radius = Math.max(TURRET_WIDTH, TURRET_HEIGHT)/2f;
 
@@ -65,7 +69,8 @@ public class Catapult extends GameObject {
 
     public void updateBullet(float dt) {
         bulletPosition.set(position.x, position.y);
-        screen.addBullet(this, 100, bulletPosition, Assets.getImage(Assets.Balls.Orange));
+        tempVec.set(playerTank.position.x - position.x, playerTank.position.y - position.y);
+        screen.addBullet(this, bulletPosition, tempVec, Assets.getImage(Assets.Balls.Purple));
     }
 
     @Override

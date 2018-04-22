@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.gameobjects.EnemyTank;
 import lando.systems.ld41.gameobjects.GameObject;
 
-public class TargetPlayerState extends State{
+public class EvadePlayerState extends State{
 
     private Vector2 targetPos;
 
-    public TargetPlayerState(GameObject owner) {
+    public EvadePlayerState(GameObject owner) {
         super(owner);
         targetPos = new Vector2();
     }
@@ -19,15 +19,8 @@ public class TargetPlayerState extends State{
     @Override
     public void update(float dt) {
         EnemyTank tankOwner = (EnemyTank)owner;
-        if (targetPos.epsilonEquals(-1000, -1000)) {
-            if (tankOwner.rotateAndMove(owner.screen.playerTank.position, dt)) {
-                // it ran into a wall, try to move around randomly
-                findNewTarget();
-            }
-        } else {
-            if (tankOwner.rotateAndMove(targetPos, dt)) {
-                targetPos.set(-1000,-1000);
-            }
+        if (tankOwner.rotateAndMove(targetPos, dt)){
+            findNewTarget();
         }
 
         tankOwner.turrentTargetRotation = (float)(Math.atan2(
@@ -35,12 +28,13 @@ public class TargetPlayerState extends State{
                 owner.screen.playerTank.position.x - owner.position.x) * 180 / Math.PI);
 
         tankOwner.shoot(dt);
+
     }
 
     @Override
     public void onEnter() {
-        Gdx.app.log("AI:", "Enter Target");
-
+        findNewTarget();
+        Gdx.app.log("AI:", "Enter Evade");
     }
 
     @Override
@@ -49,6 +43,8 @@ public class TargetPlayerState extends State{
     }
 
     private void findNewTarget(){
-        targetPos.set(owner.position.x + MathUtils.randomSign() * MathUtils.random(100, 200f), owner.position.y + MathUtils.randomSign() * MathUtils.random(100, 200f));
+        targetPos.set(owner.screen.playerTank.position).sub(owner.position);
+        targetPos.rotate(120f * MathUtils.randomSign());
+        targetPos.nor().scl(200).add(owner.position);
     }
 }
