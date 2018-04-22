@@ -56,6 +56,7 @@ public class Assets implements Disposable {
     public TextureRegion testTexture;
     public TextureRegion ballBrown;
     public TextureRegion ballOrange;
+    public TextureRegion hole;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -129,6 +130,7 @@ public class Assets implements Disposable {
         testTexture = atlas.findRegion("badlogic");
         ballBrown = atlas.findRegion("ballbrown");
         ballOrange = atlas.findRegion("ballorange");
+        hole = atlas.findRegion("hole");
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
         backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);

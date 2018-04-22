@@ -10,12 +10,11 @@ public class Hole extends GameObject {
 
     public Vector2 pos;
 
-    private final float size = 16f;
     private TextureRegion texture;
 
     public Hole(float x, float y) {
         this.pos = new Vector2(x, y);
-        this.texture = LudumDare41.game.assets.whiteCircle;
+        this.texture = LudumDare41.game.assets.hole;
     }
 
     @Override
@@ -24,7 +23,7 @@ public class Hole extends GameObject {
     @Override
     public void render(SpriteBatch batch) {
         batch.setColor(Color.ORANGE);
-        batch.draw(texture, pos.x - size / 2f, pos.y - size / 2f, size, size);
+        batch.draw(texture, pos.x, pos.y);
         batch.setColor(Color.WHITE);
     }
 }

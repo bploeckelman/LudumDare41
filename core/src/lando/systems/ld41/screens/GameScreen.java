@@ -69,8 +69,6 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         enterLevelZoom();
-
-
     }
 
     @Override

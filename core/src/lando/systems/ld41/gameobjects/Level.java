@@ -104,9 +104,8 @@ public class Level {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         {
-            if (hole != null) {
-                hole.render(batch);
-            }
+            hole.render(batch);
+            tee.render(batch);
         }
         batch.end();
 
