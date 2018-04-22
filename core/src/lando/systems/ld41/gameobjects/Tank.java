@@ -295,6 +295,15 @@ public class Tank extends GameObject {
         }
     }
 
+    public void takeHit() {
+        // todo play sounds for shield loss and explosion
+        if (hasShield) {
+            hasShield = false;
+        } else {
+            dead = true;
+        }
+    }
+
     public void shootBall(float power){
         directionVector.set(0, 1);
         directionVector.setAngle(turretRotation);

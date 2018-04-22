@@ -262,10 +262,10 @@ public class GameScreen extends BaseScreen {
             if (++treadIndex == tankTreads.length) {
                 treadIndex = 0;
             }
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            playerTank.dead = !playerTank.dead;
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.L)) {
             playerTank.hasShield = !playerTank.hasShield;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            playerTank.dead = false;
         } else {
             return;
         }
@@ -279,8 +279,7 @@ public class GameScreen extends BaseScreen {
             b.update(dt);
             if (b.checkCollision(playerTank)) {
                 b.alive = false;
-                playerTank.dead = true;
-                break;
+                playerTank.takeHit();
             }
             oldBulletPosition.set(b.position);
             newBulletPosition.set(b.position);
