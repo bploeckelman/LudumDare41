@@ -57,6 +57,11 @@ public class EnemyTurret extends GameObject{
             updateBullet(dt);
             timer = 0;
         }
+        if (timer < 1) {
+            enemyTurretFrame = LudumDare41.game.assets.enemyTurretRecoil;
+        } else {
+            enemyTurretFrame = LudumDare41.game.assets.enemyTurret;
+        }
 
     }
 
