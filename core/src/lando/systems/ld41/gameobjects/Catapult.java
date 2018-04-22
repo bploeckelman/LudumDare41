@@ -10,8 +10,8 @@ import lando.systems.ld41.screens.GameScreen;
 
 public class Catapult {
     public static float FIRE_RATE = 4;
-    public static float TURRET_WIDTH = 30;
-    public static float TURRET_HEIGHT = 30;
+    public static float TURRET_WIDTH = 50;
+    public static float TURRET_HEIGHT = 50;
 
     public Array<Bullet> activeBullets = new Array<Bullet>();
 
