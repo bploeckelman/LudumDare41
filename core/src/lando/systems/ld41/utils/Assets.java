@@ -70,7 +70,7 @@ public class Assets implements Disposable {
 
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
-
+    public Animation<TextureRegion> catapultAnimation;
     public boolean initialized;
 
     public Assets() {
@@ -112,7 +112,8 @@ public class Assets implements Disposable {
         ballBrown = atlas.findRegion("ballbrown");
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
-
+        Array catapult = atlas.findRegions("catapulttower");
+        catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         loadTankAssets();
 
         // Initialize distance field font
