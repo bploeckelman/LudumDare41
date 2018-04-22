@@ -30,6 +30,7 @@ public class Bullet {
         position = new Vector2( x , y );
         velocity = new Vector2( 0 , 0 );
         velocity.set(targetX - position.x, targetY - position.y);
+        velocity.nor();
         oldPosition = new Vector2();
         newPosition = new Vector2();
         collisionPoint = new Vector2();
@@ -43,7 +44,7 @@ public class Bullet {
         directionVector.set(1, 0);
         oldPosition.set(position);
         newPosition.set(position);
-        newPosition.add(velocity.nor().x * BULLET_VELOCITY * dt, velocity.nor().y * BULLET_VELOCITY * dt);
+        newPosition.add(velocity.x * BULLET_VELOCITY * dt, velocity.y * BULLET_VELOCITY * dt);
         if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollision(playerTank)) {
             alive = false;
         } else {
@@ -52,7 +53,7 @@ public class Bullet {
     }
 
     public void render(SpriteBatch batch){
-        batch.draw(LudumDare41.game.assets.ballOrange, position.x, position.y, position.x/2, position.y/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
+        batch.draw(LudumDare41.game.assets.ballOrange, position.x - BULLET_WIDTH/2f, position.y - BULLET_HEIGHT/2f, BULLET_WIDTH/2, BULLET_HEIGHT/2 , BULLET_WIDTH, BULLET_HEIGHT, 1, 1, 0);
     }
 
     public boolean checkCollision(Tank tank){

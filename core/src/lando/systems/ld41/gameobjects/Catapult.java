@@ -66,7 +66,7 @@ public class Catapult extends GameObject {
     }
     @Override
     public void render(SpriteBatch batch){
-        batch.draw(catapultFrame, position.x, position.y, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+        batch.draw(catapultFrame, position.x - TURRET_WIDTH/2f, position.y - TURRET_HEIGHT/2f, TURRET_WIDTH/2, TURRET_HEIGHT/2 , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         for (Bullet bullet : activeBullets) {
             bullet.render(batch);
         }

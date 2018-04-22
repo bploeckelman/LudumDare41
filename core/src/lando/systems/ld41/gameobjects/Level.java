@@ -176,11 +176,14 @@ public class Level {
                 float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition);
                 if (dist < nearestCollision && dist < radius) {
                     Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
+                    // If it is on an end point bounce back towards where you came from
                     if (collisionPoint.epsilonEquals(tempVector) || collisionPoint.epsilonEquals(tempVector2)){
                         normal.set(newPosition.x - collisionPoint.x, newPosition.y - collisionPoint.y);
                     } else {
+                        // bounce away from the normal of the segment
                         normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
                         if (Intersector.pointLineSide(tempVector, tempVector2, oldPosition) != Intersector.pointLineSide(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y, collisionPoint.x + normal.x, collisionPoint.y + normal.y)) {
+                            // Normal is facing the wrong way, flip it
                             normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
                         }
                     }
