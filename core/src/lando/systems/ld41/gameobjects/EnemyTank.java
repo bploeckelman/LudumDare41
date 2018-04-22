@@ -6,13 +6,20 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.ai.StateMachine;
+import lando.systems.ld41.ai.Transition;
+import lando.systems.ld41.ai.conditions.PlayerCloserThan;
+import lando.systems.ld41.ai.conditions.PlayerFurtherThan;
+import lando.systems.ld41.ai.states.TargetPlayerState;
+import lando.systems.ld41.ai.states.WaitState;
+import lando.systems.ld41.ai.states.WanderState;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.TankAssets;
 
 public class EnemyTank extends GameObject {
-    public float speed = 180;
     public static float rotationSpeed = 120;
     private final float TRACK_OFFSET = 20f;
 
@@ -24,9 +31,6 @@ public class EnemyTank extends GameObject {
 
     private float width;
     private float height;
-    private GameScreen screen;
-    public Vector2 position;
-    public float rotation;
     public float turretRotation;
 
     public Vector2 directionVector;
@@ -51,9 +55,11 @@ public class EnemyTank extends GameObject {
     public float aggroRadius;
     public boolean aggroPlayer;
     public Interpolation lerp = Interpolation.linear;
+    public StateMachine stateMachine;
 
     public EnemyTank(GameScreen screen, String tankName, float width, float height, Vector2 startPosition, float aggro, float speed)
     {
+
         tank = TankAssets.getTankAssets(tankName);
         this.speed = speed;
 
@@ -71,72 +77,34 @@ public class EnemyTank extends GameObject {
         this.screen = screen;
         this.directionVector = new Vector2();
 
-        TimeMoveLeft();
-        TimeMoveBackward();
-        TimeMoveForward();
-        TimeMoveRight();
+        initializeStates();
     }
 
-    public void TimeMoveLeft()
-    {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                leftRotateTime = MathUtils.random(1, 3);
-            }
-        }, MathUtils.random(2, 4));
+    private void initializeStates(){
+        WaitState wait = new WaitState(this);
+        WanderState wander = new WanderState(this);
+        TargetPlayerState targetPlayer = new TargetPlayerState(this);
+
+        PlayerCloserThan closerThan200 = new PlayerCloserThan(this, 200);
+        PlayerCloserThan closerThan100 = new PlayerCloserThan(this, 100);
+        PlayerFurtherThan furtherThanWanderRange = new PlayerFurtherThan(this, 500);
+        PlayerFurtherThan furtherThan150 = new PlayerFurtherThan(this, 150);
+
+        Array<Transition> transitions = new Array<Transition>();
+        transitions.add(new Transition(wait, closerThan200, wander));
+        transitions.add(new Transition(wander, furtherThanWanderRange, wait));
+
+        transitions.add(new Transition(wander, closerThan100, targetPlayer));
+        transitions.add(new Transition(targetPlayer, furtherThan150, wander));
+
+        stateMachine = new StateMachine(wait, transitions);
     }
 
-    public void TimeMoveRight()
-    {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                rightRotateTime = MathUtils.random(1, 3);
-            }
-        }, MathUtils.random(2, 4));
-    }
 
-    public void TimeMoveForward()
-    {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                moveForwardTime = MathUtils.random(10, 20);
-            }
-        }, MathUtils.random(1, 2));
-    }
-
-    public void TimeMoveBackward()
-    {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                moveBackwardTime = MathUtils.random(10, 20);
-            }
-        }, MathUtils.random(1, 2));
-    }
-
-    public void checkAggro()
-    {
-        if (position.dst(screen.playerTank.position) <= aggroRadius)
-        {
-            this.aggroPlayer = true;
-        } else {
-            this.aggroPlayer = false;
-        }
-    }
 
     public void update(float dt)
     {
-        checkAggro();
-
-        if (!aggroPlayer)
-        {
-            moveNormal(dt);
-        } else {
-            moveAggro(dt);
-        }
+        stateMachine.update(dt);
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
         rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
@@ -160,70 +128,7 @@ public class EnemyTank extends GameObject {
 
     }
 
-    private void moveForward(float dt)
-    {
 
-    }
-
-    private void moveNormal(float dt)
-    {
-        moveForward = moveForwardTime > 0;
-        moveBackward = moveBackwardTime > 0;
-        rotateRight = rightRotateTime > 0;
-        rotateLeft = leftRotateTime > 0;
-
-        if (moveForward)
-        {
-            moveForwardTime -= 10 * dt;
-            if (moveForwardTime <= 0)
-            {
-                TimeMoveForward();
-            }
-            leftTime += dt;
-            rightTime += dt;
-            updatePosition(speed * dt);
-        }
-
-        if (moveBackward)
-        {
-            moveBackwardTime -= 10 * dt;
-            if (moveBackwardTime <= 0)
-            {
-                TimeMoveBackward();
-            }
-            leftTime -= dt;
-            rightTime -= dt;
-            if (leftTime < 0)
-            {
-                leftTime = 0;
-            }
-            if (rightTime < 0)
-            {
-                rightTime = 0;
-            }
-            updatePosition(-speed * dt);
-        }
-
-        if (rotateLeft)
-        {
-            leftRotateTime -= 10 * dt;
-            if (leftRotateTime <= 0)
-            {
-                TimeMoveLeft();
-            }
-            rotation += rotationSpeed * dt;
-        }
-
-        if (rotateRight)
-        {
-            rightRotateTime -= 10 * dt;
-            if (rightRotateTime <= 0)
-            {
-                TimeMoveRight();
-            }
-            rotation -= rotationSpeed * dt;
-        }
-    }
     private void setTurretPosition()
     {
         // Track player
@@ -232,20 +137,18 @@ public class EnemyTank extends GameObject {
                 screen.playerTank.position.x - position.x) * 180 / Math.PI);
     }
 
-    private void updatePosition(float speed)
+    public boolean updatePosition(float speed)
     {
-        //TODO make this use up stopped velocity so it can slide along edges found later in the boundary
         directionVector.set(1, 0);
         directionVector.setAngle(rotation + 90);
         directionVector.scl(speed);
         oldPosition.set(position);
         newPosition.set(position);
         newPosition.add(directionVector);
-
+        boolean collision = false;
         if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal )){
             newPosition.set(collisionPoint);
-            moveForward = !moveForward;
-            moveBackward = !moveBackward;
+            collision = true;
         }
 
         position.set(newPosition);
@@ -256,6 +159,7 @@ public class EnemyTank extends GameObject {
 
         screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, directionVector.len());
         screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, directionVector.len());
+        return collision;
     }
 
     public void render(SpriteBatch batch)
