@@ -20,8 +20,7 @@ public class Tank extends GameObject {
     public static float rotationSpeed = 120;
     private final float TRACK_OFFSET = 20f;
 
-    private Vector3 camera = new Vector3();
-
+    public Vector3 camera = new Vector3();
     public Vector2 position;
     private Vector2 oldPosition;
     private Vector2 newPosition;
@@ -93,10 +92,10 @@ public class Tank extends GameObject {
 
         switch (movement) {
             case RightForward:
-                rotationDx = rotationSpeed*halfDt;
+                rotationDx = rotationSpeed * halfDt;
                 rightTime += dt;
                 leftTime += halfDt;
-                speedDx = speed*halfDt;
+                speedDx = speed * halfDt;
                 break;
             case Forward:
                 rightTime += dt;
@@ -104,49 +103,48 @@ public class Tank extends GameObject {
                 speedDx = fullSpeed;
                 break;
             case LeftForward:
-                rotationDx = -rotationSpeed*halfDt;
+                rotationDx = -rotationSpeed * halfDt;
                 rightTime += halfDt;
                 leftTime += dt;
-                speedDx = speed*halfDt;
+                speedDx = speed * halfDt;
                 break;
             case RightBack:
-                rotationDx = -rotationSpeed*halfDt;
+                rotationDx = -rotationSpeed * halfDt;
                 rightTime -= dt;
                 leftTime -= halfDt;
-                speedDx = -speed*halfDt;
+                speedDx = -speed * halfDt;
                 break;
             case Back:
                 rightTime -= dt;
                 leftTime -= dt;
-                speedDx = -(fullSpeed *0.75f);
+                speedDx = -(fullSpeed * 0.75f);
                 break;
             case LeftBack:
-                rotationDx = rotationSpeed*halfDt;
+                rotationDx = rotationSpeed * halfDt;
                 rightTime -= halfDt;
                 leftTime -= dt;
-                speedDx = -speed*halfDt;
+                speedDx = -speed * halfDt;
                 break;
             case SpinLeft:
                 rightTime += dt;
                 leftTime -= dt;
-                rotationDx = rotationSpeed*dt;
+                rotationDx = rotationSpeed * dt;
                 break;
             case SpinRight:
                 rightTime -= dt;
                 leftTime += dt;
-                rotationDx = -rotationSpeed*dt;
+                rotationDx = -rotationSpeed * dt;
                 break;
             default:
                 return;
         }
-
-        // temp - roll forward
-        if (leftTime < 0) {
-            leftTime = 0;
-        }
-        if (rightTime < 0) {
-            rightTime = 0;
-        }
+            if (leftTime < 0)
+            {
+                leftTime = 0;
+            }
+            if (rightTime < 0) {
+                rightTime = 0;
+            }
 
         updatePosition(speedDx, rotationDx);
     }

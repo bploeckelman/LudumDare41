@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.GameObject;
+import lando.systems.ld41.gameobjects.EnemyTank;
 import lando.systems.ld41.gameobjects.Catapult;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.gameobjects.Tank;
@@ -39,6 +40,7 @@ public class GameScreen extends BaseScreen {
     public boolean levelZoomDone;
     public ParticleSystem particleSystem;
     public Catapult catapult1;
+    public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
     public Catapult catapult2;
 
     private Array<GameObject> gameObjects = new Array<GameObject>();
@@ -52,6 +54,7 @@ public class GameScreen extends BaseScreen {
         gameObjects.add(playerTank);
   
         showPowerMeter = false;
+        enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1.5f, new Vector2(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 110));
         worldCamera.position.set(playerTank.position, 0);
@@ -77,6 +80,10 @@ public class GameScreen extends BaseScreen {
             powerMeter.update(dt);
         }
 
+        for (EnemyTank tank : enemyTanks)
+        {
+            tank.update(dt);
+        }
         particleSystem.update(dt);
         catapult1.update(dt);
         catapult2.update(dt);
@@ -118,6 +125,10 @@ public class GameScreen extends BaseScreen {
             catapult2.render(batch);
             for (GameObject gameObj : gameObjects) {
                 gameObj.render(batch);
+            }
+            for (EnemyTank tank : enemyTanks)
+            {
+                tank.render(batch);
             }
         }
         batch.end();
