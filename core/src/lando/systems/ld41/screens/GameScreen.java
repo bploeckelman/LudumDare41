@@ -77,12 +77,12 @@ public class GameScreen extends BaseScreen {
         tempVec = new Vector2();
 
         gameObjects.add(playerTank);
-        gameObjects.add(catapult1);
-        gameObjects.add(catapult2);
-        gameObjects.add(enemyTurret1);
+//        gameObjects.add(enemyTurret1);
+//        gameObjects.add(catapult1);
+//        gameObjects.add(catapult2);
 
-        catapults.add(catapult1);
-        catapults.add(catapult2);
+//        catapults.add(catapult1);
+//        catapults.add(catapult2);
 
         enemyTurrets.add(enemyTurret1);
 
@@ -190,6 +190,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void renderGame(SpriteBatch batch) {
+        Gdx.gl.glClearColor(57f / 255f, 123f / 255f, 68f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         level.render(batch, worldCamera);
