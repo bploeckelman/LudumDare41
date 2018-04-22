@@ -1,5 +1,6 @@
 package lando.systems.ld41.gameobjects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
@@ -202,8 +203,13 @@ public class EnemyTank extends GameObject {
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
             batch.draw(tank.smoke.getKeyFrame(accum), x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
         } else {
+            if (reloadTimer < .25f){
+                if ((int)(reloadTimer * 20) % 2 == 0 )
+                batch.setColor(Color.RED);
+            }
             batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            batch.setColor(Color.WHITE);
         }
     }
 

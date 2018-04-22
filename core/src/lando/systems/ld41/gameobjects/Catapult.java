@@ -1,5 +1,6 @@
 package lando.systems.ld41.gameobjects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -85,7 +86,13 @@ public class Catapult extends GameObject {
             batch.draw(LudumDare41.game.assets.catapultAnimation.getKeyFrame(2), x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
             batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
         } else {
+            float warning = FIRE_RATE - timer;
+            if (warning < .25f){
+                if ((int)(warning * 20) % 2 == 0 )
+                    batch.setColor(Color.RED);
+            }
             batch.draw(catapultFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+            batch.setColor(Color.WHITE);
         }
     }
 }

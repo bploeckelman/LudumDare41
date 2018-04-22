@@ -119,6 +119,16 @@ public class GameScreen extends BaseScreen {
             game.setScreen(new TitleScreen());
         }
 
+        hud.update(dt);
+
+        if (!levelZoomDone){
+            worldCamera.update();
+            return;
+        }
+
+        cameraTargetPos.set(playerTank.position, 0f);
+        updateCamera();
+
         level.update(dt);
         updateTank();
         final float velThreshold = 20f;
@@ -141,19 +151,12 @@ public class GameScreen extends BaseScreen {
             tank.update(dt);
         }
         particleSystem.update(dt);
-        catapult1.update(dt);
-        catapult2.update(dt);
+
         for (GameObject gameObj : gameObjects) {
             gameObj.update(dt);
         }
-        hud.update(dt);
 
-        cameraTargetPos.set(playerTank.position, 0f);
-        if (levelZoomDone) {
-            updateCamera();
-        } else {
-            worldCamera.update();
-        }
+
 
         for (PinballBumper bumper : level.pinballBumpers) {
             bumper.checkForHit(playerTank.ball);
