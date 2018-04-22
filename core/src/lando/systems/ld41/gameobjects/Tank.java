@@ -67,6 +67,7 @@ public class Tank extends GameObject {
         this.screen = screen;
         ball = new Ball(screen);
         tempVector = new Vector2();
+        dead = false;
     }
 
     public void setAssets(TankAssets assets) {

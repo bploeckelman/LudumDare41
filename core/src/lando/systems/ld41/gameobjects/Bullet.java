@@ -1,55 +1,40 @@
 package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
-import lando.systems.ld41.screens.GameScreen;
 
 public class Bullet {
 
     private final int BULLET_WIDTH = 30;
     private final int BULLET_HEIGHT = 30;
-    private final int BULLET_VELOCITY = 100;
+    public int bulletVelocityMultiplier;
     public Vector2 velocity;
     public float radius;
-    private GameScreen screen;
     public Vector2 position;
-    private Vector2 oldPosition;
-    private Vector2 newPosition;
-    private Vector2 collisionPoint;
-    private Vector2 normal;
-    public Vector2 directionVector = new Vector2();
+    public Catapult owner;
     public boolean alive = true;
-    private Tank playerTank;
+    public TextureRegion texture;
 
-
-
-
-    public Bullet(GameScreen screen, Tank playerTank, float x, float y, float targetX, float targetY) {
-        this.screen = screen;
-        position = new Vector2( x , y );
-        velocity = new Vector2( 0 , 0 );
-        velocity.set(targetX - position.x, targetY - position.y);
-        velocity.nor();
-        oldPosition = new Vector2();
-        newPosition = new Vector2();
-        collisionPoint = new Vector2();
-        normal = new Vector2();
-        this.radius = Math.max(BULLET_WIDTH, BULLET_HEIGHT)/2f;
-        this.playerTank = playerTank;
+    public Bullet() {
+        position = new Vector2();
 
     }
 
+    public void init(Tank playerTank, Vector2 pos, int bulletVelocityMultiplier, Catapult owner, TextureRegion tex){
+        position.set(pos);
+        velocity = new Vector2();
+        velocity.set(playerTank.position.x - position.x, playerTank.position.y - position.y);
+        velocity.nor();
+        this.bulletVelocityMultiplier = bulletVelocityMultiplier;
+        this.owner = owner;
+        this.texture = tex;
+        alive = true;
+    }
+
     public void update(float dt) {
-        directionVector.set(1, 0);
-        oldPosition.set(position);
-        newPosition.set(position);
-        newPosition.add(velocity.x * BULLET_VELOCITY * dt, velocity.y * BULLET_VELOCITY * dt);
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal) || checkCollision(playerTank)) {
-            alive = false;
-        } else {
-            position.set(newPosition);
-        }
+        position.add(velocity.x * bulletVelocityMultiplier * dt, velocity.y * bulletVelocityMultiplier * dt);
     }
 
     public void render(SpriteBatch batch){

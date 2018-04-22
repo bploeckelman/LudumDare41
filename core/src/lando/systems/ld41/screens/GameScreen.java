@@ -10,8 +10,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
@@ -41,6 +44,16 @@ public class GameScreen extends BaseScreen {
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
     public Catapult catapult2;
     public BallIndicatorArrow ballIndicatorArrow;
+    public Array<Catapult> catapults = new Array<Catapult>();
+    private Vector2 oldBulletPosition;
+    private Vector2 newBulletPosition;
+    private Vector2 bulletCollisionPoint;
+    private Vector2 normal;
+
+    public static final Array<Bullet> activeBullets = new Array<Bullet>();
+    public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
+
+
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
     public GameScreen(int currentLevelNum) {
@@ -59,10 +72,18 @@ public class GameScreen extends BaseScreen {
         catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
         catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
 
+        oldBulletPosition = new Vector2();
+        newBulletPosition = new Vector2();
+        bulletCollisionPoint = new Vector2();
+        normal = new Vector2();
+
         gameObjects.add(playerTank);
         gameObjects.add(catapult1);
         gameObjects.add(catapult2);
-  
+
+        catapults.add(catapult1);
+        catapults.add(catapult2);
+
         showPowerMeter = false;
 //        enemyTanks.add(new EnemyTank(this, "browntank", 60, 60, new Vector2(400, 100), 200f, 150f));
         particleSystem = new ParticleSystem();
@@ -90,6 +111,7 @@ public class GameScreen extends BaseScreen {
                 LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
             }
         }
+        updateObjects(dt);
 
         if (showPowerMeter) {
             powerMeter.update(dt);
@@ -143,6 +165,9 @@ public class GameScreen extends BaseScreen {
             for (EnemyTank tank : enemyTanks)
             {
                 tank.render(batch);
+            }
+            for (Bullet b : activeBullets){
+                b.render(batch);
             }
             particleSystem.render(batch);
 
@@ -246,5 +271,44 @@ public class GameScreen extends BaseScreen {
         }
 
         playerTank.setAssets(TankAssets.getTankAssets(tankBodies[bodyIndex], tankTreads[treadIndex]));
+    }
+
+    private void updateObjects(float dt) {
+        for(int i = activeBullets.size - 1; i >= 0; i--){
+            Bullet b = activeBullets.get(i);
+            b.update(dt);
+            if (b.checkCollision(playerTank)) {
+                b.alive = false;
+                playerTank.dead = true;
+                break;
+            }
+            oldBulletPosition.set(b.position);
+            newBulletPosition.set(b.position);
+            newBulletPosition.add(b.velocity.x * b.bulletVelocityMultiplier * dt, b.velocity.y * b.bulletVelocityMultiplier * dt);
+
+            if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal)){
+                b.alive = false;
+            }
+            if (!b.alive){
+                activeBullets.removeIndex(i);
+                bulletsPool.free(b);
+            }
+        }
+
+        if (playerTank.dead){
+            removeAllBullets();
+        }
+    }
+
+
+    public void removeAllBullets(){
+        bulletsPool.freeAll(activeBullets);
+        activeBullets.clear();
+    }
+
+    public void addBullet(Catapult owner, int velocityMultiplier, Vector2 position, TextureRegion tex){
+        Bullet b = bulletsPool.obtain();
+        b.init(playerTank, position, velocityMultiplier, owner, tex);
+        activeBullets.add(b);
     }
 }
