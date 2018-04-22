@@ -51,13 +51,10 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(this);
 
         level = new Level(this, "maps/test.tmx");
-<<<<<<< HEAD
-        ballIndicatorArrow  = new BallIndicatorArrow(this);
-        playerTank = new Tank(this, "browntank", "");
-=======
 
+        ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "brown");
->>>>>>> all the tanks!
+
         playerTank.position.set(level.tee.pos);
         playerTank.rotation = level.tee.facing;
 
