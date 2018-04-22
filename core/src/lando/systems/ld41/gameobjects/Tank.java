@@ -2,6 +2,7 @@ package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -88,6 +89,10 @@ public class Tank extends GameObject {
             recoilTime -= dt;
         }
 
+        radius = Math.max(width, height)/2f;
+        if (hasShield) {
+            radius += 15;
+        }
         if (dead) {
             smoke = tank.smoke.getKeyFrame(time);
         } else {
@@ -294,7 +299,9 @@ public class Tank extends GameObject {
             }
 
             if (hasShield) {
-                batch.draw(forceShield, x, y, halfX, halfY, width, height, 1, 1, rotation);
+                batch.setColor(1, 1, 1, 0.8f);
+                batch.draw(forceShield, x - 15, y - 15, halfX + 15, halfY + 15, width + 30, height + 30, 1, 1, 0);
+                batch.setColor(Color.WHITE);
             }
         }
         ball.render(batch);
