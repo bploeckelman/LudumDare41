@@ -45,10 +45,13 @@ public class Tank extends GameObject {
     private float width;
     private float height;
     private GameScreen screen;
-    public Ball ball;
+    public PlayerBall ball;
     public boolean isFirstBallFired = false;
     public boolean dead;
     public boolean hasShield;
+
+    public int deaths;
+    public int shots;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));
@@ -310,6 +313,7 @@ public class Tank extends GameObject {
             hasShield = false;
         } else {
             dead = true;
+            deaths++;
         }
     }
 
@@ -327,5 +331,6 @@ public class Tank extends GameObject {
 
         isFirstBallFired = true;
         ball.shootBall(tempVector, directionVector);
+        shots++;
     }
 }

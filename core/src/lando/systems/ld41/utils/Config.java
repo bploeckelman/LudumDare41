@@ -10,4 +10,6 @@ public class Config {
     public static int gameHeight = 600;
     public static boolean resizable = false;
     public static Color bgColor = new Color(188f / 255f,139f / 255f,87f / 255f,1f);
+
+    public static final int HOLES = 9;
 }

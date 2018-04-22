@@ -33,7 +33,7 @@ public class GameScreen extends BaseScreen {
     private static final float CAMERA_ZOOM_MARGIN = 1.2f;
 
     public Tank playerTank;
-    public int currentLevelNum;
+    public int currentLevelNum = -1;
     public Level level;
     public PowerMeter powerMeter;
     public boolean showPowerMeter;
@@ -58,10 +58,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(int currentLevelNum) {
         Gdx.input.setInputProcessor(this);
-
-        this.levelTransitioning = false;
-        this.currentLevelNum = currentLevelNum;
-        level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(currentLevelNum));
+        setLevel(currentLevelNum);
 
         ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "brown");
@@ -91,7 +88,20 @@ public class GameScreen extends BaseScreen {
         worldCamera.position.set(playerTank.position, 0);
         worldCamera.update();
 
+        this.levelTransitioning = false;
         enterLevelZoom();
+    }
+
+    public void setLevel(int levelIndex) {
+        if (levelIndex == Config.HOLES) {
+            // endCondition
+            return;
+        }
+
+        currentLevelNum = levelIndex;
+
+        int mapIndex = levelIndex % LudumDare41.game.assets.levelNumberToFileNameMap.size;
+        level = new Level(this, LudumDare41.game.assets.levelNumberToFileNameMap.get(mapIndex));
     }
 
     @Override
@@ -107,6 +117,7 @@ public class GameScreen extends BaseScreen {
             if (level.hole.isInside(playerTank.ball)) {
                 // TODO: fancy up the level transition
                 levelTransitioning = true;
+                LudumDare41.game.setGameStats(currentLevelNum, playerTank);
                 int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
                 LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
             }

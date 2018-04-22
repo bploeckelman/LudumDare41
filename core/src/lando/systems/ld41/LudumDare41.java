@@ -12,8 +12,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.screens.BaseScreen;
 import lando.systems.ld41.screens.TitleScreen;
+import lando.systems.ld41.stats.GameStats;
+import lando.systems.ld41.stats.HoleStats;
 import lando.systems.ld41.utils.Assets;
 import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.Config;
@@ -35,6 +38,8 @@ public class LudumDare41 extends ApplicationAdapter {
     Texture originalTexture;
     Texture transitionTexture;
     ShaderProgram transitionShader;
+
+    GameStats gameStats = new GameStats();
 
     @Override
     public void create () {
@@ -145,6 +150,16 @@ public class LudumDare41 extends ApplicationAdapter {
                     }))
                     .start(tween);
         }
+    }
+
+    public void setGameStats(int level, Tank playerTank) {
+        HoleStats stats = new HoleStats();
+        stats.deaths = playerTank.deaths;
+        stats.distance = playerTank.ball.totalDistance;
+        stats.kills = 0;
+        stats.score = playerTank.shots;
+
+        gameStats.setStats(level, stats);
     }
 
     @Override
