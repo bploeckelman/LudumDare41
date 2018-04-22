@@ -44,7 +44,6 @@ public class GameScreen extends BaseScreen {
     public Catapult catapult1;
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
     public Catapult catapult2;
-    public BallIndicatorArrow ballIndicatorArrow;
     public Array<Catapult> catapults = new Array<Catapult>();
     private Vector2 oldBulletPosition;
     private Vector2 newBulletPosition;
@@ -57,9 +56,12 @@ public class GameScreen extends BaseScreen {
 
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
+    private PlayerHud hud;
+
     public GameScreen(int currentLevelNum) {
         Gdx.input.setInputProcessor(this);
-        ballIndicatorArrow  = new BallIndicatorArrow(this);
+
+        hud = new PlayerHud(this);
 
         setLevel(currentLevelNum);
         addPlayer();
@@ -147,7 +149,7 @@ public class GameScreen extends BaseScreen {
         for (GameObject gameObj : gameObjects) {
             gameObj.update(dt);
         }
-        ballIndicatorArrow.update(dt);
+        hud.update(dt);
 
         cameraTargetPos.set(playerTank.position, 0f);
         if (levelZoomDone) {
@@ -217,13 +219,11 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         {
             batch.setColor(Color.WHITE);
-            if (showPowerMeter)
-            {
-                powerMeter.render(batch);
-            }
-            ballIndicatorArrow.render(batch);
-//            LudumDare41.game.assets.backplateNinePatch.draw(batch, 0, hudCamera.viewportHeight - 50, hudCamera.viewportWidth, 50);
-//            Assets.drawString(batch, "Game Screen", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
+            hud.render(batch);
+            //if (showPowerMeter)
+            //{
+            //    powerMeter.render(batch);
+            //}
         }
         batch.end();
     }
