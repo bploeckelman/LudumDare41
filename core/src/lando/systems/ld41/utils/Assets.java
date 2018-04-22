@@ -236,7 +236,7 @@ public class Assets implements Disposable {
         tanks.put(dead, atlas.findRegion(dead));
         String deadTurret = tankName + "turretbroken";
         tanks.put(deadTurret, atlas.findRegion(deadTurret));
-        String recoil = tankName + "turrettecoil";
+        String recoil = tankName + "turretrecoil";
         tanks.put(recoil, atlas.findRegion(recoil));
     }
 

@@ -39,6 +39,7 @@ public class Tank extends GameObject {
     private TextureRegion forceShield;
     private float leftTime;
     private float rightTime;
+    private float recoilTime;
     private float time;
 
     private float width;
@@ -82,6 +83,11 @@ public class Tank extends GameObject {
         setTurretRotation();
 
         time += dt;
+
+        if (recoilTime > 0) {
+            recoilTime -= dt;
+        }
+
         if (dead) {
             smoke = tank.smoke.getKeyFrame(time);
         } else {
@@ -278,7 +284,7 @@ public class Tank extends GameObject {
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
 
             batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
-            batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            batch.draw((recoilTime > 0) ? tank.turretRecoil : tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
 
             if (ball.onTank) {
                 directionVector.set(0, 1);
@@ -287,12 +293,12 @@ public class Tank extends GameObject {
                 tempVector.set(position).add(directionVector.scl(30));
                 batch.draw(LudumDare41.game.assets.ballBrown, position.x + directionVector.x - 5, position.y + directionVector.y - 5, 5, 5, 10, 10, 1, 1, turretRotation - 90);
             }
-            ball.render(batch);
 
             if (hasShield) {
                 batch.draw(forceShield, x, y, halfX, halfY, width, height, 1, 1, rotation);
             }
         }
+        ball.render(batch);
     }
 
     public void takeHit() {
@@ -305,6 +311,7 @@ public class Tank extends GameObject {
     }
 
     public void shootBall(float power){
+        recoilTime = 0.3f;
         directionVector.set(0, 1);
         directionVector.setAngle(turretRotation);
 
