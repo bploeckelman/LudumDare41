@@ -17,7 +17,7 @@ public class TankAssets {
     public float rightLoopTime;
 
     public static TankAssets getTankAssets(String tankName) {
-        return getTankAssets(tankName, "");
+        return getTankAssets(tankName, "brown");
     }
 
     public static TankAssets getTankAssets(String tankName, String treadType) {

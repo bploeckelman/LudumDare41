@@ -51,8 +51,13 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(this);
 
         level = new Level(this, "maps/test.tmx");
+<<<<<<< HEAD
         ballIndicatorArrow  = new BallIndicatorArrow(this);
         playerTank = new Tank(this, "browntank", "");
+=======
+
+        playerTank = new Tank(this, "browntank", "brown");
+>>>>>>> all the tanks!
         playerTank.position.set(level.tee.pos);
         playerTank.rotation = level.tee.facing;
 
@@ -213,8 +218,8 @@ public class GameScreen extends BaseScreen {
     }
 
 
-    private String[] tankBodies = new String[] { "browntank", "greentank" };
-    private String[] tankTreads = new String[] { "", "green", "greenpontoon" };
+    private String[] tankBodies = new String[] { "browntank", "greentank", "orangetank" };
+    private String[] tankTreads = new String[] { "brown", "green", "orange", "greenpontoon", "brownpontoon", "orangepontoon" };
     private int bodyIndex = 0;
     private int treadIndex = 0;
 
