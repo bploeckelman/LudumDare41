@@ -99,6 +99,7 @@ public class Assets implements Disposable {
     public HashMap<String, TextureRegion> assetMap = new HashMap<String, TextureRegion>();
     public Animation<TextureRegion> catapultAnimation;
     public Animation<TextureRegion> smokeAnimation;
+    public Animation<TextureRegion> explosionAnimation;
 
     public IntMap<String> levelNumberToFileNameMap;
 
@@ -160,9 +161,15 @@ public class Assets implements Disposable {
         smoke = atlas.findRegion("barrelsmoke");
         arrow = atlas.findRegion("arrow");
         indicator = atlas.findRegion("indicator");
-
+        enemyTurret = atlas.findRegion("greentankturret");
+        enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
         pinballBumperOff = atlas.findRegion("pinballbumper-off");
         pinballBumperOn = atlas.findRegion("pinballbumper-on");
+
+        defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
+        transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
+        backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);
+        boxNinePatch = new NinePatch(atlas.findRegion("box-outline"), 4, 4, 4, 4);
 
         Pixmap pixGreen = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixGreen.setColor(Color.GREEN);
@@ -173,17 +180,12 @@ public class Assets implements Disposable {
         pixRed.fill();
         thumbnailBoundries = new TextureRegion(new Texture(pixRed));
 
-        defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
-        transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);
-        backplateNinePatch = new NinePatch(atlas.findRegion("backplate"), 10, 10, 10, 10);
-        boxNinePatch = new NinePatch(atlas.findRegion("box-outline"), 4, 4, 4, 4);
-
         Array catapult = atlas.findRegions("catapulttower");
-        catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         Array smoke = atlas.findRegions("smoke");
+        Array explosion = atlas.findRegions("explosion");
+        catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         smokeAnimation = new Animation<TextureRegion>(0.3f, smoke, Animation.PlayMode.LOOP);
-        enemyTurret = atlas.findRegion("greentankturret");
-        enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
+        explosionAnimation = new Animation<TextureRegion>(0.3f, explosion, Animation.PlayMode.NORMAL);
 
         loadBalls();
         loadTankAssets();
