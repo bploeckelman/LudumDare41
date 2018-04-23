@@ -54,8 +54,11 @@ public class Tank extends GameObject {
     public boolean isFirstBallFired = false;
     public boolean dead;
     public boolean hasShield;
-    public boolean onSand;
-    public boolean onWater;
+    public boolean onSand = false;
+    public boolean onWater = false;
+    public boolean hasPontoons = true;
+    public String tankName;
+    public String treadType;
 
     public int shots;
     public int deaths;
@@ -66,6 +69,8 @@ public class Tank extends GameObject {
     }
 
     public Tank(GameScreen screen, String tankName, String treadType, float width, float height, Vector2 startPosition) {
+        this.tankName = tankName;
+        this.treadType = treadType;
         setAssets(TankAssets.getTankAssets(tankName, treadType));
 
         this.width = width;
@@ -82,8 +87,6 @@ public class Tank extends GameObject {
         dead = false;
         health = 2;
         smoke = tank.smoke.getKeyFrame(0);
-        onSand = false;
-        onWater = false;
     }
 
     public void setAssets(TankAssets assets) {
@@ -277,9 +280,11 @@ public class Tank extends GameObject {
         newPosition.add(directionVector);
 
         Level.CollisionType collisionType = screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal );
-        // TODO: check for and handle collisionType.water... if have pontoons, switch to them
-        if (collisionType != Level.CollisionType.None){
-            newPosition.set(collisionPoint);
+        if (collisionType != Level.CollisionType.None) {
+            if (collisionType == Level.CollisionType.Water && hasPontoons) {
+            } else {
+                newPosition.set(collisionPoint);
+            }
         }
 
         for (EnemyTank enemyTank : screen.enemyTanks){
@@ -309,6 +314,15 @@ public class Tank extends GameObject {
         
         screen.addTireTrack(position.x - xTrackOffset, position.y - yTrackOffset, directionVector.len());
         screen.addTireTrack(position.x + xTrackOffset, position.y + yTrackOffset, directionVector.len());
+
+        // switch to pontoons
+        if (onWater) {
+            if (hasPontoons) {
+                setAssets(TankAssets.getTankAssets(tankName, treadType + "pontoon"));
+            }
+        } else {
+            setAssets(TankAssets.getTankAssets(tankName, treadType));
+        }
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
         rightTread = tank.rightTreads.getKeyFrame(rightTime, true);

@@ -320,6 +320,7 @@ public class Level {
      * @param normal the normal of the collision for reflections
      * @return the Type of Collision
      */
+    Vector2 tempCollisionPoint = new Vector2();
     @SuppressWarnings("Duplicates") // sorry...
     public CollisionType checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
         boolean unresolvedCollisions = false;
@@ -329,7 +330,7 @@ public class Level {
         do {
             fuckThisShit++;
             unresolvedCollisions = false;
-            newPosition.set(collisionPoint);
+            tempCollisionPoint.set(collisionPoint);
 
             // Check for collisions against boundaries
             for (int j = 0; j < boundaries.size; j++) {
@@ -342,7 +343,7 @@ public class Level {
                     tempVector2.set(boundary.getTransformedVertices()[(i + 2) % vertLength], boundary.getTransformedVertices()[(i + 3) % vertLength]);
 
                     // Check if the traveling path intersects the segment
-                    if (Intersector.intersectSegments(oldPosition, newPosition, tempVector, tempVector2, collisionPoint)) {
+                    if (Intersector.intersectSegments(oldPosition, tempCollisionPoint, tempVector, tempVector2, collisionPoint)) {
                         normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
                         if (Intersector.pointLineSide(tempVector, tempVector2, oldPosition) != Intersector.pointLineSide(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y, collisionPoint.x + normal.x, collisionPoint.y + normal.y)) {
                             normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
@@ -357,12 +358,12 @@ public class Level {
                     }
 
                     // Check if the segments are within the radius of the object
-                    float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition);
+                    float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, tempCollisionPoint);
                     if (dist < nearestCollision && dist < radius) {
-                        Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
+                        Intersector.nearestSegmentPoint(tempVector, tempVector2, tempCollisionPoint, collisionPoint);
                         // If it is on an end point bounce back towards where you came from
                         if (collisionPoint.epsilonEquals(tempVector) || collisionPoint.epsilonEquals(tempVector2)) {
-                            normal.set(newPosition.x - collisionPoint.x, newPosition.y - collisionPoint.y);
+                            normal.set(tempCollisionPoint.x - collisionPoint.x, tempCollisionPoint.y - collisionPoint.y);
                         } else {
                             // bounce away from the normal of the segment
                             normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
@@ -399,12 +400,12 @@ public class Level {
                     tempVector2.set(boundary.getTransformedVertices()[(i + 2) % vertLength], boundary.getTransformedVertices()[(i + 3) % vertLength]);
 
                     // Check if the segments are within the radius of the object
-                    float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition);
+                    float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, tempCollisionPoint);
                     if (dist < nearestCollision && dist < radius) {
-                        Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
+                        Intersector.nearestSegmentPoint(tempVector, tempVector2, tempCollisionPoint, collisionPoint);
                         // If it is on an end point bounce back towards where you came from
                         if (collisionPoint.epsilonEquals(tempVector) || collisionPoint.epsilonEquals(tempVector2)) {
-                            normal.set(newPosition.x - collisionPoint.x, newPosition.y - collisionPoint.y);
+                            normal.set(tempCollisionPoint.x - collisionPoint.x, tempCollisionPoint.y - collisionPoint.y);
                         } else {
                             // bounce away from the normal of the segment
                             normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
@@ -430,8 +431,8 @@ public class Level {
 
             for (int i = 0; i < circles.size; i++) {
                 Ellipse circle = circles.get(i).getEllipse();
-                if (newPosition.dst(circle.x + circle.height / 2f, circle.y + circle.height / 2f) < radius + circle.height / 2f) {
-                    normal.set(newPosition);
+                if (tempCollisionPoint.dst(circle.x + circle.height / 2f, circle.y + circle.height / 2f) < radius + circle.height / 2f) {
+                    normal.set(tempCollisionPoint);
                     normal.sub(circle.x + circle.height / 2f, circle.y + circle.height / 2f);
                     normal.nor();
                     collisionPoint.set(circle.x + circle.height / 2f, circle.y + circle.height / 2f);
@@ -446,9 +447,9 @@ public class Level {
             }
 
             for (PinballBumper bumper : pinballBumpers) {
-                if (newPosition.dst(bumper.position) < radius + bumper.radius) {
+                if (tempCollisionPoint.dst(bumper.position) < radius + bumper.radius) {
                     bumper.isOn = true;
-                    normal.set(newPosition);
+                    normal.set(tempCollisionPoint);
                     normal.sub(bumper.position);
                     normal.nor();
                     collisionPoint.set(bumper.position);
