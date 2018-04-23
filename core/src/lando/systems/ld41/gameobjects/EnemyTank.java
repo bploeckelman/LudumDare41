@@ -387,7 +387,7 @@ public class EnemyTank extends GameObject {
         directionVector.nor();
         screen.particleSystem.addBarrelSmoke(tempVec.x, tempVec.y, directionVector.x, directionVector.y);
 
-        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
+        LudumDare41.game.audio.playSound(Audio.Sounds.shot);
 
         screen.addBullet(this, tempVec, directionVector, bulletTexture );
 //        ball.shootBall(tempVector, directionVector);

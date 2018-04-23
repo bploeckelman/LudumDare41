@@ -94,7 +94,7 @@ public class Catapult extends GameObject {
         bulletPosition.set(position.x, position.y);
         tempVec.set(playerTank.position.x - position.x, playerTank.position.y - position.y);
         screen.addBullet(this, bulletPosition, tempVec, Assets.getImage(Assets.Balls.Purple));
-        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
+        LudumDare41.game.audio.playSound(Audio.Sounds.shot);
 
     }
 

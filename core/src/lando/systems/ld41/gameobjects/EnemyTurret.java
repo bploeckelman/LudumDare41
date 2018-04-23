@@ -82,7 +82,7 @@ public class EnemyTurret extends GameObject{
 
         bulletPosition = startPosition;
         screen.addBullet(this, bulletPosition, directionVector, Assets.getImage(Assets.Balls.Purple));
-        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
+        LudumDare41.game.audio.playSound(Audio.Sounds.shot);
 
     }
 
