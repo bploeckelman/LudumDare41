@@ -30,9 +30,9 @@
   </object>
  </objectgroup>
  <objectgroup name="objects">
-  <object id="7" type="tee" gid="183" x="96" y="864" width="32" height="32">
+  <object id="7" type="tee" gid="183" x="416" y="896" width="32" height="32">
    <properties>
-    <property name="facing" type="int" value="-45"/>
+    <property name="facing" type="int" value="0"/>
    </properties>
   </object>
   <object id="15" type="hole" gid="169" x="832" y="128" width="32" height="32"/>
@@ -59,15 +59,14 @@
     <property name="facing" type="int" value="90"/>
    </properties>
   </object>
-  <object id="39" type="turret" gid="170" x="512" y="448" width="32" height="32">
+  <object id="39" type="turret" gid="170" x="520" y="448" width="32" height="32">
    <properties>
     <property name="facing" type="int" value="-90"/>
    </properties>
   </object>
-  <object id="40" type="water" x="256" y="832">
-   <polyline points="0,0 32,-32 32,-64 0,-96 -32,-96 -64,-64 -64,-32 -32,0 0,0"/>
+  <object id="40" type="water" x="298.667" y="832">
+   <polyline points="0,0 53.3333,-58.6667 53.3333,-117.333 0,-176 -53.3333,-176 -106.667,-117.333 -106.667,-58.6667 -53.3333,0 0,0"/>
   </object>
-  <object id="41" type="boss" gid="190" x="432" y="224" width="112" height="96"/>
   <object id="42" type="sand" x="480" y="672">
    <polyline points="16,16 24,8 24,-8 32,-16 40,-32 32,-40 24,-48 16,-64 24,-80 16,-96 0,-96 -16,-88 -24,-64 -32,-48 -40,-24 -40,0 -32,16 -16,24 0,24 16,16"/>
   </object>

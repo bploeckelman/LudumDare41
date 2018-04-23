@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="32" tileheight="32" infinite="0" nextobjectid="6">
  <properties>
-  <property name="name" value="Clown School"/>
+  <property name="name" value="Clown College"/>
   <property name="par" type="int" value="10"/>
  </properties>
  <tileset firstgid="1" source="tileset.tsx"/>

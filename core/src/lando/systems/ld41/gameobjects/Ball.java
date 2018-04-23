@@ -1,5 +1,6 @@
 package lando.systems.ld41.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
@@ -64,13 +65,10 @@ public class Ball extends GameObject {
         newPosition.add(velocity.x * dt, velocity.y * dt);
 
         Level.CollisionType collision = screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal);
-        if (collision != Level.CollisionType.None || checkCollisionWithEnemies()){
+        if ((collision != Level.CollisionType.None && collision != Level.CollisionType.Water) || checkCollisionWithEnemies()){
             if (collision == Level.CollisionType.Bumper) {
                 velocity.scl(1.3f);
                 screen.screenShake.addDamage(.2f);
-            }
-            if (collision == Level.CollisionType.Water) {
-                // TODO: handle water with slow velocity, kill the ball and re-drop it at the tee maybe?
             }
             float currentSpeed = velocity.len();
             tempVector.set(velocity);
@@ -79,6 +77,15 @@ public class Ball extends GameObject {
             tempVector.sub(dot * normal.x, dot * normal.y);
             setVelocity(tempVector.nor().scl(currentSpeed));
             newPosition.set(collisionPoint);
+        }
+
+        // handle water with slow velocity, sink the ball, make a splash sound, re-drop it at the tee
+        float tooSlowVel2 = 5000f;
+        if ((collision == Level.CollisionType.Water || onWater) && velocity.len2() < tooSlowVel2) {
+            // TODO: splash sound
+            screen.particleSystem.addWaterSplash(position.x, position.y, 0f, 0f);
+            newPosition.set(screen.level.tee.pos);
+            velocity.set(0f, 0f);
         }
 
         if (isNotMoving())

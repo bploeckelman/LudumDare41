@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.utils.Utils;
 
+@SuppressWarnings("Duplicates")
 public class ParticleSystem {
     private final Array<Particle> activeParticles = new Array<Particle>();
     private final Array<Particle> activeGroundParticles = new Array<Particle>();
@@ -56,6 +57,26 @@ public class ParticleSystem {
             particle.init(posX, posY, velX, velY, -velX, -velY,
                     0.5f, color.r, color.g, color.b, 1f,
                     color.r, color.g, color.b, 1f, scale, ttl, LudumDare41.game.assets.whitePixel);
+            activeParticles.add(particle);
+        }
+    }
+
+    public void addWaterSplash(float x, float y, float dx, float dy){
+        int waterParticles = 250;
+        for (int i = 0; i < waterParticles; i++){
+            Particle particle = particlePool.obtain();
+            float posX = x;
+            float posY = y;
+
+            float velX = dx * MathUtils.random(40, 100f) + MathUtils.random(-30f, 30f);
+            float velY = dy * MathUtils.random(40, 100f) + MathUtils.random(-30f, 30f);
+            float scale = MathUtils.random(.5f, 4.3f);
+            float ttl = MathUtils.random(.5f, 1f);
+            Utils.hsvToRgb(MathUtils.random(220, 260) / 360f, MathUtils.random(0.5f, 1.0f), 1, color);
+
+            particle.init(posX, posY, velX, velY, -velX, -velY,
+                          0.5f, color.r, color.g, color.b, 1f,
+                          1f, 1f, 1f, 0.2f, scale, ttl, LudumDare41.game.assets.whitePixel);
             activeParticles.add(particle);
         }
     }
