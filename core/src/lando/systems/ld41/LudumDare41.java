@@ -40,7 +40,7 @@ public class LudumDare41 extends ApplicationAdapter {
     ShaderProgram transitionShader;
     OrthographicCamera camera;
 
-    public GameStats gameStats = new GameStats();
+    public GameStats gameStats;
 
     @Override
     public void create () {
@@ -76,6 +76,8 @@ public class LudumDare41 extends ApplicationAdapter {
         if (assets == null) {
             assets = new Assets();
         }
+
+        gameStats = new GameStats();
 
         setScreen(new TitleScreen());
     }

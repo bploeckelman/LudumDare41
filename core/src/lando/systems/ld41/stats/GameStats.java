@@ -1,6 +1,6 @@
 package lando.systems.ld41.stats;
 
-import lando.systems.ld41.utils.Config;
+import lando.systems.ld41.LudumDare41;
 
 /**
  * Created by Brian on 4/22/2018.
@@ -9,7 +9,7 @@ public class GameStats {
     public HoleStats[] gameStats;
 
     public GameStats() {
-        gameStats = new HoleStats[Config.HOLES];
+        gameStats = new HoleStats[LudumDare41.game.assets.levelNumberToFileNameMap.size];
         for (int i = 0; i < gameStats.length; i++) {
             gameStats[i] = new HoleStats();
         }

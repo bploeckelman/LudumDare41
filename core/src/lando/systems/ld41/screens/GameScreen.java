@@ -234,7 +234,7 @@ public class GameScreen extends BaseScreen {
             .setCallback(new TweenCallback() {
                 @Override
                 public void onEvent(int i, BaseTween<?> baseTween) {
-                    int maxLevel = Config.HOLES;
+                    int maxLevel = game.assets.levelNumberToFileNameMap.size;
                     int nextLevelNum = (currentLevelNum + 1);
                     // cycle through maps if there are more holes and created
                     int level = nextLevelNum % LudumDare41.game.assets.levelNumberToFileNameMap.size;

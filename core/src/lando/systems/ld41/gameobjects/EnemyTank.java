@@ -64,14 +64,14 @@ public class EnemyTank extends GameObject {
     public EnemyType type;
 
     public static EnemyTank create(GameScreen screen, EnemyTankInfo info) {
-        EnemyType type;
+        EnemyType type = EnemyType.green;
         if      (info.color.equalsIgnoreCase("orange"))  type = EnemyType.orange;
         else if (info.color.equalsIgnoreCase("green"))   type = EnemyType.green;
         else if (info.color.equalsIgnoreCase("magenta")) type = EnemyType.pink;
         else if (info.color.equalsIgnoreCase("blue"))    type = EnemyType.blue;
-        else {
-                throw new GdxRuntimeException("Unable to create EnemyTank with color '" + info.color + "'");
-        }
+//        else {
+//                throw new GdxRuntimeException("Unable to create EnemyTank with color '" + info.color + "'");
+//        }
         EnemyTank tank = new EnemyTank(screen, type, 60, 60, new Vector2(info.x, info.y));
         tank.rotation = info.facing;
         return tank;
