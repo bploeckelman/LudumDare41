@@ -13,6 +13,7 @@
     <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.maps.objects.EllipseMapObject" />
     <extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion" />
     <extend-configuration-property name="gdx.reflect.include" value="lando.systems.ld41.particles.Particle" />
+    <extend-configuration-property name="gdx.reflect.include" value="lando.systems.ld41.gameobjects.Bullet" />
 
     <entry-point class='lando.systems.ld41.client.HtmlLauncher' />
     <set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>

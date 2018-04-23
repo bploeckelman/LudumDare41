@@ -25,7 +25,7 @@ import lando.systems.ld41.screens.GameScreen;
 public class Level {
     public enum CollisionType {None, Wall, Bumper}
 
-    private boolean showDebug;
+    private boolean showDebug = false;
 
     public String name;
     public int par;
@@ -52,8 +52,6 @@ public class Level {
     GameScreen screen;
 
     public Level(String mapFileName) {
-        showDebug = true;
-
         // TODO: Pull these out of the map
         name = "test";
         par = 3;
