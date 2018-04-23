@@ -248,6 +248,7 @@ public class LevelSelectScreen extends BaseScreen {
     }
 
     TextureRegion getLevelThumbnail(Level level) {
+        float holeSize = 20f;
         int levelWidth = level.groundLayer.getWidth() * (int)level.groundLayer.getTileWidth();
         int levelHeight = level.groundLayer.getHeight() * (int)level.groundLayer.getTileHeight();
         int frameSize = Math.max(levelWidth, levelHeight);
@@ -307,6 +308,19 @@ public class LevelSelectScreen extends BaseScreen {
                 shapes.circle(circle.x + xOffset, circle.y, circle.height / 2);
             }
         }
+
+        shapes.setColor(Color.BLACK);
+        shapes.circle(level.hole.position.x - (holeSize/2) + xOffset, level.hole.position.y - (holeSize/2), holeSize);
+
+        shapes.setColor(Color.MAGENTA);
+        shapes.triangle(
+            level.tee.pos.x + xOffset,
+            level.tee.pos.y,
+            level.tee.pos.x + xOffset - holeSize,
+            level.tee.pos.y + holeSize,
+            level.tee.pos.x + xOffset + holeSize,
+            level.tee.pos.y + holeSize
+        );
         shapes.end();
 
         fb.end();
