@@ -1,4 +1,4 @@
-package lando.systems.ld41.managers;
+package lando.systems.ld41.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
