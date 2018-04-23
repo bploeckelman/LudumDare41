@@ -1,9 +1,6 @@
 package lando.systems.ld41.stats;
 
-import com.badlogic.gdx.utils.Array;
-import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.utils.Config;
-
 
 /**
  * Created by Brian on 4/22/2018.
@@ -18,7 +15,7 @@ public class GameStats {
         }
     }
 
-    public void addStats(int level, float distance, int kills, int score, boolean isDead) {
+    public void addStats(int level, float distance, int kills, int score, boolean isDead, double time) {
         HoleStats stats = gameStats[level];
 
         // score and deaths will be displayed, so they need to stay with player - these values are current totals,
@@ -33,6 +30,7 @@ public class GameStats {
 
         stats.distance += distance;
         stats.kills += kills;
+        stats.timeMs += time;
     }
 
     public HoleStats getLevelStats(int level) {

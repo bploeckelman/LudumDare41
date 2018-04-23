@@ -61,7 +61,10 @@ public class GameScreen extends BaseScreen {
 
     private PlayerHud hud;
 
+    private double time;
+
     public GameScreen(int currentLevelNum) {
+        time = System.currentTimeMillis();
         Gdx.input.setInputProcessor(this);
 
         hud = new PlayerHud(this);
@@ -215,7 +218,8 @@ public class GameScreen extends BaseScreen {
     }
 
     private void addStats(boolean isDead) {
-        LudumDare41.game.gameStats.addStats(currentLevelNum, playerTank.ball.totalDistance, 0, playerTank.shots, isDead);
+        double totalTime = System.currentTimeMillis() - time;
+        LudumDare41.game.gameStats.addStats(currentLevelNum, playerTank.ball.totalDistance, 0, playerTank.shots, isDead, totalTime);
     }
 
     @Override

@@ -8,4 +8,5 @@ public class HoleStats {
     public int kills;
     public int deaths;
     public float distance;
+    public double timeMs;
 }
