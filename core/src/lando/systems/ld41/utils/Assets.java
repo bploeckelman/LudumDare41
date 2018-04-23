@@ -30,7 +30,11 @@ public class Assets implements Disposable {
 
     // Initialize descriptors for all assets
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
-    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
+    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title_bg.png", Texture.class);
+    private final AssetDescriptor<Texture> titleBoomTextureAsset = new AssetDescriptor<Texture>("images/boom.png", Texture.class);
+    private final AssetDescriptor<Texture> titlePutt1TextureAsset = new AssetDescriptor<Texture>("images/putt1.png", Texture.class);
+    private final AssetDescriptor<Texture> titlePutt2TextureAsset = new AssetDescriptor<Texture>("images/putt2.png", Texture.class);
+    private final AssetDescriptor<Texture> titlePutterTextureAsset = new AssetDescriptor<Texture>("images/putter.png", Texture.class);
     private final AssetDescriptor<Texture> waterTextureAsset = new AssetDescriptor<Texture>("images/water.png", Texture.class, new TextureLoader.TextureParameter() {{
         genMipMaps = true;
         minFilter = Texture.TextureFilter.MipMapLinearLinear;
@@ -90,13 +94,19 @@ public class Assets implements Disposable {
     public TextureRegion flag;
     public TextureRegion refreshButton;
     public TextureRegion helpButton;
-    public Texture titleTexture;
     public TextureRegion ballSign;
     public TextureRegion mouseMiddle;
     public TextureRegion mouseLeft;
     public TextureRegion keyWASD;
     public TextureRegion keyRTFG;
     public TextureRegion clownHead;
+
+
+    public Texture titleTexture;
+    public Texture titleBoom;
+    public Texture titlePutt1;
+    public Texture titlePutt2;
+    public Texture titlePutter;
 
     // pickups
     public TextureRegion puCamo;
@@ -160,6 +170,10 @@ public class Assets implements Disposable {
         mgr = new AssetManager();
         mgr.load(atlasAsset);
         mgr.load(titleTextureAsset);
+        mgr.load(titleBoomTextureAsset);
+        mgr.load(titlePutt1TextureAsset);
+        mgr.load(titlePutt2TextureAsset);
+        mgr.load(titlePutterTextureAsset);
         mgr.load(waterTextureAsset);
         mgr.load(sandTextureAsset);
         mgr.load(distanceFieldFontAsset);
@@ -239,6 +253,11 @@ public class Assets implements Disposable {
         puShield = atlas.findRegion("pu-shield");
 
         titleTexture = mgr.get(titleTextureAsset);
+        titleBoom = mgr.get(titleBoomTextureAsset);
+        titlePutter = mgr.get(titlePutterTextureAsset);
+        titlePutt1 = mgr.get(titlePutt1TextureAsset);
+        titlePutt2 = mgr.get(titlePutt2TextureAsset);
+
         waterTexture = mgr.get(waterTextureAsset);
         sandTexture = mgr.get(sandTextureAsset);
         waterTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);

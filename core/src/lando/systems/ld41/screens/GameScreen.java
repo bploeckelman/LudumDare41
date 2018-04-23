@@ -142,7 +142,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void update(float dt) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new TitleScreen());
+            game.setScreen(new LevelSelectScreen());
         }
         screenShake.update(dt);
         hud.update(dt);
