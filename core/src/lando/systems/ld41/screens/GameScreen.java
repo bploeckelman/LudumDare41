@@ -248,6 +248,7 @@ public class GameScreen extends BaseScreen {
         levelZoomDone = false;
         LudumDare41.game.audio.playSound(Audio.Sounds.good_job);
         addStats(false);
+        removeAllBullets();
         Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
             .target(level.hole.position.x, level.hole.position.y, .3f)
             .setCallback(new TweenCallback() {
