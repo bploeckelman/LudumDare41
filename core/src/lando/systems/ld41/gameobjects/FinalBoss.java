@@ -115,6 +115,11 @@ public class FinalBoss extends GameObject {
         if (health > 1) {
             batch.draw(turretTexture, position.x - mainTurretSize / 2, position.y - mainTurretSize / 2, mainTurretSize / 2f, mainTurretSize / 2f, mainTurretSize, mainTurretSize, 1, 1, mainTurretRotation - 90);
         }
+        if (health == 1){
+            float clownWidth = 96 * .5f;
+            float clownHeight = 128 * .5f;
+            batch.draw(LudumDare41.game.assets.clownHead, position.x - clownWidth/2f, position.y - clownHeight/2f, clownWidth, clownHeight);
+        }
     }
 
     public boolean updatePosition(float speed)

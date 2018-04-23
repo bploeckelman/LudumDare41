@@ -68,6 +68,7 @@ public class Tank extends GameObject {
     public boolean isInvincible = false;
     public boolean isVisible = true;
 
+    private float explosionTimer = 0;
     public float invincibleTimer = 0;
     public float camoTimer = 0;
 
@@ -93,6 +94,7 @@ public class Tank extends GameObject {
         tempVector = new Vector2();
         dead = false;
         health = 2;
+        explosionTimer = 0;
         smoke = tank.smoke.getKeyFrame(0);
     }
 
@@ -382,6 +384,14 @@ public class Tank extends GameObject {
         if (dead) {
             batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            screen.particleSystem.addSmoke(position.x, position.y);
+            explosionTimer += Gdx.graphics.getDeltaTime();
+            if (explosionTimer < LudumDare41.game.assets.explosionAnimation.getAnimationDuration()) {
+                batch.draw(LudumDare41.game.assets.explosionAnimation.getKeyFrame(explosionTimer),
+                        x - halfX, y - halfY, halfX, halfY,
+                        width * 2f, height * 2f,
+                        1f, 1f, 0f);
+            }
         } else {
             if (isInvincible) {
                 if ((int)(invincibleTimer * 20) % 2 == 0 ) {
@@ -416,7 +426,8 @@ public class Tank extends GameObject {
         }
 
         batch.setColor(Color.WHITE);
-        if (health < 2 && !hasShield){
+        if (health == 1 && !hasShield){
+
             batch.draw(smoke, x, y, halfX, halfY, width, height, 1, 1, 0);
 
         }

@@ -41,6 +41,26 @@ public class ParticleSystem {
         }
     }
 
+    public void addSmoke(float x, float y){
+        int smokeParticles = 1;
+        for (int i = 0; i < smokeParticles; i++){
+            Particle particle = particlePool.obtain();
+            float posX = x + MathUtils.random(-20f, 20f);
+            float posY = y + MathUtils.random(-20f, 20f);
+
+            float velX = MathUtils.random(-20f, 20f);
+            float velY =  MathUtils.random(-20f, 20f);
+            float scale = MathUtils.random(10f, 20f);
+            float ttl = MathUtils.random(.5f, 1.5f);
+            float grayValue = MathUtils.random(.7f) + .3f;
+
+            particle.init(posX, posY, velX, velY, -velX, -velY,
+                    0.5f, grayValue, grayValue, grayValue, 1f,
+                    grayValue, grayValue, grayValue, 0f, scale, ttl, LudumDare41.game.assets.smoke);
+            activeParticles.add(particle);
+        }
+    }
+
     public void addBarrelSparks(float x, float y, float dx, float dy){
         int sparkParticles = 200;
         for (int i = 0; i < sparkParticles; i++){
