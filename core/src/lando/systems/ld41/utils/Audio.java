@@ -15,6 +15,8 @@ import java.util.HashMap;
 public class Audio implements Disposable {
 
     public static final float MUSIC_VOLUME = 0.15f;
+    public static final boolean shutUpYourFace = true;
+    public static final boolean shutUpYourTunes = true;
 
     public enum Sounds {
         explosion, good_job, lose_level, transition, shot, enemy_shot
@@ -31,7 +33,7 @@ public class Audio implements Disposable {
     public MutableFloat musicVolume;
 
     public Audio() {
-        this(true);
+        this(shutUpYourTunes);
     }
 
     public Audio(boolean playMusic) {
@@ -82,6 +84,7 @@ public class Audio implements Disposable {
     }
 
     public long playSound(Sounds soundOption) {
+        if (shutUpYourFace) return -1;
         return sounds.get(soundOption).play(1f);
     }
 
