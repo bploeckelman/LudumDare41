@@ -8,6 +8,8 @@
   </properties>
  </tile>
  <tile id="170" type="catapult"/>
+ <tile id="180" type="boss"/>
+ <tile id="181" type="boss"/>
  <tile id="182" type="tee">
   <properties>
    <property name="facing" type="int" value="0"/>
@@ -44,4 +46,7 @@
    <property name="facing" type="int" value="0"/>
   </properties>
  </tile>
+ <tile id="189" type="boss"/>
+ <tile id="194" type="boss"/>
+ <tile id="195" type="boss"/>
 </tileset>

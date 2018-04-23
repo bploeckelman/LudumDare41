@@ -37,6 +37,7 @@ public class Level {
     public MapLayer objectsLayer;
 
     // Map objects
+    public FinalBoss boss;
     public Tee tee;
     public Hole hole;
     public Array<PinballBumper> pinballBumpers;
@@ -142,6 +143,10 @@ public class Level {
                 hole = new Hole(props.get("x", Float.class),
                                 props.get("y", Float.class));
             }
+            else if (type.equalsIgnoreCase("boss")) {
+                boss = new FinalBoss(props.get("x", Float.class),
+                                     props.get("y", Float.class));
+            }
             else if (type.equalsIgnoreCase("water")) {
                 // NOTE: this will blow up if the polyline isn't closed
                 Polyline polyline = ((PolylineMapObject) object).getPolyline();
@@ -216,6 +221,9 @@ public class Level {
             bumper.update(dt);
         }
         hole.update(dt);
+        if (boss != null) {
+            boss.update(dt);
+        }
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera){
@@ -241,6 +249,9 @@ public class Level {
             tee.render(batch);
             for (PinballBumper bumper : pinballBumpers) {
                 bumper.render(batch);
+            }
+            if (boss != null) {
+                boss.render(batch);
             }
         }
         batch.end();
