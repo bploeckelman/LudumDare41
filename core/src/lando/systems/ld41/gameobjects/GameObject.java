@@ -1,6 +1,7 @@
 package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.screens.GameScreen;
 
@@ -14,6 +15,7 @@ public abstract class GameObject {
     public float bulletSpeed = 200;
     public float bulletTimeToLive = 3f;
     public boolean bouncyBullets = false;
+    public TextureRegion texture = null;
 
 
 

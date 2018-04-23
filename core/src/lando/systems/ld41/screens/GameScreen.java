@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
+import lando.systems.ld41.ui.Button;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
 import lando.systems.ld41.utils.Config;
@@ -53,6 +54,7 @@ public class GameScreen extends BaseScreen {
 
     public static final Array<Bullet> activeBullets = new Array<Bullet>();
     public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
+    private Button restartLevelButton;
 
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
@@ -62,6 +64,9 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(this);
 
         hud = new PlayerHud(this);
+        float buttonMargin = 10f;
+        float buttonSize = 80f;
+        restartLevelButton = new Button(LudumDare41.game.assets.refreshButton, hudCamera, hudCamera.viewportWidth - buttonMargin - buttonSize,buttonMargin + buttonSize);
 
         setLevel(currentLevelNum);
         addPlayer();
@@ -268,6 +273,7 @@ public class GameScreen extends BaseScreen {
         {
             batch.setColor(Color.WHITE);
             hud.render(batch);
+            restartLevelButton.render(batch);
 
         }
         batch.end();
@@ -286,11 +292,15 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == 0) {
+        if (restartLevelButton.checkForTouch(screenX, screenY)) {
+            addStats(true);
+            LudumDare41.game.setScreen(new GameScreen(currentLevelNum));
+            return true;
+        }
+        else if (button == 0) {
             if (playerTank.ball.onTank && showPowerMeter) {
                 playerTank.shootBall(powerMeter.power);
             }
-
             showPowerMeter = false;
             powerMeter.reset();
         }

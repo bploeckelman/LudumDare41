@@ -74,6 +74,7 @@ public class Assets implements Disposable {
     public TextureRegion enemyTurret;
     public TextureRegion enemyTurretRecoil;
     public TextureRegion flag;
+    public TextureRegion refreshButton;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -163,6 +164,7 @@ public class Assets implements Disposable {
         arrow = atlas.findRegion("arrow");
         indicator = atlas.findRegion("indicator");
         flag = atlas.findRegion("flag");
+        refreshButton = atlas.findRegion("refresh");
 
         enemyTurret = atlas.findRegion("greentankturret");
         enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
