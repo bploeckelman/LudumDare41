@@ -181,7 +181,9 @@ public class GameScreen extends BaseScreen {
         batch.end();
 
         renderGame(batch);
-        renderUI(batch);
+        if (levelZoomDone) {
+            renderUI(batch);
+        }
     }
 
     private void renderGame(SpriteBatch batch) {

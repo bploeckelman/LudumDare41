@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.Tank;
 import lando.systems.ld41.ui.BallIndicatorArrow;
+import lando.systems.ld41.ui.HoleIndicator;
 import lando.systems.ld41.utils.Assets;
 
 /**
@@ -15,6 +16,7 @@ import lando.systems.ld41.utils.Assets;
 public class PlayerHud {
 
     private BallIndicatorArrow ballIndicatorArrow;
+    private HoleIndicator holeIndicator;
     private GameScreen screen;
     public OrthographicCamera hudCamera;
     private NinePatch border = LudumDare41.game.assets.backplateNinePatch;
@@ -28,6 +30,7 @@ public class PlayerHud {
         this.screen = screen;
         hudCamera = screen.hudCamera;
         ballIndicatorArrow  = new BallIndicatorArrow(screen);
+        holeIndicator = new HoleIndicator(screen);
     }
 
     // this is projected into screen coords
@@ -35,6 +38,7 @@ public class PlayerHud {
     public void update(float dt) {
         updateStats();
         ballIndicatorArrow.update(dt);
+        holeIndicator.update(dt);
     }
 
     private void updateStats() {
@@ -54,7 +58,7 @@ public class PlayerHud {
 
     public void render(SpriteBatch batch) {
         ballIndicatorArrow.render(batch);
-
+        holeIndicator.render(batch);
         renderPlayerInfo(batch, screen.playerTank);
     }
 
