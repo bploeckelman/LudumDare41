@@ -207,6 +207,8 @@ public class GameScreen extends BaseScreen {
             for (Bullet b : activeBullets){
                 b.render(batch);
             }
+            playerTank.render(batch);
+
             particleSystem.render(batch);
             if (showPowerMeter)
             {
@@ -259,8 +261,9 @@ public class GameScreen extends BaseScreen {
     private void enterLevelZoom() {
         levelZoomDone = false;
         cameraTargetPos.set(playerTank.position, 0f);
-        float initialZoom = worldCamera.zoom;
-        float targetZoom = Math.max(
+        targetZoom.setValue(1.2f); // Already defined
+        float initialZoom = 1.2f;
+        float targetZoom = Math.max( // So wtf is this targetZoom?
                 level.groundLayer.getWidth()  * level.groundLayer.getTileWidth()  * CAMERA_ZOOM_MARGIN / worldCamera.viewportWidth,
                 level.groundLayer.getHeight() * level.groundLayer.getTileHeight() * CAMERA_ZOOM_MARGIN / worldCamera.viewportHeight);
         Timeline.createSequence()
