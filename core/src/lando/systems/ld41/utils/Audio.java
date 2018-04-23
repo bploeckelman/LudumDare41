@@ -33,7 +33,7 @@ public class Audio implements Disposable {
     public MutableFloat musicVolume;
 
     public Audio() {
-        this(shutUpYourTunes);
+        this(!shutUpYourTunes);
     }
 
     public Audio(boolean playMusic) {
