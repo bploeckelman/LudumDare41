@@ -18,10 +18,9 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
-import lando.systems.ld41.ui.HelpModalWindow;
 import lando.systems.ld41.particles.ParticleSystem;
-import lando.systems.ld41.stats.GameStats;
 import lando.systems.ld41.ui.Button;
+import lando.systems.ld41.ui.HelpModalWindow;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
 import lando.systems.ld41.utils.Audio;
@@ -175,16 +174,18 @@ public class GameScreen extends BaseScreen {
         for (PinballBumper bumper : level.pinballBumpers) {
             bumper.checkForHit(playerTank);
         }
+
         for (Polygon waterPoly : level.waterRegions) {
-            if (Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
-                Gdx.app.log("OVERLAPS", "player tank overlaps with water: " + waterPoly.toString());
-            }
+            playerTank.onWater = Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
         }
+
         for (Polygon sandPoly : level.sandRegions) {
-            if (Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
-                Gdx.app.log("OVERLAPS", "player tank overlaps with sand: " + sandPoly.toString());
+            playerTank.onSand = Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
+            for (EnemyTank tank : enemyTanks) {
+                tank.onSand = Utils.overlaps(sandPoly, tank.position.x, tank.position.y, tank.radius);
             }
         }
+
         checkShot();
     }
 

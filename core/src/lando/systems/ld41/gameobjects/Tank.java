@@ -19,7 +19,8 @@ public class Tank extends GameObject {
         None, LeftForward, RightForward, Forward, LeftBack, RightBack, Back, SpinLeft, SpinRight
     }
 
-    public float speed = 200;
+    public float MAX_SPEED = 200;
+    public float speed = MAX_SPEED;
     public static float rotationSpeed = 120;
     private final float TRACK_OFFSET = 20f;
 
@@ -52,6 +53,8 @@ public class Tank extends GameObject {
     public boolean isFirstBallFired = false;
     public boolean dead;
     public boolean hasShield;
+    public boolean onSand;
+    public boolean onWater;
 
     public int shots;
     public int deaths;
@@ -78,6 +81,8 @@ public class Tank extends GameObject {
         dead = false;
         health = 2;
         smoke = tank.smoke.getKeyFrame(0);
+        onSand = false;
+        onWater = false;
     }
 
     public void setAssets(TankAssets assets) {
@@ -118,6 +123,9 @@ public class Tank extends GameObject {
     private void handleMovement(float dt) {
         // Don't move if you have the ball
         if (dead) return;
+
+        speed = (onSand) ? MAX_SPEED * 0.5f : MAX_SPEED;
+        // TODO: onWater
 
         if (!handleManMovement(dt)) {
             handleNoobMovement(dt);

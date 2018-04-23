@@ -28,6 +28,7 @@ public class EnemyTank extends GameObject {
     public static float rotationSpeed = 120;
     public static float TURRET_SPEED = 360;
     private final float TRACK_OFFSET = 20f;
+    private final float MAX_SPEED = 100f;
 
     public TankAssets tank;
     private TextureRegion leftTread;
@@ -56,6 +57,8 @@ public class EnemyTank extends GameObject {
 
     public boolean dead;
     public boolean killingIt = false;
+    public boolean onWater = false;
+    public boolean onSand = false;
     private float explodeAnimTime = 0f;
     private float accum;
     public EnemyType type;
@@ -89,7 +92,7 @@ public class EnemyTank extends GameObject {
         this.normal = new Vector2();
         this.screen = screen;
         this.directionVector = new Vector2();
-        this.speed = 100;
+        this.speed = MAX_SPEED;
         this.bulletSpeed = 300;
         this.dead = false;
         switch(type){
@@ -356,6 +359,7 @@ public class EnemyTank extends GameObject {
         float distanceToTarget = position.dst(targetPos);
 
         if (amountToRotate == 0 || amountToRotate < distanceToTarget / 5f){
+            speed = (onSand) ? MAX_SPEED * 0.5f : MAX_SPEED;
             float distanceToMove = speed * dt;
             if (distanceToMove > distanceToTarget) {
                 distanceToMove = distanceToTarget;
