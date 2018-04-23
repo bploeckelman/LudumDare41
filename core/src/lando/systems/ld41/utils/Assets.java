@@ -92,6 +92,8 @@ public class Assets implements Disposable {
     public TextureRegion helpButton;
 
     public Texture titleTexture;
+    public TextureRegion ballSign;
+
     public Texture waterTexture;
     public Texture sandTexture;
     public TextureRegion waterTextureRegion;
@@ -200,6 +202,7 @@ public class Assets implements Disposable {
         flag = atlas.findRegion("flag");
         refreshButton = atlas.findRegion("refresh");
         helpButton = atlas.findRegion("helpbutton");
+        ballSign = atlas.findRegion("ballsign");
         enemyTurret = atlas.findRegion("greentankturret");
         enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
         pinballBumperOff = atlas.findRegion("pinballbumper-off");

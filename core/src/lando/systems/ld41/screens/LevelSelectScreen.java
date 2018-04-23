@@ -10,10 +10,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import lando.systems.ld41.LudumDare41;
@@ -31,6 +33,11 @@ public class LevelSelectScreen extends BaseScreen {
     int currentLevelIdx;
     int currentThumbnailIdx;
 
+    GlyphLayout layout;
+    BitmapFont font;
+
+    TextureRegion ballSign;
+
     TextureRegion arrow;
     float arrowSize = 64f;
     Rectangle arrowLeftClickTarget;
@@ -42,6 +49,7 @@ public class LevelSelectScreen extends BaseScreen {
     float currentWidth;
     Rectangle currentClickTarget;
 
+    float currentSignWidth;
     Rectangle leftSignPosition;
     Rectangle currentSignPosition;
     Rectangle rightSignPosition;
@@ -57,8 +65,13 @@ public class LevelSelectScreen extends BaseScreen {
 
     public LevelSelectScreen() {
         Gdx.input.setInputProcessor(this);
+
+        layout = game.assets.layout;
+        font = game.assets.font;
+
         triangulator = new EarClippingTriangulator();
         arrow = LudumDare41.game.assets.arrow;
+        ballSign = LudumDare41.game.assets.ballSign;
 
         levels = new Array<Level>();
         thumbnails = new Array<TextureRegion>();
@@ -82,7 +95,7 @@ public class LevelSelectScreen extends BaseScreen {
 
         signSize = (hudCamera.viewportWidth - (arrowLeftClickTarget.width + 20f + (padBetween * 2))) / 4;
         float x = 10f + arrowSize + signSize + padBetween;
-        float y = hudCamera.viewportHeight/2;
+        float y = hudCamera.viewportHeight/3;
         currentWidth = hudCamera.viewportWidth - (x * 2);
         currentClickTarget = new Rectangle(x, (hudCamera.viewportHeight/2) - currentWidth, currentWidth, currentWidth);
         currentMap = new Rectangle(currentClickTarget.x, currentClickTarget.y, currentClickTarget.width, currentClickTarget.height);
@@ -90,7 +103,8 @@ public class LevelSelectScreen extends BaseScreen {
         leftSignPosition = new Rectangle(10f + arrowSize, y - (signSize/2), signSize, signSize);
         leftSign = new Rectangle();
         leftSign.set(leftSignPosition);
-        currentSignPosition = new Rectangle((hudCamera.viewportWidth/2) - (signSize/2), y, signSize, signSize);
+        currentSignWidth = hudCamera.viewportWidth - (leftSign.x*4);
+        currentSignPosition = new Rectangle(leftSign.x * 2, hudCamera.viewportHeight - signSize - leftSign.x, currentSignWidth, signSize);
         currentSign = new Rectangle();
         currentSign.set(currentSignPosition);
         rightSignPosition = new Rectangle(hudCamera.viewportWidth - (10f + arrowSize + signSize), y - (signSize/2), signSize, signSize);
@@ -108,11 +122,11 @@ public class LevelSelectScreen extends BaseScreen {
 
     @Override
     public void render(SpriteBatch batch) {
+
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
 
-        Assets.drawString(batch, "Tee Off", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
-        Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
+        // Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
 
         if (
             isCycling && (
@@ -146,25 +160,36 @@ public class LevelSelectScreen extends BaseScreen {
         batch.end();
     }
 
+    private Color alphaColor = new Color(1, 1, 1, 1);
+
     public void renderSign(SpriteBatch batch, int holeIdx, Rectangle rect) {
+
+        float alpha = (rect.width - signSize) / (currentSignWidth - signSize);
         Level level = levels.get(holeIdx);
 
         float top = rect.y + rect.height;
+        float x = rect.x;
+        float ballSize = 64;
 
-        game.assets.layout.setText(
-            game.assets.font,
-            "Hole: " + (holeIdx + 1) + "\n" +
-                level.name + "\n" +
-                "Par: " + level.par,
-            Color.CORAL,
-            rect.width,
-            1,
-            false
-        );
+        float ballX = x + 32;
+        float cx = x + (signSize - ballSize) / 2;
+        ballX += (cx - ballX) * (1 - alpha);
 
         signPatch.draw(batch, rect.x, rect.y, rect.width, rect.height);
-        game.assets.font.draw(batch, game.assets.layout, rect.x, top - 6f);
-        game.assets.layout.reset();
+        batch.draw(ballSign, ballX, top - 96, ballSize, ballSize);
+
+        Assets.drawString(batch, Integer.toString(holeIdx + 1), ballX + 2,
+                top - 48, Color.WHITE, 0.75f, font, ballSize, Align.center);
+
+        String par = String.format("Par: %d", level.par);
+        if (alpha > 0.5) {
+            alphaColor.a = alpha;
+            Assets.drawString(batch, level.name, x, top - 116, alphaColor, 0.5f, font, rect.width, Align.center);
+            Assets.drawString(batch, par, x, top - 48, alphaColor, 0.5f, font, rect.width, Align.center);
+        } else {
+            alphaColor.a = 1 - alpha;
+            Assets.drawString(batch, par, x, top - 116, alphaColor, 0.5f, font, rect.width, Align.center);
+        }
     }
 
     @Override
@@ -215,8 +240,8 @@ public class LevelSelectScreen extends BaseScreen {
         for (int i = 0; i < cycle.size - 1; i++) {
             Rectangle t = cycle.get(i + 1);
             timeline.push(Tween.to(cycle.get(i), RectangleAccessor.XYWH, duration)
-                .target(t.x, t.y, t.width, t.height)
-                .ease(Quad.OUT));
+                    .target(t.x, t.y, t.width, t.height)
+                    .ease(Quad.OUT));
         }
 
         timeline.setCallback(new TweenCallback() {
@@ -232,15 +257,15 @@ public class LevelSelectScreen extends BaseScreen {
         .start(game.tween);
 
         Timeline.createSequence()
-            .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
-                .target(-currentWidth)
-                .ease(Quad.OUT)
-                .setCallback(new TweenCallback() {
-                    @Override
-                    public void onEvent(int i, BaseTween<?> baseTween) {
-                        currentThumbnailIdx = currentThumbnailIdx + dir;
-                    }
-                }))
+            .push(Tween.to(currentMap, RectangleAccessor.Y, duration / 2)
+                    .target(-currentWidth)
+                    .ease(Quad.OUT)
+                    .setCallback(new TweenCallback() {
+                        @Override
+                        public void onEvent(int i, BaseTween<?> baseTween) {
+                            currentThumbnailIdx = currentThumbnailIdx + dir;
+                        }
+                    }))
             .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
                 .target(currentClickTarget.y)
                 .ease(Quad.IN))
@@ -339,12 +364,12 @@ public class LevelSelectScreen extends BaseScreen {
 
         shapes.setColor(Color.YELLOW);
         shapes.triangle(
-            level.tee.pos.x + xOffset,
-            level.tee.pos.y,
-            level.tee.pos.x + xOffset - holeSize,
-            level.tee.pos.y + holeSize,
-            level.tee.pos.x + xOffset + holeSize,
-            level.tee.pos.y + holeSize
+                level.tee.pos.x + xOffset,
+                level.tee.pos.y,
+                level.tee.pos.x + xOffset - holeSize,
+                level.tee.pos.y + holeSize,
+                level.tee.pos.x + xOffset + holeSize,
+                level.tee.pos.y + holeSize
         );
         shapes.end();
 
