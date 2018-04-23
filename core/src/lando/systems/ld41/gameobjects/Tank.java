@@ -493,7 +493,7 @@ public class Tank extends GameObject {
             meter.setSuperShot();
             screen.particleSystem.addBarrelSparks(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
         }
-        directionVector.scl(20 + (5 * power));
+        directionVector.scl(20 + (8 * power));
 
         isFirstBallFired = true;
         screen.screenShake.addDamage(power/200f);
