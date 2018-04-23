@@ -116,7 +116,7 @@ public class Tank extends GameObject {
 
     private void handleMovement(float dt) {
         // Don't move if you have the ball
-        if (ball.onTank || dead) return;
+        if (dead) return;
 
         if (!handleManMovement(dt)) {
             handleNoobMovement(dt);
@@ -128,46 +128,48 @@ public class Tank extends GameObject {
         if (movement == TankMovement.None) return false;
 
         // manly bonus
-        dt *= 3f;
+        dt *= 2f;
 
         float speedDx = 0;
         float rotationDx = 0;
         float halfDt = dt/2;
         float fullSpeed = speed*dt;
+        float rt = 0;
+        float lt = 0;
 
         switch (movement) {
             case RightForward:
                 rotationDx = rotationSpeed * halfDt;
-                rightTime += dt;
-                leftTime += halfDt;
+                rt = dt;
+                lt = halfDt;
                 speedDx = speed * halfDt;
                 break;
             case Forward:
-                rightTime += dt;
-                leftTime += dt;
+                rt = dt;
+                lt = dt;
                 speedDx = fullSpeed;
                 break;
             case LeftForward:
                 rotationDx = -rotationSpeed * halfDt;
-                rightTime += halfDt;
-                leftTime += dt;
+                rt = halfDt;
+                lt = dt;
                 speedDx = speed * halfDt;
                 break;
             case RightBack:
                 rotationDx = -rotationSpeed * halfDt;
-                rightTime -= dt;
-                leftTime -= halfDt;
+                rt = -dt;
+                lt =- halfDt;
                 speedDx = -speed * halfDt;
                 break;
             case Back:
-                rightTime -= dt;
-                leftTime -= dt;
+                rt = -dt;
+                lt = -dt;
                 speedDx = -(fullSpeed * 0.75f);
                 break;
             case LeftBack:
                 rotationDx = rotationSpeed * halfDt;
-                rightTime -= halfDt;
-                leftTime -= dt;
+                rt = -halfDt;
+                lt = -dt;
                 speedDx = -speed * halfDt;
                 break;
             case SpinLeft:
@@ -180,6 +182,11 @@ public class Tank extends GameObject {
                 leftTime += dt;
                 rotationDx = -rotationSpeed * dt;
                 break;
+        }
+
+        if (!ball.onTank) {
+            rightTime += rt;
+            leftTime += lt;
         }
 
         updatePosition(speedDx, rotationDx);
@@ -224,19 +231,25 @@ public class Tank extends GameObject {
             rightTime += dt;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            leftTime += dt;
-            rightTime += dt;
-            speedDx = speed*dt;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            leftTime -= dt;
-            rightTime -= dt;
-            speedDx = -speed*dt;
+        if (!ball.onTank) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                leftTime += dt;
+                rightTime += dt;
+                speedDx = speed * dt;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                leftTime -= dt;
+                rightTime -= dt;
+                speedDx = -speed * dt;
+            }
         }
         updatePosition(speedDx, rotationDx);
     }
 
     private void updatePosition(float speedUpdate, float rotationUpdate) {
+
+        if (ball.onTank) {
+            speedUpdate = 0;
+        }
 
         rotation += rotationUpdate;
 
