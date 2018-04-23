@@ -60,8 +60,9 @@ public class Catapult extends GameObject {
                 alive = false;
             }
         }
-
-        timer+=dt;
+        if (playerTank.isFirstBallFired) {
+            timer += dt;
+        }
         if (!alive) {
             smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
         } else {
