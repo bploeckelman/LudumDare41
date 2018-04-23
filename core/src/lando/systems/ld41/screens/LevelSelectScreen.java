@@ -251,6 +251,12 @@ public class LevelSelectScreen extends BaseScreen {
         int levelWidth = level.groundLayer.getWidth() * (int)level.groundLayer.getTileWidth();
         int levelHeight = level.groundLayer.getHeight() * (int)level.groundLayer.getTileHeight();
         int frameSize = Math.max(levelWidth, levelHeight);
+
+        float xOffset = 0;
+        if (frameSize > levelWidth) {
+            xOffset = (frameSize/2) - (levelWidth/2);
+        }
+
         FrameBuffer fb = new FrameBuffer(Pixmap.Format.RGBA8888, frameSize, frameSize, false);
         OrthographicCamera camera = new OrthographicCamera(frameSize, frameSize);
         camera.setToOrtho(false, fb.getWidth(), fb.getHeight());
@@ -269,6 +275,7 @@ public class LevelSelectScreen extends BaseScreen {
         );
         PolygonSprite exteriorPoly = new PolygonSprite(exteriorPolyReg);
         exteriorPoly.setOrigin(0, 0);
+        exteriorPoly.setX(xOffset);
         exteriorPoly.draw(polyBatch);
 
         for (PolylineMapObject boundry : level.boundaries) {
@@ -284,6 +291,7 @@ public class LevelSelectScreen extends BaseScreen {
             );
             PolygonSprite poly = new PolygonSprite(polyReg);
             poly.setOrigin(0, 0);
+            poly.setX(xOffset);
             poly.draw(polyBatch);
         }
 
@@ -296,7 +304,7 @@ public class LevelSelectScreen extends BaseScreen {
         {
             for (int i = 0; i < level.circles.size; i++){
                 Ellipse circle = level.circles.get(i).getEllipse();
-                shapes.circle(circle.x, circle.y, circle.height / 2);
+                shapes.circle(circle.x + xOffset, circle.y, circle.height / 2);
             }
         }
         shapes.end();
