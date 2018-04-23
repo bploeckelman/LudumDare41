@@ -2,19 +2,15 @@ package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
 
-public class Ball {
+public class Ball extends GameObject {
 
     public boolean onTank;
-    public Vector2 position;
     private Vector2 oldPosition;
     private Vector2 newPosition;
     private Vector2 collisionPoint;
@@ -26,15 +22,10 @@ public class Ball {
     public float pickupDelay;
     private GameScreen screen;
 
-    private ShapeRenderer shapeRenderer;
-    private int radiusCount = 0;
-
-    private float indicatorRadius = 0f;
-    private Interpolation indicatorInterp;
-    private float accum;
-
     public TextureRegion image;
     public boolean visible = true;
+
+    private Indicator indicator;
 
     public Ball(GameScreen screen, String ballImage){
         this.screen = screen;
@@ -44,8 +35,6 @@ public class Ball {
         position = new Vector2();
         velocity = new Vector2();
 
-        shapeRenderer = new ShapeRenderer();
-
         oldPosition = new Vector2();
         newPosition = new Vector2();
         collisionPoint = new Vector2();
@@ -54,8 +43,8 @@ public class Ball {
         tempVector3 = new Vector3();
 
         radius = 5;
-        indicatorInterp = Interpolation.pow2;
-        accum = 0;
+
+        indicator = new Indicator(this, 10);
     }
 
     public void setImage(String ballImage) {
@@ -87,8 +76,7 @@ public class Ball {
 
         if (isNotMoving())
         {
-            accum += dt;
-            indicatorRadius = 10 + 10 * indicatorInterp.apply((accum/.5f)%1f);
+            indicator.update(dt);
         }
 
         position.set(newPosition);
@@ -102,8 +90,8 @@ public class Ball {
         visible = true; // temp
         velocity.set(vel);
         Hole hole = screen.level.hole;
-        holeCenterDist = Intersector.distanceLinePoint(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.centerPos.x, hole.centerPos.y);
-        holeCenterSide = Intersector.pointLineSide(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.centerPos.x, hole.centerPos.y);
+        holeCenterDist = Intersector.distanceLinePoint(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.position.x, hole.position.y);
+        holeCenterSide = Intersector.pointLineSide(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.position.x, hole.position.y);
         //System.out.println("dist: " + holeCenterDist + " side: " + holeCenterSide);
     }
 
@@ -127,7 +115,7 @@ public class Ball {
 
         if (isNotMoving())
         {
-            batch.draw(LudumDare41.game.assets.indicator, position.x - indicatorRadius, position.y - indicatorRadius, indicatorRadius * 2f, indicatorRadius * 2f);
+            indicator.render(batch);
         }
     }
 

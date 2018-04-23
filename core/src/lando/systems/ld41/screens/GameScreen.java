@@ -139,6 +139,7 @@ public class GameScreen extends BaseScreen {
         screenShake.update(dt);
         hud.update(dt);
 
+        level.update(dt);
         if (!levelZoomDone){
             worldCamera.update();
             return;
@@ -146,8 +147,6 @@ public class GameScreen extends BaseScreen {
 
         cameraTargetPos.set(playerTank.position, 0f);
         updateCamera();
-
-        level.update(dt);
         updateTank();
         updateObjects(dt);
 

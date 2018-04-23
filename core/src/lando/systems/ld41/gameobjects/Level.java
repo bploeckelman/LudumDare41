@@ -163,12 +163,14 @@ public class Level {
     public Level(GameScreen screen, String mapFileName){
         this(mapFileName);
         this.screen = screen;
+        this.hole.screen = screen;
     }
 
     public void update(float dt){
         for (PinballBumper bumper : pinballBumpers) {
             bumper.update(dt);
         }
+        hole.update(dt);
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera){
