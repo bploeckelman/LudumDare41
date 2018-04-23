@@ -98,7 +98,7 @@ public class Level {
         enemyTankInfos = new Array<EnemyTankInfo>();
         enemyTurretInfos = new Array<EnemyTurretInfo>();
         catapultInfos = new Array<CatapultInfo>();
-        powerupInfos = new Array<>();
+        powerupInfos = new Array<PowerupInfo>();
         waterRegions = new Array<Polygon>();
         sandRegions = new Array<Polygon>();
         for (MapObject object : objects) {
