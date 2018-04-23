@@ -380,7 +380,9 @@ public class Tank extends GameObject {
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
         } else {
             if (isInvincible) {
-                batch.setColor(Color.RED);
+                if ((int)(invincibleTimer * 20) % 2 == 0 ) {
+                    batch.setColor(Color.RED);
+                }
             }
 
             batch.draw(leftTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
@@ -423,7 +425,7 @@ public class Tank extends GameObject {
         // todo play sounds for shield loss and explosion
         if (hasShield) {
             hasShield = false;
-        } else {
+        } else if (!isInvincible) {
             health--;
             if (health < 1) {
                 dead = true;
@@ -444,9 +446,11 @@ public class Tank extends GameObject {
                 hasShield = true;
                 break;
             case camo:
+                invincibleTimer = 0;
                 camoTimer = 5;
                 break;
             case invincible:
+                camoTimer = 0;
                 invincibleTimer = 5;
                 break;
             case pontoon:

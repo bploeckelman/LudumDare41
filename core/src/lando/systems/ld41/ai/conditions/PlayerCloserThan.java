@@ -13,6 +13,8 @@ public class PlayerCloserThan extends Condition{
 
     @Override
     public boolean isTrue() {
-        return owner.position.dst(owner.screen.playerTank.position) < distance && owner.screen.level.canSeeBetween(owner.position, owner.screen.playerTank.position);
+        return owner.screen.playerTank.isVisible
+                && owner.position.dst(owner.screen.playerTank.position) < distance
+                && owner.screen.level.canSeeBetween(owner.position, owner.screen.playerTank.position);
     }
 }
