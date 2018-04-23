@@ -61,6 +61,8 @@ public class Assets implements Disposable {
     private final AssetDescriptor<ShaderProgram> shaderHeartAsset      = new AssetDescriptor<ShaderProgram>("shaders/heart.frag",      ShaderProgram.class, defaultVertParam);
     private final AssetDescriptor<ShaderProgram> shaderCircleCropAsset = new AssetDescriptor<ShaderProgram>("shaders/circlecrop.frag", ShaderProgram.class, defaultVertParam);
 
+    private final AssetDescriptor<ShaderProgram> shaderWaterAsset = new AssetDescriptor<ShaderProgram>("shaders/water.frag", ShaderProgram.class, defaultVertParam);
+
     public enum Loading { SYNC, ASYNC }
 
     public SpriteBatch batch;
@@ -114,6 +116,8 @@ public class Assets implements Disposable {
     public ShaderProgram heartShader;
     public ShaderProgram circleCropShader;
 
+    public ShaderProgram waterShader;
+
     public HashMap<String, Animation<TextureRegion>> tankAnimations = new HashMap<String, Animation<TextureRegion>>();
     public HashMap<String, TextureRegion> tanks = new HashMap<String, TextureRegion>();
     public HashMap<String, TextureRegion> assetMap = new HashMap<String, TextureRegion>();
@@ -157,6 +161,7 @@ public class Assets implements Disposable {
         mgr.load(shaderRippleAsset);
         mgr.load(shaderHeartAsset);
         mgr.load(shaderCircleCropAsset);
+        mgr.load(shaderWaterAsset);
         // ...
 
         levelNumberToFileNameMap = new IntMap<String>();
@@ -247,6 +252,8 @@ public class Assets implements Disposable {
         rippleShader     = mgr.get(shaderRippleAsset);
         heartShader      = mgr.get(shaderHeartAsset);
         circleCropShader = mgr.get(shaderCircleCropAsset);
+
+        waterShader      = mgr.get(shaderWaterAsset);
 
         randomTransitions = new Array<ShaderProgram>();
         randomTransitions.addAll(

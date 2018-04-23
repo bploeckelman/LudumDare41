@@ -53,6 +53,7 @@ public class Level {
     Vector2 tempVector2;
     GameScreen screen;
     PolygonSpriteBatch polys;
+    float accum;
 
     public Level(String mapFileName) {
         polys = LudumDare41.game.assets.polys;
@@ -212,6 +213,7 @@ public class Level {
     }
 
     public void update(float dt){
+        accum += dt;
         for (PinballBumper bumper : pinballBumpers) {
             bumper.update(dt);
         }
@@ -228,13 +230,12 @@ public class Level {
         polys.setProjectionMatrix(camera.combined);
         polys.begin();
         {
+            polys.setShader(LudumDare41.game.assets.waterShader);
+            LudumDare41.game.assets.waterShader.setUniformf("u_accum", accum);
             for (PolygonSprite sprite : waterSprites) {
-                TextureRegion region = sprite.getRegion().getRegion();
-                region.setV(region.getV()+.01f);
-                region.setV2(region.getV2()+.01f);
-                sprite.setRegion(new PolygonRegion(region, sprite.getRegion().getVertices(), sprite.getRegion().getTriangles()));
                 sprite.draw(polys);
             }
+            polys.setShader(null);
             for (PolygonSprite sprite : sandSprites) {
                 sprite.draw(polys);
             }
