@@ -57,8 +57,8 @@ public class GameStats {
         long minutes = totalSeconds / 60;
         long seconds = totalSeconds % 60;
         return (minutes > 0)
-                ? String.format("%dm %ds", minutes, seconds)
-                : String.format("%ds", seconds);
+                ? minutes + "m " + seconds + "s"
+                : seconds + "s";
     }
 
 
