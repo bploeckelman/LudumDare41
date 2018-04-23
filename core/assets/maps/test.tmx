@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextobjectid="40">
+ <properties>
+  <property name="name" value="Testes, one, two... three?"/>
+  <property name="par" type="int" value="3"/>
+ </properties>
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer name="ground" width="30" height="30">
   <data encoding="base64">

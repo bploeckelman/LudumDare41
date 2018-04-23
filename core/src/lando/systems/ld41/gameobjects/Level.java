@@ -52,10 +52,6 @@ public class Level {
     GameScreen screen;
 
     public Level(String mapFileName) {
-        // TODO: Pull these out of the map
-        name = "test";
-        par = 3;
-
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 
@@ -66,6 +62,9 @@ public class Level {
         }});
         mapRenderer = new OrthoCachedTiledMapRenderer(map);
         ((OrthoCachedTiledMapRenderer) mapRenderer).setBlending(true);
+
+        this.name = map.getProperties().get("name", "[UNNAMED]", String.class);
+        this.par = map.getProperties().get("par", -1, Integer.class);
 
         // Validate that required map layers are available
         MapLayers layers = map.getLayers();
