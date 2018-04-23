@@ -3,6 +3,7 @@ package lando.systems.ld41.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,28 +22,46 @@ public class ScoreCard extends BaseScreen {
 
     private GameStats gameStats;
     private Rectangle cardBounds;
-    private String[][] data = new String[5][11];
-    private Rectangle[][] grid = new Rectangle[5][11];
+    private String[][] data;
+    private Rectangle[][] grid;
     private String[] stats = new String[3];
     private Rectangle[] statsBounds = new Rectangle[3];
     private TextureRegion white = LudumDare41.game.assets.whitePixel;
     private ShapeRenderer sr = new ShapeRenderer();
     private GlyphLayout layout = LudumDare41.game.assets.layout;
+    private int devCount = 5;
+
+    private int holes;
+
+    private String rules;
+    private Rectangle rulesBounds;
 
     public ScoreCard() {
+        holes = LudumDare41.game.assets.levelNumberToFileNameMap.size;
         gameStats = LudumDare41.game.gameStats;
         initializeGrid();
+
+        rules = "Putt Putt Boom Course Rules:\n" +
+                "1. Diplomats cannot take their tanks off the course\n" +
+                "2. Play each hole per turn. No skipping holes!\n" +
+                "3. No Fucking Curse Words\n";
     }
 
     public void setDemoStats() {
         GameStats gs = new GameStats();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < holes; i++) {
             gs.addStats(i, (float)MathUtils.random(20000, 2000000), MathUtils.random(20, 200), MathUtils.random(20, 200), MathUtils.randomBoolean(), MathUtils.random(2000, 200000000));
         }
         gameStats = gs;
     }
 
     private void initializeGrid() {
+        int totalRows = devCount + 2;
+        int totalCols = holes + 2;
+
+        data = new String[totalRows][totalCols];
+        grid = new Rectangle[totalRows][totalCols];
+
         float padding = 20;
         float dPadding = 40;
 
@@ -60,7 +79,7 @@ public class ScoreCard extends BaseScreen {
 
         float ix = x;
         float iy = hudCamera.viewportHeight - dPadding;
-        float cellHeight = (hudCamera.viewportHeight - padding - y) / (grid.length + 1);
+        float cellHeight = game.assets.font.getLineHeight() * 2;//(hudCamera.viewportHeight - padding - y) / (grid.length + 1);
         float cellWidth = width / (grid[0].length + 2);
         for (int row = 0; row < grid.length; row++) {
             iy -= cellHeight;
@@ -77,15 +96,42 @@ public class ScoreCard extends BaseScreen {
             ix = x;
         }
 
-        DevData[] devData = DevData.getDevData(3, 9);
+        DevData[] devData = DevData.getDevData(devCount, holes);
 
-        data = new String[][]{
-                {"NAME", "1", "2", "3", "4", "5", "6", "7", "8", "9", "TOTAL"},
-                {"You", getScore(0), getScore(1), getScore(2), getScore(3), getScore(4), getScore(5), getScore(6), getScore(7), getScore(8), getTotalScore()},
-                { devData[0].name, devData[0].scores[0], devData[0].scores[1], devData[0].scores[2],devData[0].scores[3],devData[0].scores[4],devData[0].scores[5],devData[0].scores[6],devData[0].scores[7],devData[0].scores[8],devData[0].total},
-                { devData[1].name, devData[1].scores[0], devData[1].scores[1], devData[1].scores[2],devData[1].scores[3],devData[1].scores[4],devData[1].scores[5],devData[1].scores[6],devData[1].scores[7],devData[1].scores[8],devData[1].total},
-                { devData[2].name, devData[2].scores[0], devData[2].scores[1], devData[2].scores[2],devData[2].scores[3],devData[2].scores[4],devData[2].scores[5],devData[2].scores[6],devData[2].scores[7],devData[2].scores[8],devData[2].total},
-        };
+        for (int row = 0; row < data.length; row++) {
+            String text;
+            for (int col = 0; col < data[row].length; col++) {
+                if (row == 0) {
+                    // header
+                    if (col == 0) {
+                        text = "NAME";
+                    } else if (col + 1 == data[row].length) {
+                        text = "TOTAL";
+                    } else {
+                        text = Integer.toString(col);
+                    }
+                } else if (row == 1) {
+                    // user
+                    if (col == 0) {
+                        text = "You";
+                    } else if (col + 1 != data[row].length) {
+                        text = getScore(col - 1);
+                    } else {
+                        text = getTotalScore();
+                    }
+                } else {
+                    // devs
+                    if (col == 0) {
+                        text = devData[row - 2].name;
+                    } else if (col + 1 != data[row].length) {
+                        text = devData[row - 2].scores[col - 1];
+                    } else {
+                        text = devData[row - 2].total;
+                    }
+                }
+                data[row][col] = text;
+            }
+        }
 
         stats[0] = "Time: " + gameStats.totalTime();
         stats[1] = "Deaths: " + gameStats.totalDeaths();
@@ -94,12 +140,15 @@ public class ScoreCard extends BaseScreen {
         statsBounds = new Rectangle[3];
         x = dPadding;
         y = dPadding;
-        cellWidth = width / 2;
+        cellWidth = width / 3;
         statsBounds = new Rectangle[] {
-                new Rectangle(x, y + cellHeight, width, cellHeight),
                 new Rectangle(x, y, cellWidth, cellHeight),
-                new Rectangle(x + cellWidth, y, cellWidth, cellHeight)
+                new Rectangle(x + cellWidth, y, cellWidth, cellHeight),
+                new Rectangle(x + (cellWidth * 2), y, cellWidth, cellHeight)
         };
+
+        float ruleHeight = hudCamera.viewportHeight - (dPadding * 3) - ((data.length + 1) * cellHeight);
+        rulesBounds = new Rectangle(x, cellHeight + dPadding, width, ruleHeight);
     }
 
     private String getScore(int index) {
@@ -121,6 +170,11 @@ public class ScoreCard extends BaseScreen {
     @Override
     public void render(SpriteBatch batch) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        BitmapFont.BitmapFontData fontData = game.assets.font.getData();
+
+        float scaleX = fontData.scaleX;
+        float scaleY = fontData.scaleY;
+        fontData.setScale(0.25f);
 
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
@@ -138,6 +192,9 @@ public class ScoreCard extends BaseScreen {
                 }
             }
 
+            layout.setText(game.assets.font, rules, Color.BLACK, rulesBounds.width, Align.left, false);
+            game.assets.font.draw(batch, layout, rulesBounds.x,  rulesBounds.y + rulesBounds.height);
+
             for (int col = 0; col < statsBounds.length; col++) {
                 drawString(batch, stats[col], statsBounds[col].x, statsBounds[col].y, statsBounds[col].width, Color.BLACK, Align.left);
             }
@@ -154,6 +211,8 @@ public class ScoreCard extends BaseScreen {
             }
         }
         sr.end();
+
+        fontData.setScale(scaleX, scaleY);
     }
 
     private void drawString(SpriteBatch batch, String[][] data, Rectangle[][] grid, int x, int y, int align) {

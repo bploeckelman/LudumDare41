@@ -168,7 +168,6 @@ public class GameScreen extends BaseScreen {
         }
         cameraTargetPos.set(playerTank.position, 0f);
         updateCamera();
-        updateTank();
         updateObjects(dt);
 
         if (showPowerMeter) {
@@ -442,6 +441,7 @@ public class GameScreen extends BaseScreen {
     private int bodyIndex = 0;
     private int treadIndex = 0;
 
+    /*
     public void updateTank() {
 
 
@@ -469,6 +469,7 @@ public class GameScreen extends BaseScreen {
 
         playerTank.setAssets(TankAssets.getTankAssets(tankBodies[bodyIndex], tankTreads[treadIndex]));
     }
+    */
 
     private void updateObjects(float dt) {
         for(int i = activeBullets.size - 1; i >= 0; i--) {
