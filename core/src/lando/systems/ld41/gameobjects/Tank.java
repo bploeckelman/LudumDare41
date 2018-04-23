@@ -53,6 +53,7 @@ public class Tank extends GameObject {
 
     public int shots;
     public int deaths;
+    public int health;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));

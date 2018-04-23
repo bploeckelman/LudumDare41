@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.utils.Assets;
 
-public class Particle {
+public class Particle implements Pool.Poolable {
 
     TextureRegion region;
     Vector2 pos;
@@ -104,5 +105,10 @@ public class Particle {
         batch.setColor(r, g, b, a);
         batch.draw(region, pos.x - scale.floatValue()/2f, pos.y - scale.floatValue()/2f, scale.floatValue(), scale.floatValue());
         batch.setColor(Color.WHITE);
+    }
+
+    @Override
+    public void reset() {
+
     }
 }
