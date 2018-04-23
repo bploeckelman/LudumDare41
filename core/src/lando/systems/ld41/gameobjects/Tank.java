@@ -60,6 +60,7 @@ public class Tank extends GameObject {
 
     public int shots;
     public int deaths;
+    public int kills;
     public int health;
 
     // pickups
@@ -503,5 +504,6 @@ public class Tank extends GameObject {
     public void setStats(HoleStats stats) {
         deaths = stats.deaths;
         shots = stats.score;
+        kills = stats.kills;
     }
 }

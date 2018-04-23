@@ -49,6 +49,7 @@ public class Catapult extends GameObject {
         LudumDare41.game.audio.playSound(Audio.Sounds.explosion);
         killingIt = true;
         explodeAnimTime = 0f;
+        screen.playerTank.kills++;
     }
 
     @Override

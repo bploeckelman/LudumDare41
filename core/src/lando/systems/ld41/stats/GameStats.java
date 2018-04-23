@@ -29,7 +29,7 @@ public class GameStats {
         stats.score = score;
 
         stats.distance += distance;
-        stats.kills += kills;
+        stats.kills = kills;
         stats.timeMs += time;
     }
 

@@ -26,6 +26,8 @@ public class PlayerHud {
     private String scoreText;
     private int deaths = -1;
     private String deathText;
+    private int kills = -1;
+    private String killText;
     private long totalTime = 0;
     private String timeText = "";
 
@@ -50,12 +52,17 @@ public class PlayerHud {
 
         if (score != player.shots) {
             score = player.shots;
-            scoreText = "" + score;
+            scoreText = Integer.toString(score);
         }
 
         if (deaths != player.deaths) {
             deaths = player.deaths;
-            deathText = "" + deaths;
+            deathText = Integer.toString(deaths);
+        }
+
+        if (kills != player.kills) {
+            kills = player.kills;
+            killText = Integer.toString(kills);
         }
 
         long time = screen.getTime();
@@ -74,7 +81,7 @@ public class PlayerHud {
     private void renderPlayerInfo(SpriteBatch batch, Tank player) {
         if (player == null) return;
 
-        float height = 105;
+        float height = 125;
         float width = 120;
         float padding = 10;
 
@@ -88,6 +95,9 @@ public class PlayerHud {
         x += padding;
         drawString(batch, "Shots:", x, y);
         drawString(batch, scoreText, x + 70, y);
+        y -= 20;
+        drawString(batch, "Kills:", x, y);
+        drawString(batch, killText, x + 70, y);
         y -= 20;
         drawString(batch, "Deaths:", x, y);
         drawString(batch, deathText, x + 70, y);

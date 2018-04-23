@@ -275,7 +275,7 @@ public class GameScreen extends BaseScreen {
 
     private void addStats(boolean isDead) {
         double totalTime = System.currentTimeMillis() - time;
-        LudumDare41.game.gameStats.addStats(currentLevelNum, playerTank.ball.totalDistance, 0, playerTank.shots, isDead, totalTime);
+        LudumDare41.game.gameStats.addStats(currentLevelNum, playerTank.ball.totalDistance, playerTank.kills, playerTank.shots, isDead, totalTime);
     }
 
     @Override

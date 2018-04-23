@@ -230,6 +230,7 @@ public class EnemyTank extends GameObject {
         screen.screenShake.addDamage(.4f);
         LudumDare41.game.audio.playSound(Audio.Sounds.explosion);
         explodeAnimTime = 0f;
+        screen.playerTank.kills++;
     }
 
     public void update(float dt)
