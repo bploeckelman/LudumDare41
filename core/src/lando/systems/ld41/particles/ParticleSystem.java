@@ -25,7 +25,7 @@ public class ParticleSystem {
             float velY = dy * MathUtils.random(2, 10f) + MathUtils.random(-20f, 20f);
             float scale = MathUtils.random(5f, 20f);
             float ttl = MathUtils.random(.5f, 1.5f);
-            float grayValue = MathUtils.random(.5f) + .5f;
+            float grayValue = MathUtils.random(.7f) + .3f;
 
             particle.init(posX, posY, velX, velY, -velX, -velY,
                     0.5f, grayValue, grayValue, grayValue, 1f,

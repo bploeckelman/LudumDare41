@@ -44,16 +44,6 @@ public class PowerMeter {
         batch.setColor(Color.WHITE);
         LudumDare41.game.assets.boxNinePatch.draw(batch, x, y, width, height);
 
-//        batch.end();
-//        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRenderer.rect(position.x, position.y, 50, power);
-//        shapeRenderer.end();
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.rect(position.x, position.y, 50, 100);
-//        shapeRenderer.end();
-//        batch.begin();
-
     }
 
     public void update(float dt)

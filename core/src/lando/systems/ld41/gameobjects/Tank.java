@@ -74,6 +74,7 @@ public class Tank extends GameObject {
         ball = new PlayerBall(screen);
         tempVector = new Vector2();
         dead = false;
+        health = 2;
     }
 
     public void setAssets(TankAssets assets) {
@@ -97,7 +98,7 @@ public class Tank extends GameObject {
         if (hasShield) {
             radius += 15;
         }
-        if (dead) {
+        if (health < 2) {
             smoke = tank.smoke.getKeyFrame(time);
         } else {
             forceShield = tank.forceShield.getKeyFrame(time);
@@ -284,7 +285,6 @@ public class Tank extends GameObject {
         if (dead) {
             batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
-            batch.draw(smoke, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
         } else {
             batch.draw(leftTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
@@ -306,6 +306,10 @@ public class Tank extends GameObject {
                 batch.setColor(Color.WHITE);
             }
         }
+        if (health < 2 && !hasShield){
+            batch.draw(smoke, x, y, halfX, halfY, width, height, 1, 1, 0);
+
+        }
         ball.render(batch);
     }
 
@@ -314,7 +318,10 @@ public class Tank extends GameObject {
         if (hasShield) {
             hasShield = false;
         } else {
-            dead = true;
+            health--;
+            if (health < 1) {
+                dead = true;
+            }
         }
     }
 

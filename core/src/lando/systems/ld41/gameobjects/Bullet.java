@@ -2,10 +2,12 @@ package lando.systems.ld41.gameobjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import lando.systems.ld41.LudumDare41;
 
-public class Bullet {
+public class Bullet implements Pool.Poolable{
 
     public float bulletSpeed;
     public Vector2 velocity;
@@ -54,6 +56,11 @@ public class Bullet {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void reset() {
+
     }
 }
 
