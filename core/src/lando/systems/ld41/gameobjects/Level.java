@@ -3,7 +3,10 @@ package lando.systems.ld41.gameobjects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.PolygonRegion;
+import com.badlogic.gdx.graphics.g2d.PolygonSprite;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
@@ -133,7 +136,7 @@ public class Level {
             else if (type.equalsIgnoreCase("tee")) {
                 tee = new Tee(props.get("x", Float.class),
                               props.get("y", Float.class),
-                              props.get("facing", Integer.class));
+                              props.get("facing", 0, Integer.class));
             }
             else if (type.equalsIgnoreCase("hole")) {
                 hole = new Hole(props.get("x", Float.class),
