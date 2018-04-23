@@ -291,6 +291,7 @@ public class GameScreen extends BaseScreen {
             {
                 powerMeter.render(batch);
             }
+            powerMeter.renderSuperShot(batch);
         }
         batch.end();
     }
@@ -359,7 +360,7 @@ public class GameScreen extends BaseScreen {
                 helpModalWindow.hide();
             }
             if (playerTank.ball.onTank && showPowerMeter) {
-                playerTank.shootBall(powerMeter.power);
+                playerTank.shootBall(powerMeter);
             }
             showPowerMeter = false;
             powerMeter.reset();

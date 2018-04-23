@@ -1,18 +1,24 @@
 package lando.systems.ld41.particles;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.utils.Utils;
 
 public class ParticleSystem {
     private final Array<Particle> activeParticles = new Array<Particle>();
     private final Array<Particle> activeGroundParticles = new Array<Particle>();
     private final Pool<Particle> particlePool = Pools.get(Particle.class, 500);
 
-    public ParticleSystem() { }
+    private Color color;
+
+    public ParticleSystem() {
+        color = new Color();
+    }
 
     public void addBarrelSmoke(float x, float y, float dx, float dy){
         int smokeParticles = 50;
@@ -30,6 +36,26 @@ public class ParticleSystem {
             particle.init(posX, posY, velX, velY, -velX, -velY,
                     0.5f, grayValue, grayValue, grayValue, 1f,
                     grayValue, grayValue, grayValue, 0f, scale, ttl, LudumDare41.game.assets.smoke);
+            activeParticles.add(particle);
+        }
+    }
+
+    public void addBarrelSparks(float x, float y, float dx, float dy){
+        int sparkParticles = 200;
+        for (int i = 0; i < sparkParticles; i++){
+            Particle particle = particlePool.obtain();
+            float posX = x;
+            float posY = y;
+
+            float velX = dx * MathUtils.random(40, 100f) + MathUtils.random(-30f, 30f);
+            float velY = dy * MathUtils.random(40, 100f) + MathUtils.random(-30f, 30f);
+            float scale = MathUtils.random(.5f, 1.3f);
+            float ttl = MathUtils.random(.5f, 1f);
+            Utils.hsvToRgb(MathUtils.random(1f), 1, 1, color);
+
+            particle.init(posX, posY, velX, velY, -velX, -velY,
+                    0.5f, color.r, color.g, color.b, 1f,
+                    color.r, color.g, color.b, 1f, scale, ttl, LudumDare41.game.assets.whitePixel);
             activeParticles.add(particle);
         }
     }

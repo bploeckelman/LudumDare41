@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.stats.HoleStats;
+import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.TankAssets;
 
@@ -386,8 +387,10 @@ public class Tank extends GameObject {
         ball.onTank = true;
     }
 
-    public void shootBall(float power){
+    public void shootBall(PowerMeter meter){
         if (dead) return;
+
+        float power = meter.power;
         LudumDare41.game.audio.playSound(Audio.Sounds.shot);
 
         recoilTime = 0.3f;
@@ -398,6 +401,10 @@ public class Tank extends GameObject {
         directionVector.nor();
         screen.particleSystem.addBarrelSmoke(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
 
+        if (power > 90){
+            meter.setSuperShot();
+            screen.particleSystem.addBarrelSparks(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
+        }
         directionVector.scl(20 + (5 * power));
 
         isFirstBallFired = true;
