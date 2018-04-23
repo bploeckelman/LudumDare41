@@ -15,7 +15,7 @@ public class HelpModalWindow extends ModalWindow {
     };
     private String[] keyTutorial = {
             "Left Click - Control power of putt",
-            "Mouse Scroll- zoom map",
+            "Mouse Scroll- Zoom map",
             "WASD - Basic control of the tank",
             "RTFG - Advanced control of the tank using tread",
     };
@@ -121,16 +121,16 @@ public class HelpModalWindow extends ModalWindow {
                 LudumDare41.game.assets.mouseLeft.getRegionHeight() / 3f);
 
         batch.draw(LudumDare41.game.assets.keyWASD,
-                modalRect.x + margin_left * 1f,
+                modalRect.x + margin_left * 1.5f,
                 modalRect.y + modalRect.height - margin_top * 2f - margin_top * MARGIN_MULTIPLIER * (introTutorial.length+4),
-                LudumDare41.game.assets.keyWASD.getRegionWidth() / 9f,
-                LudumDare41.game.assets.keyWASD.getRegionHeight() / 9f);
+                LudumDare41.game.assets.keyWASD.getRegionWidth(),
+                LudumDare41.game.assets.keyWASD.getRegionHeight());
 
         batch.draw(LudumDare41.game.assets.keyRTFG,
                 modalRect.x + margin_left * 1.5f,
                 modalRect.y + modalRect.height - margin_top * 2f - margin_top * MARGIN_MULTIPLIER * (introTutorial.length+5),
-                LudumDare41.game.assets.keyRTFG.getRegionWidth() / 9f,
-                LudumDare41.game.assets.keyRTFG.getRegionHeight() / 9f);
+                LudumDare41.game.assets.keyRTFG.getRegionWidth(),
+                LudumDare41.game.assets.keyRTFG.getRegionHeight());
     }
 
 }

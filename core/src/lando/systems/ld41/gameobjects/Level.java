@@ -21,6 +21,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
+import lando.systems.ld41.screens.EndScreen;
+
 
 public class Level {
     public enum CollisionType {None, Wall, Bumper, Water}

@@ -28,6 +28,11 @@ public class TitleScreen extends BaseScreen {
             card.setDemoStats();
             game.setScreen(card);
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            EndScreen screen = new EndScreen();
+            game.setScreen(screen);
+        }
     }
 
     @Override

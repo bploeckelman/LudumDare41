@@ -12,4 +12,5 @@ public class Config {
     public static Color bgColor = new Color(188f / 255f,139f / 255f,87f / 255f,1f);
     public static Color COLOR_BLACK = new Color(23/255f, 13/255f, 32/255f, 1f);
     public static Color COLOR_DARK_GREEN = new Color(60/255f, 89/255f, 86/255f, 1f);
+    public static Color COLOR_TEXT = new Color(Color.WHITE);
 }

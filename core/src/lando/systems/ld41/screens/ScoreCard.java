@@ -113,7 +113,9 @@ public class ScoreCard extends BaseScreen {
 
     @Override
     public void update(float dt) {
-
+        if (Gdx.input.justTouched()) {
+            game.setScreen(new EndScreen());
+        }
     }
 
     @Override
