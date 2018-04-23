@@ -111,6 +111,7 @@ public class GameScreen extends BaseScreen {
         }
 
         if (level.finalBossInfo != null){
+            level.hole.position.x = -1000;
             boss = new FinalBoss(this, level.finalBossInfo.x, level.finalBossInfo.y);
         }
         particleSystem = new ParticleSystem();

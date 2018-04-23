@@ -202,8 +202,8 @@ public class Ball extends GameObject {
             collisionPoint.add(normal);
             normal.nor();
             velocity.scl(2f);
-            if (velocity.len() < 200){
-                velocity.nor().scl(200);
+            if (velocity.len() < 400){
+                velocity.nor().scl(400);
             }
             boss.takeDamage();
             return true;

@@ -30,6 +30,7 @@ public class HoleIndicator {
     public void render(SpriteBatch batch)
     {
         Hole hole = screen.level.hole;
+        if (screen.boss != null && screen.boss.health > 0) return;
 
         if (!hole.isInWorldView(screen))
         {
