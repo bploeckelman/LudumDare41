@@ -273,6 +273,25 @@ public class Tank extends GameObject {
             newPosition.set(collisionPoint);
         }
 
+        for (EnemyTank enemyTank : screen.enemyTanks){
+            if (enemyTank.dead) continue;
+            if (newPosition.dst(enemyTank.position) < radius + enemyTank.radius){
+                tempVector.set(position).sub(enemyTank.position).nor().scl(3);
+                newPosition.add(tempVector);
+//                tempVector.scl(-.7f);
+//                enemyTank.position.add(tempVector);
+            }
+        }
+
+        for (int i = 0; i < screen.gameObjects.size; i++){
+            GameObject obj = screen.gameObjects.get(i);
+            if (obj == this || !obj.alive) continue;
+            if (newPosition.dst(obj.position) < radius + obj.radius){
+                tempVector.set(position).sub(obj.position).nor().scl(5);
+                newPosition.add(tempVector);
+            }
+        }
+
         position.set(newPosition);
 
         // Add track trail for both left and right tracks

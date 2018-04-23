@@ -62,7 +62,7 @@ public class GameScreen extends BaseScreen {
     private Button helpButton;
     private HelpModalWindow helpModalWindow;
 
-    private Array<GameObject> gameObjects = new Array<GameObject>();
+    public Array<GameObject> gameObjects = new Array<GameObject>();
 
     private PlayerHud hud;
 

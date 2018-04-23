@@ -15,11 +15,9 @@ public class Catapult extends GameObject {
     public static final float TURRET_WIDTH = 50;
     public static final float TURRET_HEIGHT = 50;
 
-    public Vector2 position;
     public Vector2 directionVector;
     public float rotation;
     public Tank playerTank;
-    public boolean alive = true;
     public boolean killingIt = false;
     private float explodeAnimTime = 0f;
     private TextureRegion catapultFrame;
@@ -27,7 +25,6 @@ public class Catapult extends GameObject {
     private float timer = 0;
     private GameScreen screen;
     private Vector2 bulletPosition;
-    public float radius;
 
     private Vector2 tempVec;
 

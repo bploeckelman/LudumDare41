@@ -8,6 +8,8 @@ import lando.systems.ld41.screens.GameScreen;
 public abstract class GameObject {
 
     public Vector2 position;
+    public float radius;
+    public boolean alive = true;
     public GameScreen screen;
     public float rotation;
     public float speed;
