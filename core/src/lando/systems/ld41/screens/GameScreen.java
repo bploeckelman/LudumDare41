@@ -291,7 +291,8 @@ public class GameScreen extends BaseScreen {
     }
 
     private void renderGame(SpriteBatch batch) {
-        Gdx.gl.glClearColor(57f / 255f, 123f / 255f, 68f / 255f, 1f);
+        Gdx.gl.glClearColor(60/255f, 89/255f, 86/255f, 1f);
+//        Gdx.gl.glClearColor(57f / 255f, 123f / 255f, 68f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         level.render(batch, screenShake.getViewCamera());
