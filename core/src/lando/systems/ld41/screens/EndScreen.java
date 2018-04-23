@@ -13,11 +13,11 @@ public class EndScreen extends BaseScreen{
     private String heading = "Putt Putt Boom";
     private String theme = "Made for Ludum Dare 41:\nTheme: Two Incompatible Genre";
     private String thanks = "Thanks for playing our game!";
-    private String developers = "Developed by:\nDoug Graham\nBrian Ploeckelman\nBrian Rossman\nJeffrey Hwang\nBrandon Humboldt\nTyler Pecora";
+    private String developers = "Developed by:\nDoug Graham\nBrian Ploeckelman\nBrian Rossman\nJeffrey Hwang\nBrandon Humboldt\nColin Kennedy";
     private String artists = "Art by:\nMatt Neumann\nLuke Bain\nTroy Sullivan";
     private String emotionalSupport = "Emotional Support:\nAsuka the Shiba\nIan's Baklava";
     //TODO add song title
-    private String music = "Music by:\nColin Kennedy";
+    private String music = "Music by:\nTyler Pecora";
     private String libgdx = "Made with <3 and LibGDX";
 
     public EndScreen(){
