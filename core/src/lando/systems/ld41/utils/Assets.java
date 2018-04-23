@@ -156,10 +156,16 @@ public class Assets implements Disposable {
         // ...
 
         levelNumberToFileNameMap = new IntMap<String>();
-        levelNumberToFileNameMap.put(0, "maps/tutorial.tmx");
-        levelNumberToFileNameMap.put(1, "maps/test.tmx");
-        levelNumberToFileNameMap.put(2, "maps/test2.tmx");
-        // TODO: add other maps here
+        levelNumberToFileNameMap.put(0, "maps/test.tmx");
+        levelNumberToFileNameMap.put(1, "maps/troysholeshole1.tmx");
+        levelNumberToFileNameMap.put(2, "maps/troysholeshole2.tmx");
+        levelNumberToFileNameMap.put(3, "maps/troysholeshole3.tmx");
+        levelNumberToFileNameMap.put(4, "maps/troysholeshole4.tmx");
+        levelNumberToFileNameMap.put(5, "maps/troysholeshole5.tmx");
+        levelNumberToFileNameMap.put(6, "maps/troysholeshole6.tmx");
+//        levelNumberToFileNameMap.put(7, "maps/troysholeshole7.tmx"); // NOTE: 7 is the same as 6, but without boundaries?
+        levelNumberToFileNameMap.put(7, "maps/troysholeshole8.tmx");
+        levelNumberToFileNameMap.put(8, "maps/troysholeshole9.tmx");
 
         if (loading == Loading.SYNC) {
             mgr.finishLoading();

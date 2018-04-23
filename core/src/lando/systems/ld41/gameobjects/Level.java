@@ -107,23 +107,21 @@ public class Level {
             else if (type.equalsIgnoreCase("tank")) {
                 if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on tank");
                 if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on tank");
-                if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on tank");
                 if (props.get("color")  == null) throw new GdxRuntimeException("Missing 'color' property on tank");
                 enemyTankInfos.add(new EnemyTankInfo() {{
                     x      = props.get("x", Float.class);
                     y      = props.get("y", Float.class);
-                    facing = props.get("facing", Integer.class);
+                    facing = props.get("facing", 0, Integer.class);
                     color  = props.get("color", String.class);
                 }});
             }
             else if (type.equalsIgnoreCase("turret")) {
                 if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on turret");
                 if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on turret");
-                if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on turret");
                 enemyTurretInfos.add(new EnemyTurretInfo() {{
                     x      = props.get("x", Float.class);
                     y      = props.get("y", Float.class);
-                    facing = props.get("facing", Integer.class);
+                    facing = props.get("facing", 0, Integer.class);
                 }});
             }
             else if (type.equalsIgnoreCase("catapult")) {
