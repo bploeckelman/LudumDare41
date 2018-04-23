@@ -88,6 +88,7 @@ public class Catapult extends GameObject {
     }
 
     public void updateBullet(float dt) {
+        if (!alive || killingIt) return;
         bulletPosition.set(position.x, position.y);
         tempVec.set(playerTank.position.x - position.x, playerTank.position.y - position.y);
         screen.addBullet(this, bulletPosition, tempVec, Assets.getImage(Assets.Balls.Purple));

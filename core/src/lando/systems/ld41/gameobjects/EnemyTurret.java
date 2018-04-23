@@ -74,6 +74,7 @@ public class EnemyTurret extends GameObject{
     }
 
     public void updateBullet(float dt) {
+        if (!alive || killingIt) return;
         bulletPosition.set(position.x, position.y);
         screen.addBullet(this, bulletPosition, directionVector, Assets.getImage(Assets.Balls.Purple));
     }
