@@ -15,11 +15,17 @@ import java.util.HashMap;
 public class Audio implements Disposable {
 
     public static final float MUSIC_VOLUME = 0.3f;
-    public static final boolean shutUpYourFace = true;
+    public static final boolean shutUpYourFace = false;
     public static final boolean shutUpYourTunes = true;
 
     public enum Sounds {
-        explosion, good_job, lose_level, transition, shot, enemy_shot
+        explosion, explosion1, explosion2,
+        good_job, lose_level, transition,
+        bumper, sassy_boom,
+        shot, shot1, shot2, shot3,
+        pew,
+        splash, splash1, splash2,
+        pop, in_the_hole, full_power
     }
 
     public enum Musics {
@@ -37,14 +43,21 @@ public class Audio implements Disposable {
     }
 
     public Audio(boolean playMusic) {
-//        sounds.put(Sounds.sound1, Gdx.audio.newSound(Gdx.files.internal("sounds/sound1.wav")));
-
-        sounds.put(Sounds.explosion, Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav")));
-        sounds.put(Sounds.good_job, Gdx.audio.newSound(Gdx.files.internal("audio/good_job.wav")));
-        sounds.put(Sounds.lose_level, Gdx.audio.newSound(Gdx.files.internal("audio/lose_level.wav")));
-        sounds.put(Sounds.shot, Gdx.audio.newSound(Gdx.files.internal("audio/shot.wav")));
-        sounds.put(Sounds.enemy_shot, Gdx.audio.newSound(Gdx.files.internal("audio/shot2.wav")));
-        sounds.put(Sounds.transition, Gdx.audio.newSound(Gdx.files.internal("audio/transition.wav")));
+        sounds.put(Sounds.lose_level, Gdx.audio.newSound(Gdx.files.internal("audio/awww.mp3")));
+        sounds.put(Sounds.splash1, Gdx.audio.newSound(Gdx.files.internal("audio/splash-1.mp3")));
+        sounds.put(Sounds.splash2, Gdx.audio.newSound(Gdx.files.internal("audio/splash-2.mp3")));
+        sounds.put(Sounds.shot1, Gdx.audio.newSound(Gdx.files.internal("audio/shot-1.mp3")));
+        sounds.put(Sounds.shot2, Gdx.audio.newSound(Gdx.files.internal("audio/shot-2.mp3")));
+        sounds.put(Sounds.shot3, Gdx.audio.newSound(Gdx.files.internal("audio/shot-3.mp3")));
+        sounds.put(Sounds.explosion1, Gdx.audio.newSound(Gdx.files.internal("audio/explosion-1.mp3")));
+        sounds.put(Sounds.explosion2, Gdx.audio.newSound(Gdx.files.internal("audio/explosion-2.mp3")));
+        sounds.put(Sounds.pop, Gdx.audio.newSound(Gdx.files.internal("audio/beer-bottle-pop.mp3")));
+        sounds.put(Sounds.in_the_hole, Gdx.audio.newSound(Gdx.files.internal("audio/yay.mp3")));
+        sounds.put(Sounds.transition, Gdx.audio.newSound(Gdx.files.internal("audio/transition.mp3")));
+        sounds.put(Sounds.full_power, Gdx.audio.newSound(Gdx.files.internal("audio/noice.mp3")));
+        sounds.put(Sounds.bumper, Gdx.audio.newSound(Gdx.files.internal("audio/bumper.mp3")));
+        sounds.put(Sounds.sassy_boom, Gdx.audio.newSound(Gdx.files.internal("audio/bewmmm.mp3")));
+        sounds.put(Sounds.pew, Gdx.audio.newSound(Gdx.files.internal("audio/pew.mp3")));
 
         musics.put(Musics.music1, Gdx.audio.newMusic(Gdx.files.internal("audio/song1.wav")));
         musics.put(Musics.music2, Gdx.audio.newMusic(Gdx.files.internal("audio/song2.wav")));
@@ -85,6 +98,12 @@ public class Audio implements Disposable {
 
     public long playSound(Sounds soundOption) {
         if (shutUpYourFace) return -1;
+        if (soundOption == Sounds.splash) {
+            soundOption = MathUtils.randomBoolean() ? Sounds.splash1 : Sounds.splash2;
+        }
+        if (soundOption == Sounds.explosion) {
+            soundOption = MathUtils.randomBoolean() ? Sounds.explosion1 : Sounds.explosion2;
+        }
         return sounds.get(soundOption).play(1f);
     }
 
