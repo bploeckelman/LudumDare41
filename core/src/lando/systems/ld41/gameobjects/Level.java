@@ -20,7 +20,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 
 public class Level {
-    public enum CollisionType {None, Wall, Bumper}
+    public enum CollisionType {None, Wall, Bumper, Water}
 
     private boolean showDebug = false;
 
@@ -319,6 +319,7 @@ public class Level {
      * @param normal the normal of the collision for reflections
      * @return the Type of Collision
      */
+    @SuppressWarnings("Duplicates") // sorry...
     public CollisionType checkCollision(Vector2 oldPosition, Vector2 newPosition, float radius, Vector2 collisionPoint, Vector2 normal){
         boolean unresolvedCollisions = false;
         CollisionType collisionType = CollisionType.None;
@@ -328,6 +329,8 @@ public class Level {
             fuckThisShit++;
             unresolvedCollisions = false;
             newPosition.set(collisionPoint);
+
+            // Check for collisions against boundaries
             for (int j = 0; j < boundaries.size; j++) {
                 Polyline boundary = boundaries.get(j).getPolyline();
                 boolean collided = false;
@@ -382,6 +385,45 @@ public class Level {
                     if (collisionType != CollisionType.Bumper){
                         collisionType = CollisionType.Wall;
                     }
+                }
+            }
+
+            // Check for collision against water regions
+            for (int j = 0; j < waterRegions.size; j++) {
+                Polygon boundary = waterRegions.get(j);
+                float nearestCollision = Float.MAX_VALUE;
+                int vertLength = boundary.getVertices().length;
+                for (int i = 0; i < vertLength; i += 2) {
+                    tempVector.set(boundary.getTransformedVertices()[i], boundary.getTransformedVertices()[i + 1]);
+                    tempVector2.set(boundary.getTransformedVertices()[(i + 2) % vertLength], boundary.getTransformedVertices()[(i + 3) % vertLength]);
+
+                    // Check if the segments are within the radius of the object
+                    float dist = Intersector.distanceSegmentPoint(tempVector, tempVector2, newPosition);
+                    if (dist < nearestCollision && dist < radius) {
+                        Intersector.nearestSegmentPoint(tempVector, tempVector2, newPosition, collisionPoint);
+                        // If it is on an end point bounce back towards where you came from
+                        if (collisionPoint.epsilonEquals(tempVector) || collisionPoint.epsilonEquals(tempVector2)) {
+                            normal.set(newPosition.x - collisionPoint.x, newPosition.y - collisionPoint.y);
+                        } else {
+                            // bounce away from the normal of the segment
+                            normal.set(-1 * (tempVector2.y - tempVector.y), (tempVector2.x - tempVector.x));
+                            if (Intersector.pointLineSide(tempVector, tempVector2, oldPosition) != Intersector.pointLineSide(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y, collisionPoint.x + normal.x, collisionPoint.y + normal.y)) {
+                                // Normal is facing the wrong way, flip it
+                                normal.set((tempVector2.y - tempVector.y), -1 * (tempVector2.x - tempVector.x));
+                            }
+                        }
+                        normal.nor();
+                        collisionPoint.add(normal.scl(radius+1f));
+
+                        normal.nor();
+
+                        nearestCollision = dist;
+                        unresolvedCollisions = true;
+                        if (collisionType != CollisionType.Bumper){
+                            collisionType = CollisionType.Water;
+                        }
+                    }
+
                 }
             }
 

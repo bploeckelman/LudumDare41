@@ -65,6 +65,9 @@ public class Ball extends GameObject {
                 velocity.scl(1.3f);
                 screen.screenShake.addDamage(.2f);
             }
+            if (collision == Level.CollisionType.Water) {
+                // TODO: handle water with slow velocity, kill the ball and re-drop it at the tee maybe?
+            }
             float currentSpeed = velocity.len();
             tempVector.set(velocity);
             // r=d−2(d⋅n)n

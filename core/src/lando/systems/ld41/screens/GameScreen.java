@@ -172,7 +172,8 @@ public class GameScreen extends BaseScreen {
         }
 
         for (Polygon waterPoly : level.waterRegions) {
-            playerTank.onWater = Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
+            playerTank.onWater = waterPoly.contains(playerTank.position);
+//            playerTank.onWater = Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
         }
 
         for (Polygon sandPoly : level.sandRegions) {
@@ -455,8 +456,9 @@ public class GameScreen extends BaseScreen {
             oldBulletPosition.set(b.position);
             newBulletPosition.set(b.position);
             newBulletPosition.add(b.velocity.x * b.bulletSpeed * dt, b.velocity.y * b.bulletSpeed * dt);
-            //check collision with the walls
-            if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal) != Level.CollisionType.None){
+            //check collision with the walls & water
+            Level.CollisionType collisionType = level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal);
+            if (collisionType != Level.CollisionType.None && collisionType != Level.CollisionType.Water){
                 if (b.bouncyBullet){
                     float currentSpeed = b.velocity.len();
                     tempVec.set(b.velocity);

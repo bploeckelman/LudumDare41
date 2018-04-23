@@ -125,8 +125,7 @@ public class Tank extends GameObject {
         // Don't move if you have the ball
         if (dead) return;
 
-        speed = (onSand) ? MAX_SPEED * 0.5f : MAX_SPEED;
-        // TODO: onWater
+        speed = (onSand || onWater) ? MAX_SPEED * 0.5f : MAX_SPEED;
 
         if (!handleManMovement(dt)) {
             handleNoobMovement(dt);
@@ -256,7 +255,6 @@ public class Tank extends GameObject {
     }
 
     private void updatePosition(float speedUpdate, float rotationUpdate) {
-
         if (ball.onTank) {
             speedUpdate = 0;
         }
@@ -278,7 +276,9 @@ public class Tank extends GameObject {
         newPosition.set(position);
         newPosition.add(directionVector);
 
-        if (screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal ) != Level.CollisionType.None){
+        Level.CollisionType collisionType = screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal );
+        // TODO: check for and handle collisionType.water... if have pontoons, switch to them
+        if (collisionType != Level.CollisionType.None){
             newPosition.set(collisionPoint);
         }
 
