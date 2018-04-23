@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = 0.15f;
+    public static final float MUSIC_VOLUME = 0.3f;
     public static final boolean shutUpYourFace = true;
     public static final boolean shutUpYourTunes = true;
 
@@ -130,7 +130,7 @@ public class Audio implements Disposable {
             } else {
                 currentMusic = musics.get(Musics.music1);
             }
-            currentMusic.setVolume(MUSIC_VOLUME);
+            currentMusic.setVolume(musicVolume.floatValue());
             currentMusic.play();
             currentMusic.setOnCompletionListener(nextSong);
         }

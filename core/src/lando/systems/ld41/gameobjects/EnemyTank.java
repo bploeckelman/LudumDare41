@@ -99,6 +99,9 @@ public class EnemyTank extends GameObject {
             case blue:   initializeBlue(); break;
             default:     initializeOrange();
         }
+
+        leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
+        rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
     }
 
     private void initializeOrange(){
@@ -228,6 +231,7 @@ public class EnemyTank extends GameObject {
 
     public void update(float dt)
     {
+        if (!screen.playerTank.isFirstBallFired) return;
         if (killingIt) {
             explodeAnimTime += dt;
             if (explodeAnimTime >= LudumDare41.game.assets.explosionAnimation.getAnimationDuration()) {
@@ -240,8 +244,7 @@ public class EnemyTank extends GameObject {
         if (dead || killingIt) return;
         stateMachine.update(dt);
 
-        leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
-        rightTread = tank.rightTreads.getKeyFrame(rightTime, true);
+
         updateTurretRotation(dt);
 //        setTurretPosition();
     }
