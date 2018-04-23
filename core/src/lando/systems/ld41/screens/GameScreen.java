@@ -39,10 +39,7 @@ public class GameScreen extends BaseScreen {
     public boolean levelZoomDone;
     private boolean levelTransitioning;
     public ParticleSystem particleSystem;
-    public Catapult catapult1;
     public Array<EnemyTank> enemyTanks = new Array<EnemyTank>();
-    public Catapult catapult2;
-    public EnemyTurret enemyTurret1;
     public Array<Catapult> catapults = new Array<Catapult>();
     public Array<EnemyTurret> enemyTurrets = new Array<EnemyTurret>();
     private Vector2 oldBulletPosition;
@@ -66,10 +63,6 @@ public class GameScreen extends BaseScreen {
         setLevel(currentLevelNum);
         addPlayer();
 
-        catapult1 = new Catapult(this, playerTank, new Vector2(900, 100));
-        catapult2 = new Catapult(this, playerTank, new Vector2(300, 500));
-        enemyTurret1 = new EnemyTurret(this, playerTank, new Vector2(500, 500), new Vector2(500, 510));
-
         oldBulletPosition = new Vector2();
         newBulletPosition = new Vector2();
         bulletCollisionPoint = new Vector2();
@@ -77,14 +70,21 @@ public class GameScreen extends BaseScreen {
         tempVec = new Vector2();
 
         gameObjects.add(playerTank);
-//        gameObjects.add(enemyTurret1);
-//        gameObjects.add(catapult1);
-//        gameObjects.add(catapult2);
-
-//        catapults.add(catapult1);
-//        catapults.add(catapult2);
-
-        enemyTurrets.add(enemyTurret1);
+        for (EnemyTurretInfo info : level.enemyTurretInfos) {
+            // TODO: shift pos to center?
+            Vector2 position = new Vector2(info.x + EnemyTurret.TURRET_WIDTH / 2f, info.y + EnemyTurret.TURRET_HEIGHT / 2f);
+            Vector2 direction = new Vector2(0f, 1f).rotate(info.facing);
+            EnemyTurret turret = new EnemyTurret(this, playerTank, position, direction);
+            turret.rotation = info.facing;
+            enemyTurrets.add(turret);
+            gameObjects.add(turret);
+        }
+        for (CatapultInfo info : level.catapultInfos) {
+            // TODO: shift pos to center?
+            Catapult catapult = new Catapult(this, playerTank, new Vector2(info.x, info.y));
+            catapults.add(catapult);
+            gameObjects.add(catapult);
+        }
 
         showPowerMeter = false;
         for (EnemyTankInfo info : level.enemyTankInfos) {

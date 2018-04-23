@@ -41,6 +41,8 @@ public class Level {
     public Hole hole;
     public Array<PinballBumper> pinballBumpers;
     public Array<EnemyTankInfo> enemyTankInfos;
+    public Array<EnemyTurretInfo> enemyTurretInfos;
+    public Array<CatapultInfo> catapultInfos;
 
     public Array<PolylineMapObject> boundaries;
     public PolylineMapObject exteriorBoundry;
@@ -86,6 +88,8 @@ public class Level {
         // load objects
         pinballBumpers = new Array<PinballBumper>();
         enemyTankInfos = new Array<EnemyTankInfo>();
+        enemyTurretInfos = new Array<EnemyTurretInfo>();
+        catapultInfos = new Array<CatapultInfo>();
         for (MapObject object : objects) {
             final MapProperties props = object.getProperties();
             String type = (String) props.get("type");
@@ -104,6 +108,24 @@ public class Level {
                     y      = props.get("y", Float.class);
                     facing = props.get("facing", Integer.class);
                     color  = props.get("color", String.class);
+                }});
+            }
+            if (type.equalsIgnoreCase("turret")) {
+                if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on turret");
+                if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on turret");
+                if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on turret");
+                enemyTurretInfos.add(new EnemyTurretInfo() {{
+                    x      = props.get("x", Float.class);
+                    y      = props.get("y", Float.class);
+                    facing = props.get("facing", Integer.class);
+                }});
+            }
+            if (type.equalsIgnoreCase("catapult")) {
+                if (props.get("x") == null) throw new GdxRuntimeException("Missing 'x' property on catapult");
+                if (props.get("y") == null) throw new GdxRuntimeException("Missing 'y' property on catapult");
+                catapultInfos.add(new CatapultInfo() {{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
                 }});
             }
             if (type.equalsIgnoreCase("tee")) {

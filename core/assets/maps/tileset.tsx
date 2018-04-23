@@ -2,6 +2,12 @@
 <tileset name="tileset" tilewidth="32" tileheight="32" spacing="4" margin="2" tilecount="196" columns="14">
  <image source="tileset.png" width="512" height="512"/>
  <tile id="168" type="hole"/>
+ <tile id="169" type="turret">
+  <properties>
+   <property name="facing" type="int" value="0"/>
+  </properties>
+ </tile>
+ <tile id="170" type="catapult"/>
  <tile id="182" type="tee">
   <properties>
    <property name="facing" type="int" value="0"/>

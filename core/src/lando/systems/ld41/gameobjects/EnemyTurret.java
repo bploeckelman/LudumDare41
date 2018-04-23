@@ -9,9 +9,9 @@ import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
 
 public class EnemyTurret extends GameObject{
-    public final float FIRE_RATE = 3;
-    public final float TURRET_WIDTH = 50;
-    public final float TURRET_HEIGHT = 50;
+    public static final float FIRE_RATE = 3;
+    public static final float TURRET_WIDTH = 50;
+    public static final float TURRET_HEIGHT = 50;
 
     public Vector2 position;
     public Vector2 directionVector;
@@ -24,22 +24,18 @@ public class EnemyTurret extends GameObject{
     private GameScreen screen;
     private Vector2 bulletPosition;
     public float radius;
-    private Vector2 tempVec;
-    public Vector2 targetPosition;
 
 
-    public EnemyTurret(GameScreen screen, Tank playerTank, Vector2 startPosition, Vector2 targetPosition){
+    public EnemyTurret(GameScreen screen, Tank playerTank, Vector2 startPosition, Vector2 direction){
         this.screen = screen;
         this.position = startPosition;
         this.playerTank = playerTank;
         this.bulletPosition = new Vector2();
         this.bulletSpeed = 100;
         this.bulletSize = 15f;
-        directionVector = new Vector2();
-        tempVec = new Vector2();
-        enemyTurretFrame = LudumDare41.game.assets.enemyTurret;
+        this.directionVector = new Vector2(direction);
+        this.enemyTurretFrame = LudumDare41.game.assets.enemyTurret;
         this.radius = Math.max(TURRET_WIDTH, TURRET_HEIGHT)/2f;
-        this.targetPosition = targetPosition;
 
     }
     @Override
@@ -47,10 +43,6 @@ public class EnemyTurret extends GameObject{
         timer+=dt;
         if (!alive) {
             smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
-        } else {
-            rotation = (float)(Math.atan2(
-                    targetPosition.y - position.y,
-                    targetPosition.x - position.x) * 180 / Math.PI);
         }
         if (playerTank.isFirstBallFired && !playerTank.dead && alive
                 && timer > FIRE_RATE) {
@@ -62,13 +54,11 @@ public class EnemyTurret extends GameObject{
         } else {
             enemyTurretFrame = LudumDare41.game.assets.enemyTurret;
         }
-
     }
 
     public void updateBullet(float dt) {
         bulletPosition.set(position.x, position.y);
-        tempVec.set(targetPosition.x - position.x, targetPosition.y - position.y);
-        screen.addBullet(this, bulletPosition, tempVec, Assets.getImage(Assets.Balls.Purple));
+        screen.addBullet(this, bulletPosition, directionVector, Assets.getImage(Assets.Balls.Purple));
     }
 
     @Override
@@ -78,16 +68,17 @@ public class EnemyTurret extends GameObject{
         float x = position.x - halfX;
         float y = position.y - halfY;
         if (!alive) {
-            batch.draw(enemyTurretFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation - 90);
-            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+            batch.draw(enemyTurretFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation);
+            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
         } else {
             float warning = FIRE_RATE - timer;
             if (warning < .25f){
                 if ((int)(warning * 20) % 2 == 0)
                     batch.setColor(Color.RED);
             }
-            batch.draw(enemyTurretFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation - 90);
+            batch.draw(enemyTurretFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation);
             batch.setColor(Color.WHITE);
         }
     }
+
 }
