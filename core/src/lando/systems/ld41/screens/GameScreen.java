@@ -327,7 +327,17 @@ public class GameScreen extends BaseScreen {
             newBulletPosition.add(b.velocity.x * b.bulletSpeed * dt, b.velocity.y * b.bulletSpeed * dt);
             //check collision with the walls
             if (level.checkCollision(oldBulletPosition, newBulletPosition, b.radius, bulletCollisionPoint, normal) != Level.CollisionType.None){
-                b.alive = false;
+                if (b.bouncyBullet){
+                    float currentSpeed = b.velocity.len();
+                    tempVec.set(b.velocity);
+                    // r=d−2(d⋅n)n
+                    float dot = 2f * tempVec.dot(normal);
+                    tempVec.sub(dot * normal.x, dot * normal.y);
+                    b.velocity.set(tempVec).nor().scl(currentSpeed);
+                    b.position.set(bulletCollisionPoint);
+                } else {
+                    b.alive = false;
+                }
             }
             if (!b.alive){
                 activeBullets.removeIndex(i);

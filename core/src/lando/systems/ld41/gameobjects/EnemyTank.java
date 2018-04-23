@@ -74,6 +74,7 @@ public class EnemyTank extends GameObject {
     {
         this.type = type;
         tempVec = new Vector2();
+        bouncyBullets = true;
 
 
         this.width = width;

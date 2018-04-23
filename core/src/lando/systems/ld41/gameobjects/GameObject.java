@@ -12,6 +12,8 @@ public abstract class GameObject {
     public float speed;
     public float bulletSize = 10;
     public float bulletSpeed = 200;
+    public float bulletTimeToLive = 3f;
+    public boolean bouncyBullets = false;
 
 
 

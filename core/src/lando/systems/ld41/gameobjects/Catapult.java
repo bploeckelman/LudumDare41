@@ -36,6 +36,7 @@ public class Catapult extends GameObject {
         this.bulletPosition = new Vector2();
         this.bulletSpeed = 100;
         this.bulletSize = 15f;
+        this.bulletTimeToLive = 10f;
         directionVector = new Vector2();
         tempVec = new Vector2();
         catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);

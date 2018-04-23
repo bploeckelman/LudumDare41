@@ -14,6 +14,8 @@ public class Bullet {
     public GameObject owner;
     public boolean alive = true;
     public TextureRegion texture;
+    public float timeToLive;
+    public boolean bouncyBullet;
 
     public Bullet() {
         position = new Vector2();
@@ -25,6 +27,8 @@ public class Bullet {
         position.set(pos);
         velocity.set(dir);
         velocity.nor();
+        timeToLive = owner.bulletTimeToLive;
+        this.bouncyBullet = owner.bouncyBullets;
         this.bulletSpeed = owner.bulletSpeed;
         this.owner = owner;
         this.texture = tex;
@@ -34,7 +38,11 @@ public class Bullet {
 
     public void update(float dt) {
         position.add(velocity.x * bulletSpeed * dt, velocity.y * bulletSpeed * dt);
+        if (bouncyBullet) velocity.scl(.995f);
+        timeToLive -= dt;
+        if (timeToLive < 0) alive = false;
     }
+
 
     public void render(SpriteBatch batch){
         batch.draw(texture, position.x - radius, position.y - radius, radius, radius , radius*2f, radius*2f, 1, 1, 0);
