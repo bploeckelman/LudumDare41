@@ -21,6 +21,7 @@ public class HelpModalWindow extends ModalWindow {
     };
     private String[] tutorial = {
             "- Each death, including reset, counts as 2 shots",
+            "- Each kills grant you a bonus score",
             "- Enemy turrets attack in a set direction",
             "- Catapults aim and attack you when in sight",
             "- Enemy Tanks follow and attack you",
