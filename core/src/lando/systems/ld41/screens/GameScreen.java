@@ -71,7 +71,7 @@ public class GameScreen extends BaseScreen {
     private double time;
 
     public GameScreen(int currentLevelNum) {
-        time = System.currentTimeMillis();
+        time = 0;
         Gdx.input.setInputProcessor(this);
 
         hud = new PlayerHud(this);
@@ -429,6 +429,7 @@ public class GameScreen extends BaseScreen {
                                public void onEvent(int i, BaseTween<?> baseTween) {
                                    // pauseGame = false;
                                    levelZoomDone = true;
+                                   time = System.currentTimeMillis();
                                }
                            }))
                 .start(LudumDare41.game.tween);
@@ -535,5 +536,9 @@ public class GameScreen extends BaseScreen {
         Pickup pickup = new Pickup(this, pickupType);
         pickups.add(pickup);
         return pickup;
+    }
+
+    public long getTime() {
+        return (long)(System.currentTimeMillis() - time) / 1000;
     }
 }

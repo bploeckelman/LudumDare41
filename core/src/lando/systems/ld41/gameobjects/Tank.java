@@ -68,8 +68,8 @@ public class Tank extends GameObject {
     public boolean isInvincible = false;
     public boolean isVisible = true;
 
-    private float invincibleTimer = 0;
-    private float camoTimer = 0;
+    public float invincibleTimer = 0;
+    public float camoTimer = 0;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));
@@ -451,11 +451,11 @@ public class Tank extends GameObject {
                 break;
             case camo:
                 invincibleTimer = 0;
-                camoTimer = 5;
+                camoTimer = 15;
                 break;
             case invincible:
                 camoTimer = 0;
-                invincibleTimer = 5;
+                invincibleTimer = 15;
                 break;
             case pontoon:
                 hasPontoons = true;

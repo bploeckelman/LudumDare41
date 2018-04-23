@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.Tank;
+import lando.systems.ld41.stats.GameStats;
 import lando.systems.ld41.ui.BallIndicatorArrow;
 import lando.systems.ld41.ui.HoleIndicator;
 import lando.systems.ld41.utils.Assets;
@@ -25,6 +26,8 @@ public class PlayerHud {
     private String scoreText;
     private int deaths = -1;
     private String deathText;
+    private long totalTime = 0;
+    private String timeText = "";
 
     public PlayerHud(GameScreen screen) {
         this.screen = screen;
@@ -54,6 +57,12 @@ public class PlayerHud {
             deaths = player.deaths;
             deathText = "" + deaths;
         }
+
+        long time = screen.getTime();
+        if (totalTime != time || timeText == "") {
+            totalTime = time;
+            timeText = GameStats.toTimeString(totalTime);
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -65,7 +74,7 @@ public class PlayerHud {
     private void renderPlayerInfo(SpriteBatch batch, Tank player) {
         if (player == null) return;
 
-        float height = 55;
+        float height = 105;
         float width = 120;
         float padding = 10;
 
@@ -82,6 +91,34 @@ public class PlayerHud {
         y -= 20;
         drawString(batch, "Deaths:", x, y);
         drawString(batch, deathText, x + 70, y);
+        y -= 20;
+        drawString(batch, "Time:", x, y);
+        drawString(batch, timeText, x + 45, y);
+
+        y -= 50;
+        if (player.isInvincible) {
+            batch.setColor(getColor(player.invincibleTimer));
+            batch.draw(LudumDare41.game.assets.puInvincible, x + 8, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.setColor(Color.WHITE);
+        }
+
+        if (!player.isVisible) {
+            batch.setColor(getColor(player.camoTimer));
+            batch.draw(LudumDare41.game.assets.puCamo, x + 36, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.setColor(Color.WHITE);
+        }
+
+        if (player.hasPontoons) {
+            batch.draw(LudumDare41.game.assets.puPontoon, x + 92, y, 0, 0, 20, 20, 1, 1, 45);
+        }
+
+        if (player.hasShield) {
+            batch.draw(LudumDare41.game.assets.puShield, x + 64, y, 0, 0, 20, 20, 1, 1, 45);
+        }
+    }
+
+    private Color getColor(float timer) {
+        return (timer < 2f) && ((int) (timer * 20) % 2 == 0) ? Color.RED : Color.WHITE;
     }
 
     private void drawString(SpriteBatch batch, String text, float x, float y) {

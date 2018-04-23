@@ -50,10 +50,15 @@ public class GameStats {
         for (int i = 0; i < gameStats.length; i++) {
             total += gameStats[i].timeMs;
         }
-        long totalSeconds = (long)total/1000;
+        return toTimeString((long) total / 1000);
+    }
+
+    public static String toTimeString(long totalSeconds) {
         long minutes = totalSeconds / 60;
         long seconds = totalSeconds % 60;
-        return "" + minutes + " min " + seconds + " sec";
+        return (minutes > 0)
+                ? String.format("%dm %ds", minutes, seconds)
+                : String.format("%ds", seconds);
     }
 
 
