@@ -210,39 +210,37 @@ public class LevelSelectScreen extends BaseScreen {
             cycle.reverse();
         }
 
+        Timeline timeline = Timeline.createParallel();
+
         for (int i = 0; i < cycle.size - 1; i++) {
             Rectangle t = cycle.get(i + 1);
-            Tween tween = Tween.to(cycle.get(i), RectangleAccessor.XYWH, duration)
+            timeline.push(Tween.to(cycle.get(i), RectangleAccessor.XYWH, duration)
                 .target(t.x, t.y, t.width, t.height)
-                .ease(Quad.OUT);
-
-            if (i == 3) {
-                tween = tween
-                    .setCallback(new TweenCallback() {
-                        @Override
-                        public void onEvent(int i, BaseTween<?> baseTween) {
-                            currentLevelIdx = currentLevelIdx + dir;
-                            isCycling = false;
-                            rightSign.set(rightSignPosition);
-                            leftSign.set(leftSignPosition);
-                            currentSign.set(currentSignPosition);
-                        }
-                    });
-            }
-
-            tween.start(game.tween);
+                .ease(Quad.OUT));
         }
+
+        timeline.setCallback(new TweenCallback() {
+            @Override
+            public void onEvent(int i, BaseTween<?> baseTween) {
+                currentLevelIdx = currentLevelIdx + dir;
+                isCycling = false;
+                rightSign.set(rightSignPosition);
+                leftSign.set(leftSignPosition);
+                currentSign.set(currentSignPosition);
+            }
+        })
+        .start(game.tween);
 
         Timeline.createSequence()
             .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
                 .target(-currentWidth)
-                .ease(Quad.OUT))
-            .setCallback(new TweenCallback() {
-                @Override
-                public void onEvent(int i, BaseTween<?> baseTween) {
-                    currentThumbnailIdx = currentThumbnailIdx + dir;
-                }
-            })
+                .ease(Quad.OUT)
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int i, BaseTween<?> baseTween) {
+                        currentThumbnailIdx = currentThumbnailIdx + dir;
+                    }
+                }))
             .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
                 .target(currentClickTarget.y)
                 .ease(Quad.IN))
