@@ -74,7 +74,12 @@ public class EnemyTurret extends GameObject{
 
     public void updateBullet(float dt) {
         if (!alive || killingIt) return;
-        bulletPosition.set(position.x, position.y);
+        float startXPosition = position.x + directionVector.x * 40f;
+        float startYPosition = position.y + directionVector.y * 40f;
+        Vector2 startPosition = new Vector2(startXPosition, startYPosition);
+
+
+        bulletPosition = startPosition;
         screen.addBullet(this, bulletPosition, directionVector, Assets.getImage(Assets.Balls.Purple));
         LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
 
