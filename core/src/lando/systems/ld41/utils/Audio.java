@@ -101,6 +101,15 @@ public class Audio implements Disposable {
         if (soundOption == Sounds.splash) {
             soundOption = MathUtils.randomBoolean() ? Sounds.splash1 : Sounds.splash2;
         }
+        if (soundOption == Sounds.shot) {
+            int id = MathUtils.random(1, 3);
+            switch (id) {
+                default:
+                case 1: soundOption = Sounds.shot1; break;
+                case 2: soundOption = Sounds.shot2; break;
+                case 3: soundOption = Sounds.shot3; break;
+            }
+        }
         if (soundOption == Sounds.explosion) {
             soundOption = MathUtils.randomBoolean() ? Sounds.explosion1 : Sounds.explosion2;
         }
