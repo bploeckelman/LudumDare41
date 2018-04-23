@@ -181,7 +181,7 @@ public class LevelSelectScreen extends BaseScreen {
         Assets.drawString(batch, Integer.toString(holeIdx + 1), ballX + 2,
                 top - 48, Color.WHITE, 0.75f, font, ballSize, Align.center);
 
-        String par = String.format("Par: %d", level.par);
+        String par = "Par: " + level.par;
         if (alpha > 0.5) {
             alphaColor.a = alpha;
             Assets.drawString(batch, level.name, x, top - 116, alphaColor, 0.5f, font, rect.width, Align.center);

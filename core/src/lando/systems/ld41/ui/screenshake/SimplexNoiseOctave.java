@@ -57,7 +57,9 @@ public class SimplexNoiseOctave {  // Simplex noise in 2D, 3D and 4D
     private short perm[] = new short[512];
     private short permMod12[] = new short[512];
     public SimplexNoiseOctave(int seed) {
-        p=p_supply.clone();
+        // NOTE: clone not supported in GWT
+        p=p_supply;//.clone();
+
 
         if (seed==RANDOMSEED){
             Random rand=new Random();
