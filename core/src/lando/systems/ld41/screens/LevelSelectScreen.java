@@ -114,12 +114,21 @@ public class LevelSelectScreen extends BaseScreen {
         Assets.drawString(batch, "Tee Off", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
 
-        if (currentLevelIdx > 0) {
-            // Draw left arrow (reversed)
-            batch.draw(arrow, arrowLeftClickTarget.x + arrowSize, arrowLeftClickTarget.y, -arrowSize, arrowSize);
+        if (
+            isCycling && (
+                (movingDirection == 1 && currentLevelIdx + 2 <= levels.size - 1) ||
+                    (movingDirection == -1 && currentLevelIdx - 2 >= 0)
+            )) {
+            // Draw incoming box
+            renderSign(batch, currentLevelIdx + (movingDirection * 2), incomingSign);
+        }
 
+        if (currentLevelIdx > 0) {
             // Draw left box
             renderSign(batch, currentLevelIdx - 1, leftSign);
+
+            // Draw left arrow (reversed)
+            batch.draw(arrow, arrowLeftClickTarget.x + arrowSize, arrowLeftClickTarget.y, -arrowSize, arrowSize);
         }
 
         // Draw current
@@ -132,15 +141,6 @@ public class LevelSelectScreen extends BaseScreen {
 
             // Draw right arrow
             batch.draw(arrow, arrowRightClickTarget.x, arrowRightClickTarget.y, arrowSize, arrowSize);
-        }
-
-        if (
-            isCycling && (
-                (movingDirection == 1 && currentLevelIdx + 2 <= levels.size - 1) ||
-                (movingDirection == -1 && currentLevelIdx - 2 >= 0)
-            )) {
-            // Draw incoming box
-            renderSign(batch, currentLevelIdx + (movingDirection * 2), incomingSign);
         }
 
         batch.end();
