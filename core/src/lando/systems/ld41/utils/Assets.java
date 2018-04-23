@@ -218,11 +218,12 @@ public class Assets implements Disposable {
         boxNinePatch = new NinePatch(atlas.findRegion("box-outline"), 4, 4, 4, 4);
 
         Pixmap pixGreen = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixGreen.setColor(Color.GREEN);
+        pixGreen.setColor(57f / 255f, 123f / 255f, 68f / 255f, 1f);
         pixGreen.fill();
         thumbnailBg = new TextureRegion(new Texture(pixGreen));
         Pixmap pixRed = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixRed.setColor(Color.RED);
+        pixRed.setColor(169f / 255f, 59f / 255f, 59f / 255f, 1f);
+//        pixRed.setColor(230f / 255f, 72f / 255f, 46f / 255f, 1f);
         pixRed.fill();
         thumbnailBoundries = new TextureRegion(new Texture(pixRed));
 

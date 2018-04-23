@@ -296,11 +296,36 @@ public class LevelSelectScreen extends BaseScreen {
             poly.draw(polyBatch);
         }
 
+        polyBatch.setColor(Color.WHITE);
+        for (Polygon water : level.waterRegions) {
+            PolygonRegion polyReg = new PolygonRegion(
+                    LudumDare41.game.assets.waterTextureRegion,
+                    water.getTransformedVertices(),
+                    triangulator.computeTriangles(water.getTransformedVertices()).toArray()
+            );
+            PolygonSprite poly = new PolygonSprite(polyReg);
+            poly.setOrigin(0, 0);
+            poly.setX(xOffset);
+            poly.draw(polyBatch);
+        }
+        for (Polygon sand : level.sandRegions) {
+            PolygonRegion polyReg = new PolygonRegion(
+                    LudumDare41.game.assets.sandTextureRegion,
+                    sand.getTransformedVertices(),
+                    triangulator.computeTriangles(sand.getTransformedVertices()).toArray()
+            );
+            PolygonSprite poly = new PolygonSprite(polyReg);
+            poly.setOrigin(0, 0);
+            poly.setX(xOffset);
+            poly.draw(polyBatch);
+        }
+        polyBatch.setColor(Color.WHITE);
         polyBatch.end();
 
         ShapeRenderer shapes = LudumDare41.game.assets.shapes;
         shapes.begin(ShapeRenderer.ShapeType.Filled);
-        shapes.setColor(Color.RED);
+        shapes.setColor(169f / 255f, 59f / 255f, 59f / 255f, 1f);
+//        shapes.setColor(230f / 255f, 72f / 255f, 46f / 255f, 1f);
         shapes.setProjectionMatrix(camera.combined);
         {
             for (int i = 0; i < level.circles.size; i++){
@@ -309,10 +334,10 @@ public class LevelSelectScreen extends BaseScreen {
             }
         }
 
-        shapes.setColor(Color.BLACK);
+        shapes.setColor(Color.DARK_GRAY);
         shapes.circle(level.hole.position.x - (holeSize/2) + xOffset, level.hole.position.y - (holeSize/2), holeSize);
 
-        shapes.setColor(Color.MAGENTA);
+        shapes.setColor(Color.YELLOW);
         shapes.triangle(
             level.tee.pos.x + xOffset,
             level.tee.pos.y,
