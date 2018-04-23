@@ -173,11 +173,13 @@ public class GameScreen extends BaseScreen {
 
         for (Polygon waterPoly : level.waterRegions) {
             playerTank.onWater = waterPoly.contains(playerTank.position);
+            playerTank.ball.onWater = Utils.overlaps(waterPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius);
 //            playerTank.onWater = Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
         }
 
         for (Polygon sandPoly : level.sandRegions) {
             playerTank.onSand = Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
+            playerTank.ball.onSand = Utils.overlaps(sandPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius);
             for (EnemyTank tank : enemyTanks) {
                 tank.onSand = Utils.overlaps(sandPoly, tank.position.x, tank.position.y, tank.radius);
             }

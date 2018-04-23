@@ -24,6 +24,8 @@ public class Ball extends GameObject {
 
     public TextureRegion image;
     public boolean visible = true;
+    public boolean onSand = false;
+    public boolean onWater = false;
 
     private Indicator indicator;
 
@@ -54,6 +56,8 @@ public class Ball extends GameObject {
     public void update(float dt){
         if (onTank || !visible) return;
         pickupDelay = Math.max(pickupDelay - dt, 0);
+
+        if (onSand) velocity.scl(0.95f);
 
         oldPosition.set(position);
         newPosition.set(position);
