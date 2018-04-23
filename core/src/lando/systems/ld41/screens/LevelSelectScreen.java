@@ -1,5 +1,10 @@
 package lando.systems.ld41.screens;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,6 +19,7 @@ import com.badlogic.gdx.utils.IntMap;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.Level;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.accessors.RectangleAccessor;
 
 import java.util.Iterator;
 
@@ -23,6 +29,7 @@ public class LevelSelectScreen extends BaseScreen {
     Array<Level> levels;
     Array<TextureRegion> thumbnails;
     int currentLevelIdx;
+    int currentThumbnailIdx;
 
     TextureRegion arrow;
     float arrowSize = 64f;
@@ -34,6 +41,19 @@ public class LevelSelectScreen extends BaseScreen {
     float padBetween = 32f;
     float currentWidth;
     Rectangle currentClickTarget;
+
+    Rectangle leftSignPosition;
+    Rectangle currentSignPosition;
+    Rectangle rightSignPosition;
+    Rectangle leftSign;
+    Rectangle currentSign;
+    Rectangle currentMap;
+    Rectangle rightSign;
+    Rectangle incomingSign;
+    Rectangle incomingSignLeft;
+    Rectangle incomingSignRight;
+    int movingDirection;
+    boolean isCycling = false;
 
     public LevelSelectScreen() {
         Gdx.input.setInputProcessor(this);
@@ -54,6 +74,7 @@ public class LevelSelectScreen extends BaseScreen {
         }
 
         currentLevelIdx = 0;
+        currentThumbnailIdx = 0;
         arrowLeftClickTarget = new Rectangle(10, (hudCamera.viewportHeight/2) - (arrowSize/2), arrowSize, arrowSize);
         arrowRightClickTarget = new Rectangle(hudCamera.viewportWidth - 10f - arrowSize, (hudCamera.viewportHeight/2) - (arrowSize/2), arrowSize, arrowSize);
 
@@ -61,8 +82,23 @@ public class LevelSelectScreen extends BaseScreen {
 
         signSize = (hudCamera.viewportWidth - (arrowLeftClickTarget.width + 20f + (padBetween * 2))) / 4;
         float x = 10f + arrowSize + signSize + padBetween;
+        float y = hudCamera.viewportHeight/2;
         currentWidth = hudCamera.viewportWidth - (x * 2);
         currentClickTarget = new Rectangle(x, (hudCamera.viewportHeight/2) - currentWidth, currentWidth, currentWidth);
+        currentMap = new Rectangle(currentClickTarget.x, currentClickTarget.y, currentClickTarget.width, currentClickTarget.height);
+
+        leftSignPosition = new Rectangle(10f + arrowSize, y - (signSize/2), signSize, signSize);
+        leftSign = new Rectangle();
+        leftSign.set(leftSignPosition);
+        currentSignPosition = new Rectangle((hudCamera.viewportWidth/2) - (signSize/2), y, signSize, signSize);
+        currentSign = new Rectangle();
+        currentSign.set(currentSignPosition);
+        rightSignPosition = new Rectangle(hudCamera.viewportWidth - (10f + arrowSize + signSize), y - (signSize/2), signSize, signSize);
+        rightSign = new Rectangle();
+        rightSign.set(rightSignPosition);
+        incomingSign = new Rectangle();
+        incomingSignLeft = new Rectangle(-32f - signSize, y - (signSize/2), signSize, signSize);
+        incomingSignRight = new Rectangle(hudCamera.viewportWidth + 32f, y - (signSize/2), signSize, signSize);
     }
 
     @Override
@@ -77,38 +113,43 @@ public class LevelSelectScreen extends BaseScreen {
 
         Assets.drawString(batch, "Tee Off", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
         Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
-        float x = 10f + arrowSize;
-        float y = hudCamera.viewportHeight/2;
 
         if (currentLevelIdx > 0) {
             // Draw left arrow (reversed)
             batch.draw(arrow, arrowLeftClickTarget.x + arrowSize, arrowLeftClickTarget.y, -arrowSize, arrowSize);
 
             // Draw left box
-            renderSign(batch, currentLevelIdx - 1, x, y - (signSize/2));
+            renderSign(batch, currentLevelIdx - 1, leftSign);
         }
 
         // Draw current
-        renderSign(batch, currentLevelIdx, (hudCamera.viewportWidth/2) - signSize/2, y);
-        batch.draw(thumbnails.get(currentLevelIdx), currentClickTarget.x, currentClickTarget.y, currentWidth, currentWidth);
+        renderSign(batch, currentLevelIdx, currentSign);
+        batch.draw(thumbnails.get(currentThumbnailIdx), currentMap.x, currentMap.y, currentWidth, currentWidth);
 
         if (currentLevelIdx != levels.size - 1) {
-            x = 10f + arrowSize + signSize;
-
             // Draw right box
-            renderSign(batch, currentLevelIdx + 1, hudCamera.viewportWidth - x, y - (signSize/2));
+            renderSign(batch, currentLevelIdx + 1, rightSign);
 
             // Draw right arrow
             batch.draw(arrow, arrowRightClickTarget.x, arrowRightClickTarget.y, arrowSize, arrowSize);
         }
 
+        if (
+            isCycling && (
+                (movingDirection == 1 && currentLevelIdx + 2 <= levels.size - 1) ||
+                (movingDirection == -1 && currentLevelIdx - 2 >= 0)
+            )) {
+            // Draw incoming box
+            renderSign(batch, currentLevelIdx + (movingDirection * 2), incomingSign);
+        }
+
         batch.end();
     }
 
-    public void renderSign(SpriteBatch batch, int holeIdx, float x, float y) {
+    public void renderSign(SpriteBatch batch, int holeIdx, Rectangle rect) {
         Level level = levels.get(holeIdx);
 
-        float top = y + signSize;
+        float top = rect.y + rect.height;
 
         game.assets.layout.setText(
             game.assets.font,
@@ -116,30 +157,96 @@ public class LevelSelectScreen extends BaseScreen {
                 level.name + "\n" +
                 "Par: " + level.par,
             Color.CORAL,
-            signSize,
+            rect.width,
             1,
             false
         );
 
-        signPatch.draw(batch, x, y, signSize, signSize);
-        game.assets.font.draw(batch, game.assets.layout, x, top - 6f);
+        signPatch.draw(batch, rect.x, rect.y, rect.width, rect.height);
+        game.assets.font.draw(batch, game.assets.layout, rect.x, top - 6f);
         game.assets.layout.reset();
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Vector3 unprojected = hudCamera.unproject(new Vector3(screenX, screenY, 0));
+        if (isCycling) {
+            return true;
+        }
+
+        Vector3 unproj = hudCamera.unproject(new Vector3(screenX, screenY, 0));
         if (button == 0) {
-            if (currentLevelIdx > 0 && arrowLeftClickTarget.contains(screenX, screenY)) {
-                currentLevelIdx--;
-            } else if (currentLevelIdx != levels.size - 1 && arrowRightClickTarget.contains(screenX, screenY)) {
-                currentLevelIdx++;
-            } else if (currentClickTarget.contains(unprojected.x, unprojected.y)) {
+            if (currentLevelIdx > 0 && (arrowLeftClickTarget.contains(unproj.x, unproj.y) || leftSignPosition.contains(unproj.x, unproj.y))) {
+                tweenCycle(-1);
+            } else if (currentLevelIdx != levels.size - 1 && (arrowRightClickTarget.contains(unproj.x, unproj.y) || rightSignPosition.contains(unproj.x, unproj.y))) {
+                tweenCycle(1);
+            } else if (currentClickTarget.contains(unproj.x, unproj.y) || currentSignPosition.contains(unproj.x, unproj.y)) {
                 game.setScreen(new GameScreen(currentLevelIdx), LudumDare41.game.assets.circleCropShader, 1.4f);
             }
         }
 
         return true;
+    }
+
+    void tweenCycle(final int dir) {
+        isCycling = true;
+        movingDirection = dir;
+        float duration = .3f;
+
+        Array<Rectangle> cycle = new Array<Rectangle>();
+        cycle.add(
+            rightSign,
+            currentSign,
+            leftSign
+        );
+
+        if (dir > 0) {
+            incomingSign.set(incomingSignRight);
+            cycle.insert(0, incomingSign);
+            cycle.add(incomingSignLeft);
+        } else if (dir < 0) {
+            incomingSign.set(incomingSignLeft);
+            cycle.insert(0, incomingSignRight);
+            cycle.add(incomingSign);
+            cycle.reverse();
+        }
+
+        for (int i = 0; i < cycle.size - 1; i++) {
+            Rectangle t = cycle.get(i + 1);
+            Tween tween = Tween.to(cycle.get(i), RectangleAccessor.XYWH, duration)
+                .target(t.x, t.y, t.width, t.height)
+                .ease(Quad.OUT);
+
+            if (i == 3) {
+                tween = tween
+                    .setCallback(new TweenCallback() {
+                        @Override
+                        public void onEvent(int i, BaseTween<?> baseTween) {
+                            currentLevelIdx = currentLevelIdx + dir;
+                            isCycling = false;
+                            rightSign.set(rightSignPosition);
+                            leftSign.set(leftSignPosition);
+                            currentSign.set(currentSignPosition);
+                        }
+                    });
+            }
+
+            tween.start(game.tween);
+        }
+
+        Timeline.createSequence()
+            .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
+                .target(-currentWidth)
+                .ease(Quad.OUT))
+            .setCallback(new TweenCallback() {
+                @Override
+                public void onEvent(int i, BaseTween<?> baseTween) {
+                    currentThumbnailIdx = currentThumbnailIdx + dir;
+                }
+            })
+            .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
+                .target(currentClickTarget.y)
+                .ease(Quad.IN))
+            .start(game.tween);
     }
 
     TextureRegion getLevelThumbnail(Level level) {
