@@ -24,8 +24,7 @@ public class HelpModalWindow extends ModalWindow {
             "- Each kills grant you a bonus score",
             "- Enemy turrets attack in a set direction",
             "- Catapults aim and attack you when in sight",
-            "- Enemy Tanks follow and attack you",
-            "- Beware of the boss!"
+            "- Enemy Tanks follow and attack you"
     };
 
     public HelpModalWindow(OrthographicCamera camera) {
