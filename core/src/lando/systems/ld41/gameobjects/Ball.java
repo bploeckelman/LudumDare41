@@ -42,7 +42,7 @@ public class Ball extends GameObject {
         tempVector = new Vector2();
         tempVector3 = new Vector3();
 
-        radius = 5;
+        radius = 8;
 
         indicator = new Indicator(this, 10);
     }

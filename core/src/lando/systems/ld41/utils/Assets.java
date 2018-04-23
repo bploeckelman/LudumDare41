@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 public class Assets implements Disposable {
     public class Balls {
+        public static final String White = "ballwhite";
         public static final String Orange = "ballorange";
         public static final String Brown = "ballbrown";
         public static final String Blue = "ballblue";
@@ -274,6 +275,7 @@ public class Assets implements Disposable {
     }
 
     private void loadBalls() {
+        assetMap.put(Balls.White, atlas.findRegion(Balls.White));
         assetMap.put(Balls.Orange, atlas.findRegion(Balls.Orange));
         assetMap.put(Balls.Blue, atlas.findRegion(Balls.Blue));
         assetMap.put(Balls.Purple, atlas.findRegion(Balls.Purple));

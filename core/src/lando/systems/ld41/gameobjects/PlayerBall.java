@@ -11,7 +11,7 @@ public class PlayerBall extends Ball {
     public float totalDistance;
 
     public PlayerBall(GameScreen screen) {
-        super(screen, Assets.Balls.Orange);
+        super(screen, Assets.Balls.White);
     }
 
     @Override
