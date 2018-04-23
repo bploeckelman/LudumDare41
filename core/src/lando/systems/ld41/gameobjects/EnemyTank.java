@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.ai.StateMachine;
 import lando.systems.ld41.ai.Transition;
 import lando.systems.ld41.ai.conditions.PlayerCloserThan;
@@ -53,6 +54,8 @@ public class EnemyTank extends GameObject {
     public float reloadDelay = 5f;
 
     public boolean dead;
+    public boolean killingIt = false;
+    private float explodeAnimTime = 0f;
     private float accum;
     public EnemyType type;
 
@@ -73,23 +76,21 @@ public class EnemyTank extends GameObject {
     public EnemyTank(GameScreen screen, EnemyType type, float width, float height, Vector2 startPosition)
     {
         this.type = type;
-        tempVec = new Vector2();
-        bouncyBullets = true;
-
-
+        this.tempVec = new Vector2();
+        this.bouncyBullets = true;
         this.width = width;
         this.height = height;
         this.radius = Math.max(width, height)/2f;
-        position = startPosition;
-        oldPosition = new Vector2();
-        newPosition = new Vector2();
-        collisionPoint = new Vector2();
-        normal = new Vector2();
+        this.position = startPosition;
+        this.oldPosition = new Vector2();
+        this.newPosition = new Vector2();
+        this.collisionPoint = new Vector2();
+        this.normal = new Vector2();
         this.screen = screen;
         this.directionVector = new Vector2();
         this.speed = 100;
         this.bulletSpeed = 300;
-        dead = false;
+        this.dead = false;
         switch(type){
             case orange: initializeOrange(); break;
             case green:  initializeGreen(); break;
@@ -216,10 +217,24 @@ public class EnemyTank extends GameObject {
         stateMachine = new StateMachine(wait, transitions);
     }
 
+    public void kill() {
+        if (killingIt) return;
+        killingIt = true;
+        explodeAnimTime = 0f;
+    }
+
     public void update(float dt)
     {
+        if (killingIt) {
+            explodeAnimTime += dt;
+            if (explodeAnimTime >= LudumDare41.game.assets.explosionAnimation.getAnimationDuration()) {
+                killingIt = false;
+                dead = true;
+            }
+        }
+
         accum += dt;
-        if (dead) return;
+        if (dead || killingIt) return;
         stateMachine.update(dt);
 
         leftTread = tank.leftTreads.getKeyFrame(leftTime, true);
@@ -231,6 +246,7 @@ public class EnemyTank extends GameObject {
 
     private void updateTurretRotation(float dt)
     {
+        if (killingIt) return;
         if (turrentTargetRotation - turretRotation < -180) turretRotation -= 360;
         if (turrentTargetRotation - turretRotation > 180) turretRotation += 360;
 
@@ -252,6 +268,7 @@ public class EnemyTank extends GameObject {
 
     public boolean updatePosition(float speed)
     {
+        if (killingIt) return false;
         directionVector.set(1, 0);
         directionVector.setAngle(rotation + 90);
         directionVector.scl(speed);
@@ -290,7 +307,7 @@ public class EnemyTank extends GameObject {
         if (dead) {
             batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
-            batch.draw(tank.smoke.getKeyFrame(accum), x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+            batch.draw(tank.smoke.getKeyFrame(accum), x, y, halfX, halfY, width, height, 1, 1, 0f);
         } else {
             if (reloadTimer < .25f){
                 if ((int)(reloadTimer * 20) % 2 == 0 )
@@ -299,6 +316,13 @@ public class EnemyTank extends GameObject {
             batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
             batch.setColor(Color.WHITE);
+            if (killingIt) {
+                batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
+                batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
+                batch.draw(LudumDare41.game.assets.explosionAnimation.getKeyFrame(explodeAnimTime),
+                           x - halfX, y - halfY, halfX, halfY,
+                           width * 2f, height * 2f, 1f, 1f, 0f);
+            }
         }
     }
 

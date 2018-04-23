@@ -133,7 +133,7 @@ public class Ball {
     public boolean checkCollisionWithEnemies() {
         if (velocity.len() < 30) return false;
         for(Catapult catapult : screen.catapults) {
-            if (catapult.alive && catapult.position.dst(newPosition) < catapult.radius + radius) {
+            if (catapult.alive && !catapult.killingIt && catapult.position.dst(newPosition) < catapult.radius + radius) {
                 normal.set(newPosition);
                 normal.sub(catapult.position);
                 normal.nor();
@@ -141,13 +141,13 @@ public class Ball {
                 normal.scl(catapult.radius + radius);
                 collisionPoint.add(normal);
                 normal.nor();
-                catapult.alive = false;
+                catapult.kill();
                 return true;
             }
         }
 
         for(EnemyTurret turret : screen.enemyTurrets) {
-            if (turret.alive && turret.position.dst(newPosition) < turret.radius + radius) {
+            if (turret.alive && !turret.killingIt && turret.position.dst(newPosition) < turret.radius + radius) {
                 normal.set(newPosition);
                 normal.sub(turret.position);
                 normal.nor();
@@ -155,7 +155,7 @@ public class Ball {
                 normal.scl(turret.radius + radius);
                 collisionPoint.add(normal);
                 normal.nor();
-                turret.alive = false;
+                turret.kill();
                 return true;
             }
         }
@@ -169,7 +169,7 @@ public class Ball {
                 normal.scl(tank.radius + radius);
                 collisionPoint.add(normal);
                 normal.nor();
-                tank.dead = true;
+                tank.kill();
                 return true;
             }
         }

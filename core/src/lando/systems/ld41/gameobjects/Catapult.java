@@ -19,6 +19,8 @@ public class Catapult extends GameObject {
     public float rotation;
     public Tank playerTank;
     public boolean alive = true;
+    public boolean killingIt = false;
+    private float explodeAnimTime = 0f;
     private TextureRegion catapultFrame;
     private TextureRegion smokeFrame;
     private float timer = 0;
@@ -37,14 +39,28 @@ public class Catapult extends GameObject {
         this.bulletSpeed = 100;
         this.bulletSize = 15f;
         this.bulletTimeToLive = 10f;
-        directionVector = new Vector2();
-        tempVec = new Vector2();
-        catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
+        this.directionVector = new Vector2();
+        this.tempVec = new Vector2();
+        this.catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(0);
         this.radius = Math.max(TURRET_WIDTH, TURRET_HEIGHT)/2f;
-
     }
+
+    public void kill() {
+        if (killingIt) return;
+        killingIt = true;
+        explodeAnimTime = 0f;
+    }
+
     @Override
     public void update(float dt){
+        if (killingIt) {
+            explodeAnimTime += dt;
+            if (explodeAnimTime >= LudumDare41.game.assets.explosionAnimation.getAnimationDuration()) {
+                killingIt = false;
+                alive = false;
+            }
+        }
+
         timer+=dt;
         if (!alive) {
             smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
@@ -84,7 +100,7 @@ public class Catapult extends GameObject {
         float y = position.y - halfY;
         if (!alive) {
             batch.draw(LudumDare41.game.assets.catapultAnimation.getKeyFrame(2), x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
-            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
+            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, 0);
         } else {
             float warning = FIRE_RATE - timer;
             if (warning < .25f){
@@ -93,6 +109,12 @@ public class Catapult extends GameObject {
             }
             batch.draw(catapultFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation - 90);
             batch.setColor(Color.WHITE);
+            if (killingIt) {
+                batch.draw(LudumDare41.game.assets.explosionAnimation.getKeyFrame(explodeAnimTime),
+                           x - halfX, y - halfY, halfX, halfY,
+                           TURRET_WIDTH * 2f, TURRET_HEIGHT * 2f,
+                           1f, 1f, 0f);
+            }
         }
     }
 }

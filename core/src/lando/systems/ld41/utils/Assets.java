@@ -188,7 +188,7 @@ public class Assets implements Disposable {
         Array explosion = atlas.findRegions("explosion");
         catapultAnimation = new Animation<TextureRegion>(1, catapult, Animation.PlayMode.LOOP);
         smokeAnimation = new Animation<TextureRegion>(0.3f, smoke, Animation.PlayMode.LOOP);
-        explosionAnimation = new Animation<TextureRegion>(0.3f, explosion, Animation.PlayMode.NORMAL);
+        explosionAnimation = new Animation<TextureRegion>(0.15f, explosion, Animation.PlayMode.NORMAL);
 
         loadBalls();
         loadTankAssets();

@@ -18,6 +18,8 @@ public class EnemyTurret extends GameObject{
     public float rotation;
     public Tank playerTank;
     public boolean alive = true;
+    public boolean killingIt = false;
+    private float explodeAnimTime = 0f;
     private TextureRegion enemyTurretFrame;
     private TextureRegion smokeFrame;
     private float timer = 0;
@@ -36,10 +38,24 @@ public class EnemyTurret extends GameObject{
         this.directionVector = new Vector2(direction);
         this.enemyTurretFrame = LudumDare41.game.assets.enemyTurret;
         this.radius = Math.max(TURRET_WIDTH, TURRET_HEIGHT)/2f;
-
     }
+
+    public void kill() {
+        if (killingIt) return;
+        killingIt = true;
+        explodeAnimTime = 0f;
+    }
+
     @Override
     public void update(float dt){
+        if (killingIt) {
+            explodeAnimTime += dt;
+            if (explodeAnimTime >= LudumDare41.game.assets.explosionAnimation.getAnimationDuration()) {
+                killingIt = false;
+                alive = false;
+            }
+        }
+
         timer+=dt;
         if (!alive) {
             smokeFrame = LudumDare41.game.assets.smokeAnimation.getKeyFrame(timer);
@@ -69,7 +85,7 @@ public class EnemyTurret extends GameObject{
         float y = position.y - halfY;
         if (!alive) {
             batch.draw(enemyTurretFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation);
-            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, rotation);
+            batch.draw(smokeFrame, x, y, halfX, halfY, TURRET_WIDTH, TURRET_HEIGHT, 1, 1, 0f);
         } else {
             float warning = FIRE_RATE - timer;
             if (warning < .25f){
@@ -78,6 +94,12 @@ public class EnemyTurret extends GameObject{
             }
             batch.draw(enemyTurretFrame,x, y, halfX, halfY , TURRET_WIDTH, TURRET_HEIGHT, 2, 2, rotation);
             batch.setColor(Color.WHITE);
+            if (killingIt) {
+                batch.draw(LudumDare41.game.assets.explosionAnimation.getKeyFrame(explodeAnimTime),
+                           x - halfX, y - halfY, halfX, halfY,
+                           TURRET_WIDTH * 2f, TURRET_HEIGHT * 2f,
+                           1f, 1f, 0f);
+            }
         }
     }
 
