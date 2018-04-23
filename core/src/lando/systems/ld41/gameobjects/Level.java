@@ -39,12 +39,12 @@ public class Level {
     public MapLayer objectsLayer;
 
     // Map objects
-    public FinalBoss boss;
     public Tee tee;
     public Hole hole;
     public Array<PinballBumper> pinballBumpers;
     public Array<EnemyTankInfo> enemyTankInfos;
     public Array<EnemyTurretInfo> enemyTurretInfos;
+    public FinalBossInfo finalBossInfo;
     public Array<CatapultInfo> catapultInfos;
     public Array<Polygon> waterRegions;
     public Array<Polygon> sandRegions;
@@ -145,8 +145,10 @@ public class Level {
                                 props.get("y", Float.class));
             }
             else if (type.equalsIgnoreCase("boss")) {
-                boss = new FinalBoss(props.get("x", Float.class),
-                                     props.get("y", Float.class));
+                finalBossInfo = new FinalBossInfo() {{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
+                }};
             }
             else if (type.equalsIgnoreCase("water")) {
                 // NOTE: this will blow up if the polyline isn't closed
@@ -223,9 +225,7 @@ public class Level {
             bumper.update(dt);
         }
         hole.update(dt);
-        if (boss != null) {
-            boss.update(dt);
-        }
+
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera){
@@ -255,9 +255,7 @@ public class Level {
             for (PinballBumper bumper : pinballBumpers) {
                 bumper.render(batch);
             }
-            if (boss != null) {
-                boss.render(batch);
-            }
+
         }
         batch.end();
 

@@ -39,6 +39,7 @@ public class GameScreen extends BaseScreen {
     private static final float CAMERA_ZOOM_MARGIN = 1.2f;
 
     public Tank playerTank;
+    public FinalBoss boss;
     public int currentLevelNum = -1;
     public Level level;
     public PowerMeter powerMeter;
@@ -108,6 +109,10 @@ public class GameScreen extends BaseScreen {
         for (EnemyTankInfo info : level.enemyTankInfos) {
             enemyTanks.add(EnemyTank.create(this, info));
         }
+
+        if (level.finalBossInfo != null){
+            boss = new FinalBoss(this, level.finalBossInfo.x, level.finalBossInfo.y);
+        }
         particleSystem = new ParticleSystem();
         powerMeter = new PowerMeter(1f, playerTank);
         worldCamera.position.set(playerTank.position, 0);
@@ -167,6 +172,10 @@ public class GameScreen extends BaseScreen {
 
         if (showPowerMeter) {
             powerMeter.update(dt);
+        }
+
+        if (boss != null) {
+            boss.update(dt);
         }
 
         for (EnemyTank tank : enemyTanks) {
@@ -302,6 +311,11 @@ public class GameScreen extends BaseScreen {
             {
                 tank.render(batch);
             }
+
+            if (boss != null) {
+                boss.render(batch);
+            }
+
             for (Bullet b : activeBullets){
                 b.render(batch);
             }

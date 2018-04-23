@@ -191,6 +191,23 @@ public class Ball extends GameObject {
                 return true;
             }
         }
+
+        FinalBoss boss = screen.boss;
+        if (boss != null && boss.position.dst(newPosition) < boss.radius + radius ) {
+            normal.set(newPosition);
+            normal.sub(boss.position);
+            normal.nor();
+            collisionPoint.set(boss.position);
+            normal.scl(boss.radius + radius);
+            collisionPoint.add(normal);
+            normal.nor();
+            velocity.scl(2f);
+            if (velocity.len() < 200){
+                velocity.nor().scl(200);
+            }
+            boss.takeDamage();
+            return true;
+        }
         return false;
     }
 }

@@ -314,8 +314,13 @@ public class Tank extends GameObject {
             if (newPosition.dst(enemyTank.position) < radius + enemyTank.radius){
                 tempVector.set(position).sub(enemyTank.position).nor().scl(3);
                 newPosition.add(tempVector);
-//                tempVector.scl(-.7f);
-//                enemyTank.position.add(tempVector);
+            }
+        }
+
+        if (screen.boss != null && screen.boss.health > 0){
+            if (newPosition.dst(screen.boss.position) < radius + screen.boss.radius){
+                tempVector.set(position).sub(screen.boss.position).nor().scl(3);
+                newPosition.add(tempVector);
             }
         }
 

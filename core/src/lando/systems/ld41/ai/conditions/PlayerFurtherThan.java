@@ -1,13 +1,14 @@
 package lando.systems.ld41.ai.conditions;
 
-import lando.systems.ld41.gameobjects.EnemyTank;
+import lando.systems.ld41.gameobjects.GameObject;
 
-public class PlayerFurtherThan extends Condition{
+public class PlayerFurtherThan implements Condition{
 
     private float distance;
+    GameObject owner;
 
-    public PlayerFurtherThan(EnemyTank owner, float distance) {
-        super(owner);
+    public PlayerFurtherThan(GameObject owner, float distance) {
+        this.owner = owner;
         this.distance = distance;
     }
 

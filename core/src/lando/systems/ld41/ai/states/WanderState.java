@@ -6,32 +6,32 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.gameobjects.EnemyTank;
 import lando.systems.ld41.gameobjects.GameObject;
 
-public class WanderState extends State{
+public class WanderState implements State{
 
+    private EnemyTank owner;
     private Vector2 targetPos;
     private Vector2 tempVector;
 
-    public WanderState(GameObject owner) {
-        super(owner);
+    public WanderState(EnemyTank owner) {
+        this.owner = owner;
         targetPos = new Vector2();
         tempVector = new Vector2();
     }
 
     @Override
     public void update(float dt) {
-        if (((EnemyTank)owner).rotateAndMove(targetPos, dt)){
+        if (owner.rotateAndMove(targetPos, dt)){
             findNewTarget();
         }
-        ((EnemyTank)owner).turrentTargetRotation += 100*dt;
-        if (((EnemyTank)owner).turrentTargetRotation > 360){
-            ((EnemyTank)owner).turrentTargetRotation -= 360;
+        owner.turrentTargetRotation += 100*dt;
+        if (owner.turrentTargetRotation > 360){
+            owner.turrentTargetRotation -= 360;
         }
     }
 
     @Override
     public void onEnter() {
         findNewTarget();
-        Gdx.app.log("AI:", "Enter Wander");
 
     }
 
