@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
-import lando.systems.ld41.utils.Assets;
-import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.accessors.RectangleAccessor;
 
 public abstract class ModalWindow {
