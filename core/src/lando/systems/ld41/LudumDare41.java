@@ -38,11 +38,16 @@ public class LudumDare41 extends ApplicationAdapter {
     Texture originalTexture;
     Texture transitionTexture;
     ShaderProgram transitionShader;
+    OrthographicCamera camera;
 
     public GameStats gameStats = new GameStats();
 
     @Override
     public void create () {
+
+        camera = new OrthographicCamera(Config.gameWidth, Config.gameHeight);
+        camera.translate(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0f);
+        camera.update();
 
         transitionPercent = new MutableFloat(0);
         transitionFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Config.gameWidth, Config.gameHeight, false);
@@ -89,14 +94,17 @@ public class LudumDare41 extends ApplicationAdapter {
             nextScreen.update(dt);
 
             transitionFBO.begin();
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             nextScreen.render(assets.batch);
             transitionFBO.end();
 
             originalFBO.begin();
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             screen.render(assets.batch);
             originalFBO.end();
 
             assets.batch.setShader(transitionShader);
+            assets.batch.setProjectionMatrix(camera.combined);
             assets.batch.begin();
             originalTexture.bind(1);
             transitionShader.setUniformi("u_texture1", 1);

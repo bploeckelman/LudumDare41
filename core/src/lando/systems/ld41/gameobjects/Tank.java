@@ -77,6 +77,7 @@ public class Tank extends GameObject {
         tempVector = new Vector2();
         dead = false;
         health = 2;
+        smoke = tank.smoke.getKeyFrame(0);
     }
 
     public void setAssets(TankAssets assets) {
@@ -346,7 +347,6 @@ public class Tank extends GameObject {
         } else {
             health--;
             if (health < 1) {
-                LudumDare41.game.audio.playSound(Audio.Sounds.lose_level);
                 dead = true;
             }
         }

@@ -141,6 +141,7 @@ public class GameScreen extends BaseScreen {
         }
         screenShake.update(dt);
         hud.update(dt);
+        particleSystem.update(dt);
 
         level.update(dt);
         if (!levelZoomDone){
@@ -160,7 +161,6 @@ public class GameScreen extends BaseScreen {
         for (EnemyTank tank : enemyTanks) {
             tank.update(dt);
         }
-        particleSystem.update(dt);
 
         for (GameObject gameObj : gameObjects) {
             gameObj.update(dt);
@@ -215,11 +215,21 @@ public class GameScreen extends BaseScreen {
 
     private void playerScores() {
         // TODO: fancy up the level transition
-        levelTransitioning = true;
-        addStats(false);
-        int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
+        if (!levelZoomDone) return;
+        levelZoomDone = false;
         LudumDare41.game.audio.playSound(Audio.Sounds.good_job);
-        LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
+        addStats(false);
+        Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
+                .target(level.hole.position.x, level.hole.position.y, .3f)
+                .setCallback(new TweenCallback() {
+                    @Override
+                    public void onEvent(int i, BaseTween<?> baseTween) {
+                        int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
+                        LudumDare41.game.setScreen(new GameScreen(nextLevelNum), LudumDare41.game.assets.circleCropShader, 1.4f);
+                    }
+                })
+                .start(LudumDare41.game.tween);
+
     }
 
     private void addStats(boolean isDead) {
@@ -303,9 +313,21 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (restartLevelButton.checkForTouch(screenX, screenY)) {
+        if (restartLevelButton.checkForTouch(screenX, screenY) && levelZoomDone) {
+            playerTank.health = 0;
+            showPowerMeter = false;
             addStats(true);
-            LudumDare41.game.setScreen(new GameScreen(currentLevelNum));
+            levelZoomDone = false;
+            LudumDare41.game.audio.playSound(Audio.Sounds.lose_level);
+            Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
+                    .target(playerTank.position.x, playerTank.position.y, .3f)
+                    .setCallback(new TweenCallback() {
+                        @Override
+                        public void onEvent(int i, BaseTween<?> baseTween) {
+                            LudumDare41.game.setScreen(new GameScreen(currentLevelNum), LudumDare41.game.assets.doomShader, 1.4f);
+                        }
+                    })
+                    .start(LudumDare41.game.tween);
             return true;
         }
         else if (button == 0) {
@@ -383,7 +405,17 @@ public class GameScreen extends BaseScreen {
                 playerTank.takeHit();
                 if (playerTank.dead) {
                     addStats(true);
-                    LudumDare41.game.setScreen(new GameScreen(currentLevelNum));
+                    levelZoomDone = false;
+                    LudumDare41.game.audio.playSound(Audio.Sounds.lose_level);
+                    Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
+                            .target(playerTank.position.x, playerTank.position.y, .3f)
+                            .setCallback(new TweenCallback() {
+                                @Override
+                                public void onEvent(int i, BaseTween<?> baseTween) {
+                                    LudumDare41.game.setScreen(new GameScreen(currentLevelNum), LudumDare41.game.assets.doomShader, 1.4f);
+                                }
+                            })
+                            .start(LudumDare41.game.tween);
                 }
             }
             oldBulletPosition.set(b.position);
