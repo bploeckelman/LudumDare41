@@ -85,6 +85,8 @@ public class Assets implements Disposable {
     public TextureRegion enemyTurretRecoil;
     public TextureRegion flag;
     public TextureRegion refreshButton;
+    public TextureRegion helpButton;
+
 
     public Texture waterTexture;
     public Texture sandTexture;
@@ -189,6 +191,7 @@ public class Assets implements Disposable {
         indicator = atlas.findRegion("indicator");
         flag = atlas.findRegion("flag");
         refreshButton = atlas.findRegion("refresh");
+        helpButton = atlas.findRegion("helpbutton");
         enemyTurret = atlas.findRegion("greentankturret");
         enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
         pinballBumperOff = atlas.findRegion("pinballbumper-off");

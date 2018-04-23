@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
+import lando.systems.ld41.managers.HelpModalWindow;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.Button;
 import lando.systems.ld41.ui.PowerMeter;
@@ -59,6 +60,8 @@ public class GameScreen extends BaseScreen {
     public static final Array<Bullet> activeBullets = new Array<Bullet>();
     public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
     private Button restartLevelButton;
+    private Button helpButton;
+    private HelpModalWindow helpModalWindow;
 
     private Array<GameObject> gameObjects = new Array<GameObject>();
 
@@ -71,10 +74,11 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(this);
 
         hud = new PlayerHud(this);
-        float buttonMargin = 10f;
+        float buttonMargin = 20f;
         float buttonSize = 80f;
-        restartLevelButton = new Button(LudumDare41.game.assets.refreshButton, hudCamera, hudCamera.viewportWidth - buttonMargin - buttonSize,buttonMargin + buttonSize);
-
+        helpButton = new Button(LudumDare41.game.assets.helpButton, hudCamera, hudCamera.viewportWidth - buttonMargin - buttonSize,buttonMargin);
+        restartLevelButton = new Button(LudumDare41.game.assets.refreshButton, hudCamera, hudCamera.viewportWidth - buttonMargin - buttonSize, buttonMargin + buttonSize);
+        helpModalWindow = new HelpModalWindow(hudCamera);
         setLevel(currentLevelNum);
         addPlayer();
 
@@ -300,7 +304,10 @@ public class GameScreen extends BaseScreen {
             batch.setColor(Color.WHITE);
             hud.render(batch);
             restartLevelButton.render(batch);
-
+            helpButton.render(batch);
+            if (helpModalWindow.isActive) {
+                helpModalWindow.render(batch);
+            }
         }
         batch.end();
     }
@@ -308,7 +315,12 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (!levelZoomDone) return false;
-
+        if (restartLevelButton.checkForTouch(screenX, screenY) && levelZoomDone) {
+            return true;
+        }
+        if (helpButton.checkForTouch(screenX, screenY)) {
+            return true;
+        }
         if (button == 0 && playerTank.ball.onTank){
             showPowerMeter = true;
         }
@@ -335,7 +347,14 @@ public class GameScreen extends BaseScreen {
                     .start(LudumDare41.game.tween);
             return true;
         }
+        else if (helpButton.checkForTouch(screenX, screenY)) {
+            helpModalWindow.show();
+            return true;
+        }
         else if (button == 0) {
+            if (helpModalWindow.isActive) {
+                helpModalWindow.hide();
+            }
             if (playerTank.ball.onTank && showPowerMeter) {
                 playerTank.shootBall(powerMeter.power);
             }
