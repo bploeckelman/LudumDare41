@@ -20,6 +20,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.ui.HelpModalWindow;
 import lando.systems.ld41.particles.ParticleSystem;
+import lando.systems.ld41.stats.GameStats;
 import lando.systems.ld41.ui.Button;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
@@ -401,7 +402,9 @@ public class GameScreen extends BaseScreen {
     private int treadIndex = 0;
 
     public void updateTank() {
-        // update tank look - temp
+
+
+            // update tank look - temp
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             if (++bodyIndex == tankBodies.length) {
                 bodyIndex = 0;

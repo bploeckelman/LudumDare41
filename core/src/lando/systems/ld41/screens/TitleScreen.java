@@ -25,6 +25,10 @@ public class TitleScreen extends BaseScreen {
         }
 
         // ...
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            game.setScreen(new ScoreCard());
+        }
     }
 
     @Override

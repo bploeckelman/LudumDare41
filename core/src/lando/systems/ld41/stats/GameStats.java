@@ -36,4 +36,41 @@ public class GameStats {
     public HoleStats getLevelStats(int level) {
         return gameStats[level];
     }
+
+    public int totalScore() {
+        int total = 0;
+        for (int i = 0; i < gameStats.length; i++) {
+            total += gameStats[i].score;
+        }
+        return total;
+    }
+
+    public String totalTime() {
+        double total = 0;
+        for (int i = 0; i < gameStats.length; i++) {
+            total += gameStats[i].timeMs;
+        }
+        long totalSeconds = (long)total/1000;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        return String.format("%d min %d sec", minutes, seconds);
+    }
+
+
+    public int totalDeaths() {
+        int total = 0;
+        for (int i = 0; i < gameStats.length; i++) {
+            total += gameStats[i].deaths;
+        }
+        return total;
+    }
+
+
+    public int totalKills() {
+        int total = 0;
+        for (int i = 0; i < gameStats.length; i++) {
+            total += gameStats[i].kills;
+        }
+        return total;
+    }
 }
