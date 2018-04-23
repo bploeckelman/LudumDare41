@@ -141,7 +141,7 @@ public class Ball {
     public void checkCollision(Tank tank){
         if (onTank || pickupDelay > 0) return;
         if (position.dst(tank.position) < radius + tank.radius){
-            onTank = true;
+            tank.pickupBall();
         }
     }
 

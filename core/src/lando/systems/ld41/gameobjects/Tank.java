@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,7 +33,6 @@ public class Tank extends GameObject {
     public float rotation;
     public float turretRotation;
     public Vector2 directionVector = new Vector2();
-    public Vector2 shotVector = new Vector2();
     public Vector2 tempVector;
 
     private TankAssets tank;
@@ -106,6 +104,10 @@ public class Tank extends GameObject {
             smoke = tank.smoke.getKeyFrame(time);
         } else {
             forceShield = tank.forceShield.getKeyFrame(time);
+        }
+
+        if (ball.onTank) {
+            directionLength = MathUtils.lerp(directionLength, 1f, dt);
         }
 
         ball.update(dt);
@@ -212,10 +214,14 @@ public class Tank extends GameObject {
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)){
             rotationDx = rotationSpeed*dt;
+            leftTime += dt;
+            rightTime -= dt;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             rotationDx = -rotationSpeed * dt;
+            leftTime -= dt;
+            rightTime += dt;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
@@ -294,15 +300,16 @@ public class Tank extends GameObject {
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
 
             batch.draw(tank.body, x, y, halfX, halfY, width, height, 1, 1, rotation);
-            batch.draw((recoilTime > 0) ? tank.turretRecoil : tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
 
             if (ball.onTank) {
-                directionVector.set(0, 1);
+                directionVector.set(0, directionLength);
                 directionVector.setAngle(turretRotation);
 
                 tempVector.set(position).add(directionVector.scl(30));
                 batch.draw(ball.image, position.x + directionVector.x - 5, position.y + directionVector.y - 5, 5, 5, 10, 10, 1, 1, turretRotation - 90);
             }
+
+            batch.draw((recoilTime > 0) ? tank.turretRecoil : tank.turret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
 
             if (hasShield) {
                 batch.setColor(1, 1, 1, 0.8f);
@@ -330,6 +337,13 @@ public class Tank extends GameObject {
                 dead = true;
             }
         }
+    }
+
+    private float directionLength = 1;
+
+    public void pickupBall() {
+        directionLength = 0.8f;
+        ball.onTank = true;
     }
 
     public void shootBall(float power){
