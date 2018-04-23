@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.accessors.RectangleAccessor;
 
 public abstract class ModalWindow {
@@ -105,7 +106,7 @@ public abstract class ModalWindow {
 //        // Draw outline
 //        batch.setColor(Color.WHITE);
 //        Assets.defaultNinePatch.draw(batch, modalRect.x, modalRect.y, modalRect.width, modalRect.height);
-        batch.setColor(Color.MAGENTA);
+        batch.setColor(Config.COLOR_DARK_GREEN);
         LudumDare41.game.assets.backplateNinePatch.draw(batch, modalRect.x, modalRect.y, modalRect.width, modalRect.height);
         batch.setColor(Color.WHITE);
 

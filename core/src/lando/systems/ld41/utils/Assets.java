@@ -90,9 +90,12 @@ public class Assets implements Disposable {
     public TextureRegion flag;
     public TextureRegion refreshButton;
     public TextureRegion helpButton;
-
     public Texture titleTexture;
     public TextureRegion ballSign;
+    public TextureRegion mouseMiddle;
+    public TextureRegion mouseLeft;
+    public TextureRegion keyWASD;
+    public TextureRegion keyRTFG;
 
     public Texture waterTexture;
     public Texture sandTexture;
@@ -207,6 +210,10 @@ public class Assets implements Disposable {
         enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
         pinballBumperOff = atlas.findRegion("pinballbumper-off");
         pinballBumperOn = atlas.findRegion("pinballbumper-on");
+        mouseLeft = atlas.findRegion("mouse-left");
+        mouseMiddle = atlas.findRegion("mouse-middle");
+        keyWASD = atlas.findRegion("keyboard-wasd");
+        keyRTFG = atlas.findRegion("keyboard-rtfg");
 
         titleTexture = mgr.get(titleTextureAsset);
         waterTexture = mgr.get(waterTextureAsset);
