@@ -44,6 +44,7 @@ public class Level {
     public Array<PinballBumper> pinballBumpers;
     public Array<EnemyTankInfo> enemyTankInfos;
     public Array<EnemyTurretInfo> enemyTurretInfos;
+    public Array<PowerupInfo> powerupInfos;
     public FinalBossInfo finalBossInfo;
     public Array<CatapultInfo> catapultInfos;
     public Array<Polygon> waterRegions;
@@ -97,6 +98,7 @@ public class Level {
         enemyTankInfos = new Array<EnemyTankInfo>();
         enemyTurretInfos = new Array<EnemyTurretInfo>();
         catapultInfos = new Array<CatapultInfo>();
+        powerupInfos = new Array<>();
         waterRegions = new Array<Polygon>();
         sandRegions = new Array<Polygon>();
         for (MapObject object : objects) {
@@ -149,6 +151,34 @@ public class Level {
                     x = props.get("x", Float.class);
                     y = props.get("y", Float.class);
                 }};
+            }
+            else if (type.equalsIgnoreCase("shield")){
+                powerupInfos.add(new PowerupInfo(){{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
+                    type = Pickup.PickupType.shield;
+                }});
+            }
+            else if (type.equalsIgnoreCase("camo")){
+                powerupInfos.add(new PowerupInfo(){{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
+                    type = Pickup.PickupType.camo;
+                }});
+            }
+            else if (type.equalsIgnoreCase("pontoon")){
+                powerupInfos.add(new PowerupInfo(){{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
+                    type = Pickup.PickupType.pontoon;
+                }});
+            }
+            else if (type.equalsIgnoreCase("star")){
+                powerupInfos.add(new PowerupInfo(){{
+                    x = props.get("x", Float.class);
+                    y = props.get("y", Float.class);
+                    type = Pickup.PickupType.invincible;
+                }});
             }
             else if (type.equalsIgnoreCase("water")) {
                 // NOTE: this will blow up if the polyline isn't closed

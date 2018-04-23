@@ -104,6 +104,9 @@ public class GameScreen extends BaseScreen {
             catapults.add(catapult);
             gameObjects.add(catapult);
         }
+        for (PowerupInfo info : level.powerupInfos){
+            pickups.add(new Pickup(this, info.type, info.x, info.y));
+        }
 
         showPowerMeter = false;
         for (EnemyTankInfo info : level.enemyTankInfos) {
@@ -447,10 +450,10 @@ public class GameScreen extends BaseScreen {
 
             // update tank look - temp
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-            addPickup(Pickup.PickupType.shield).position.set(200, 100);
-            addPickup(Pickup.PickupType.camo).position.set(300, 100);
-            addPickup(Pickup.PickupType.invincible).position.set(400, 100);
-            addPickup(Pickup.PickupType.pontoon).position.set(500, 100);
+//            addPickup(Pickup.PickupType.shield).position.set(200, 100);
+//            addPickup(Pickup.PickupType.camo).position.set(300, 100);
+//            addPickup(Pickup.PickupType.invincible).position.set(400, 100);
+//            addPickup(Pickup.PickupType.pontoon).position.set(500, 100);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             if (++bodyIndex == tankBodies.length) {
                 bodyIndex = 0;
@@ -534,11 +537,11 @@ public class GameScreen extends BaseScreen {
         activeBullets.add(b);
     }
 
-    public Pickup addPickup(Pickup.PickupType pickupType) {
-        Pickup pickup = new Pickup(this, pickupType);
-        pickups.add(pickup);
-        return pickup;
-    }
+//    public Pickup addPickup(Pickup.PickupType pickupType) {
+//        Pickup pickup = new Pickup(this, pickupType);
+//        pickups.add(pickup);
+//        return pickup;
+//    }
 
     public long getTime() {
         return (long)(System.currentTimeMillis() - time) / 1000;

@@ -24,7 +24,7 @@ public class Pickup extends GameObject {
 
     private PickupType type;
 
-    public Pickup(GameScreen screen, PickupType type) {
+    public Pickup(GameScreen screen, PickupType type, float x, float y) {
         this.screen = screen;
         this.type = type;
         position = new Vector2(100, 100);
