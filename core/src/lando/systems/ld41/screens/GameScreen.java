@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -117,11 +118,6 @@ public class GameScreen extends BaseScreen {
     }
 
     public void setLevel(int levelIndex) {
-        if (levelIndex == Config.HOLES) {
-            // endCondition
-            return;
-        }
-
         currentLevelNum = levelIndex;
 
         int mapIndex = levelIndex % LudumDare41.game.assets.levelNumberToFileNameMap.size;
@@ -232,16 +228,24 @@ public class GameScreen extends BaseScreen {
         LudumDare41.game.audio.playSound(Audio.Sounds.good_job);
         addStats(false);
         Tween.to(worldCamera, CameraAccessor.XYZ, 2f)
-                .target(level.hole.position.x, level.hole.position.y, .3f)
-                .setCallback(new TweenCallback() {
-                    @Override
-                    public void onEvent(int i, BaseTween<?> baseTween) {
-                        int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
-                        LudumDare41.game.setScreen(new GameScreen(nextLevelNum), LudumDare41.game.assets.circleCropShader, 1.4f);
-                    }
-                })
-                .start(LudumDare41.game.tween);
+            .target(level.hole.position.x, level.hole.position.y, .3f)
+            .setCallback(new TweenCallback() {
+                @Override
+                public void onEvent(int i, BaseTween<?> baseTween) {
+                    int maxLevel = Config.HOLES;
+                    int nextLevelNum = (currentLevelNum + 1);
+                    // cycle through maps if there are more holes and created
+                    int level = nextLevelNum % LudumDare41.game.assets.levelNumberToFileNameMap.size;
+                    BaseScreen screen = (nextLevelNum == maxLevel)
+                            ? new ScoreCard() : new GameScreen(level);
 
+                    ShaderProgram transition = (nextLevelNum == maxLevel)
+                            ? LudumDare41.game.assets.doomShader : LudumDare41.game.assets.circleCropShader;
+
+                    LudumDare41.game.setScreen(screen, transition, 1.4f);
+                }
+            })
+             .start(LudumDare41.game.tween);
     }
 
     private void addStats(boolean isDead) {

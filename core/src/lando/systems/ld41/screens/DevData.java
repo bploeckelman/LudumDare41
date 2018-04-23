@@ -9,12 +9,28 @@ public class DevData {
 
 
     public static DevData[] getDevData(int count, int holes) {
-        String[] devs = new String[] { "Brian", "Doug", "Jeffery", "Luke", "Troy", "Matt" };
         DevData[] data = new DevData[count];
         for (int i = 0; i < count; i++) {
-            data[i] = new DevData(devs[MathUtils.random(devs.length - 1)], holes);
+            data[i] = new DevData(getRandoDev(data), holes);
         }
         return data;
+    }
+
+    private static String getRandoDev(DevData[] data) {
+        String[] devs = new String[] { "Brian R", "Brian P", "Doug", "Jeffery", "Luke", "Troy", "Matt" };
+
+        String devName = "";
+        do {
+            devName = devs[MathUtils.random(devs.length - 1)];
+        } while (isDupName(devName, data));
+        return devName;
+    }
+
+    private static boolean isDupName(String name, DevData[] data) {
+        for (DevData dd : data) {
+            if (dd != null && dd.name == name) { return true; }
+        }
+        return false;
     }
 
     public String[] scores;
@@ -23,10 +39,20 @@ public class DevData {
 
     public DevData(String name, int count) {
         this.name = name;
+        int minScore = 1;
+        int maxScore = 3;
+        if (name == "Brian R") {
+            maxScore = 1;
+        } else if (name == "Doug") {
+            minScore = 10;
+            maxScore = 20;
+        }
+
+
         scores = new String[count];
         int totalScore = 0;
         for (int i = 0; i < count; i++) {
-            int score = MathUtils.random(1, 4);
+            int score = MathUtils.random(minScore, maxScore);
             scores[i] = Integer.toString(score);
             totalScore += score;
         }

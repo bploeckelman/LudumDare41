@@ -30,17 +30,16 @@ public class ScoreCard extends BaseScreen {
     private GlyphLayout layout = LudumDare41.game.assets.layout;
 
     public ScoreCard() {
-        gameStats = getStats();
+        gameStats = LudumDare41.game.gameStats;
         initializeGrid();
     }
 
-    private GameStats getStats() {
-        // return LudumDare41.game.gameStats;
+    public void setDemoStats() {
         GameStats gs = new GameStats();
         for (int i = 0; i < 9; i++) {
             gs.addStats(i, (float)MathUtils.random(20000, 2000000), MathUtils.random(20, 200), MathUtils.random(20, 200), MathUtils.randomBoolean(), MathUtils.random(2000, 200000000));
         }
-        return gs;
+        gameStats = gs;
     }
 
     private void initializeGrid() {
@@ -104,7 +103,8 @@ public class ScoreCard extends BaseScreen {
     }
 
     private String getScore(int index) {
-        return Integer.toString(gameStats.getLevelStats(index).score);
+        int score = gameStats.getLevelStats(index).score;
+        return (score > 0) ? Integer.toString(score) : "-";
     }
 
     private String getTotalScore() {
