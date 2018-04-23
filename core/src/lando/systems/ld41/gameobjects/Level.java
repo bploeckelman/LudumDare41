@@ -25,7 +25,7 @@ import lando.systems.ld41.screens.GameScreen;
 public class Level {
     public enum CollisionType {None, Wall, Bumper}
 
-    private boolean showDebug = true;
+    private boolean showDebug = false;
 
     public String name;
     public int par;
@@ -44,9 +44,9 @@ public class Level {
     public Array<EnemyTurretInfo> enemyTurretInfos;
     public Array<CatapultInfo> catapultInfos;
     public Array<Polygon> waterRegions;
-//    public Array<Polygon> sandRegions;
+    public Array<Polygon> sandRegions;
     public Array<PolygonSprite> waterSprites;
-//    public Array<PolygonSprite> sandSprites;
+    public Array<PolygonSprite> sandSprites;
 
     public Array<PolylineMapObject> boundaries;
     public PolylineMapObject exteriorBoundry;
@@ -94,7 +94,7 @@ public class Level {
         enemyTurretInfos = new Array<EnemyTurretInfo>();
         catapultInfos = new Array<CatapultInfo>();
         waterRegions = new Array<Polygon>();
-//        sandRegions = new Array<Polygon>();
+        sandRegions = new Array<Polygon>();
         for (MapObject object : objects) {
             final MapProperties props = object.getProperties();
             String type = (String) props.get("type");
@@ -148,9 +148,12 @@ public class Level {
                 Polygon polygon = new Polygon(polyline.getTransformedVertices());
                 waterRegions.add(polygon);
             }
-//            else if (type.equalsIgnoreCase("sand")) {
-//                sandRegions.add((PolylineMapObject) object);
-//            }
+            else if (type.equalsIgnoreCase("sand")) {
+                // NOTE: this will blow up if the polyline isn't closed
+                Polyline polyline = ((PolylineMapObject) object).getPolyline();
+                Polygon polygon = new Polygon(polyline.getTransformedVertices());
+                sandRegions.add(polygon);
+            }
         }
         if (tee == null) {
             throw new GdxRuntimeException("Map missing 'tee' object");
@@ -179,7 +182,7 @@ public class Level {
         waterSprites = new Array<PolygonSprite>();
         for (Polygon waterPoly : waterRegions) {
             PolygonRegion polyRegion = new PolygonRegion(
-                    LudumDare41.game.assets.testTexture,
+                    LudumDare41.game.assets.waterTextureRegion,
                     waterPoly.getTransformedVertices(),
                     triangulator.computeTriangles(waterPoly.getTransformedVertices()).toArray()
             );
@@ -187,17 +190,17 @@ public class Level {
             sprite.setOrigin(0, 0);
             waterSprites.add(sprite);
         }
-//        sandSprites = new Array<PolygonSprite>();
-//        for (Polygon sandPoly : sandRegions) {
-//            PolygonRegion polyRegion = new PolygonRegion(
-//                    LudumDare41.game.assets.testTexture,
-//                    sandPoly.getTransformedVertices(),
-//                    triangulator.computeTriangles(sandPoly.getTransformedVertices()).toArray()
-//            );
-//            PolygonSprite sprite = new PolygonSprite(polyRegion);
-//            sprite.setOrigin(0, 0);
-//            sandSprites.add(sprite);
-//        }
+        sandSprites = new Array<PolygonSprite>();
+        for (Polygon sandPoly : sandRegions) {
+            PolygonRegion polyRegion = new PolygonRegion(
+                    LudumDare41.game.assets.sandTextureRegion,
+                    sandPoly.getTransformedVertices(),
+                    triangulator.computeTriangles(sandPoly.getTransformedVertices()).toArray()
+            );
+            PolygonSprite sprite = new PolygonSprite(polyRegion);
+            sprite.setOrigin(0, 0);
+            sandSprites.add(sprite);
+        }
 
         circles = collisionLayer.getObjects().getByType(EllipseMapObject.class);
     }
@@ -225,9 +228,9 @@ public class Level {
             for (PolygonSprite sprite : waterSprites) {
                 sprite.draw(polys);
             }
-//            for (PolygonSprite sprite : sandSprites) {
-//                sprite.draw(polys);
-//            }
+            for (PolygonSprite sprite : sandSprites) {
+                sprite.draw(polys);
+            }
         }
         polys.end();
 

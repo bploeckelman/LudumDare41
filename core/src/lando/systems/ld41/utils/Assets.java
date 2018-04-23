@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.ShaderProgramLoader;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,6 +29,16 @@ public class Assets implements Disposable {
 
     // Initialize descriptors for all assets
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
+    private final AssetDescriptor<Texture> waterTextureAsset = new AssetDescriptor<Texture>("images/water.png", Texture.class, new TextureLoader.TextureParameter() {{
+        genMipMaps = true;
+        minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        magFilter = Texture.TextureFilter.Linear;
+    }});
+    private final AssetDescriptor<Texture> sandTextureAsset = new AssetDescriptor<Texture>("images/sand.png", Texture.class, new TextureLoader.TextureParameter() {{
+        genMipMaps = true;
+        minFilter = Texture.TextureFilter.MipMapLinearLinear;
+        magFilter = Texture.TextureFilter.Linear;
+    }});
     private final AssetDescriptor<BitmapFont> distanceFieldFontAsset = new AssetDescriptor<BitmapFont>("fonts/ubuntu.fnt", BitmapFont.class,
             new BitmapFontLoader.BitmapFontParameter() {{
                 genMipMaps = true;
@@ -74,6 +85,11 @@ public class Assets implements Disposable {
     public TextureRegion enemyTurretRecoil;
     public TextureRegion flag;
     public TextureRegion refreshButton;
+
+    public Texture waterTexture;
+    public Texture sandTexture;
+    public TextureRegion waterTextureRegion;
+    public TextureRegion sandTextureRegion;
 
     public NinePatch defaultNinePatch;
     public NinePatch transparentNinePatch;
@@ -123,6 +139,8 @@ public class Assets implements Disposable {
 
         mgr = new AssetManager();
         mgr.load(atlasAsset);
+        mgr.load(waterTextureAsset);
+        mgr.load(sandTextureAsset);
         mgr.load(distanceFieldFontAsset);
         mgr.load(distanceFieldShaderAsset);
         mgr.load(shaderBlindsAsset);
@@ -165,11 +183,17 @@ public class Assets implements Disposable {
         indicator = atlas.findRegion("indicator");
         flag = atlas.findRegion("flag");
         refreshButton = atlas.findRegion("refresh");
-
         enemyTurret = atlas.findRegion("greentankturret");
         enemyTurretRecoil = atlas.findRegion("greentankturretrecoil");
         pinballBumperOff = atlas.findRegion("pinballbumper-off");
         pinballBumperOn = atlas.findRegion("pinballbumper-on");
+
+        waterTexture = mgr.get(waterTextureAsset);
+        sandTexture = mgr.get(sandTextureAsset);
+        waterTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        sandTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        waterTextureRegion = new TextureRegion(waterTexture);
+        sandTextureRegion = new TextureRegion(sandTexture);
 
         defaultNinePatch = new NinePatch(atlas.findRegion("ninepatch"), 6, 6, 6, 6);
         transparentNinePatch = new NinePatch(atlas.findRegion("transparent-ninepatch"), 10, 10, 10, 10);

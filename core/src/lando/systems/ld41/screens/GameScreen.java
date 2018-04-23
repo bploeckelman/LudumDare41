@@ -174,6 +174,11 @@ public class GameScreen extends BaseScreen {
                 Gdx.app.log("OVERLAPS", "player tank overlaps with water: " + waterPoly.toString());
             }
         }
+        for (Polygon sandPoly : level.sandRegions) {
+            if (Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
+                Gdx.app.log("OVERLAPS", "player tank overlaps with sand: " + sandPoly.toString());
+            }
+        }
         checkShot();
     }
 
