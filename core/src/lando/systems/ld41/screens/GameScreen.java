@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -136,16 +137,6 @@ public class GameScreen extends BaseScreen {
 
         level.update(dt);
         updateTank();
-        final float velThreshold = 20f;
-        if (!playerTank.ball.onTank && !levelTransitioning && playerTank.ball.velocity.len() <= velThreshold) {
-            if (level.hole.isInside(playerTank.ball)) {
-                // TODO: fancy up the level transition
-                levelTransitioning = true;
-                addStats(false);
-                int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
-                LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
-            }
-        }
         updateObjects(dt);
 
         if (showPowerMeter) {
@@ -166,6 +157,51 @@ public class GameScreen extends BaseScreen {
         for (PinballBumper bumper : level.pinballBumpers) {
             bumper.checkForHit(playerTank);
         }
+        checkShot();
+    }
+
+    private Vector2 orthVector = new Vector2();
+    private void checkShot() {
+        Hole hole = level.hole;
+        Ball ball = playerTank.ball;
+        if (!(ball.visible && hole.isInside(ball))) { return; }
+
+        // scale by middle of hole
+        float spdScl = 1 - (0.15f* (1 - ball.holeCenterDist/(hole.width/2)));
+        //System.out.println("dist: " + ball.holeCenterDist + " spdScl " + spdScl);
+        ball.velocity.scl(spdScl);
+
+        float ballVelocity = ball.velocity.len();
+
+        if (ballVelocity < 10) {
+            ball.visible = false;
+            playerScores();
+        }
+
+        float x = ball.holeCenterDist / hole.width/2;
+        float spdMod = (0.01f*(1-x));
+
+        if (ballVelocity < 200) {
+            float scale = 5; //(1.2f - ((ballVelocity - 20) / 180));
+            //System.out.println("scale " + scale + " bv: " + ball.velocity.len() + "sclspd " + spdScl );
+
+            if (ball.holeCenterSide > 0) {
+                orthVector.set(-ball.velocity.y, ball.velocity.x);
+            } else {
+                orthVector.set(ball.velocity.y, -ball.velocity.y);
+            }
+            ball.velocity.add(orthVector.nor().scl(scale));
+        }
+
+        ball.velocity.scl(1 - spdMod);
+    }
+
+    private void playerScores() {
+        // TODO: fancy up the level transition
+        levelTransitioning = true;
+        addStats(false);
+        int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
+        LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
     }
 
     private void addStats(boolean isDead) {

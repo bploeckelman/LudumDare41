@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import lando.systems.ld41.LudumDare41;
@@ -33,6 +34,7 @@ public class Ball {
     private float accum;
 
     public TextureRegion image;
+    public boolean visible = true;
 
     public Ball(GameScreen screen, String ballImage){
         this.screen = screen;
@@ -61,7 +63,7 @@ public class Ball {
     }
 
     public void update(float dt){
-        if (onTank) return;
+        if (onTank || !visible) return;
         pickupDelay = Math.max(pickupDelay - dt, 0);
 
         oldPosition.set(position);
@@ -76,7 +78,7 @@ public class Ball {
             // r=d−2(d⋅n)n
             float dot = 2f * tempVector.dot(normal);
             tempVector.sub(dot * normal.x, dot * normal.y);
-            velocity.set(tempVector).nor().scl(currentSpeed);
+            setVelocity(tempVector.nor().scl(currentSpeed));
             newPosition.set(collisionPoint);
         }
 
@@ -89,6 +91,17 @@ public class Ball {
         position.set(newPosition);
 
         velocity.scl(.99f);
+    }
+
+    public float holeCenterDist;
+    public int holeCenterSide;
+    public void setVelocity(Vector2 vel) {
+        visible = true; // temp
+        velocity.set(vel);
+        Hole hole = screen.level.hole;
+        holeCenterDist = Intersector.distanceLinePoint(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.centerPos.x, hole.centerPos.y);
+        holeCenterSide = Intersector.pointLineSide(position.x, position.y, position.x + vel.x, position.y + vel.y, hole.centerPos.x, hole.centerPos.y);
+        //System.out.println("dist: " + holeCenterDist + " side: " + holeCenterSide);
     }
 
     public boolean isInWorldView()
@@ -105,7 +118,7 @@ public class Ball {
     }
 
     public void render(SpriteBatch batch){
-        if (onTank) return;
+        if (onTank || !visible) return;
 
         batch.draw(image, position.x -radius, position.y-radius, radius*2, radius*2);
 
@@ -117,7 +130,7 @@ public class Ball {
 
     public void shootBall(Vector2 position, Vector2 velocity){
         this.position.set(position);
-        this.velocity.set(velocity);
+        setVelocity(velocity);
         pickupDelay = 1f;
         onTank = false;
     }

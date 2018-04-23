@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -31,6 +32,7 @@ public class Tank extends GameObject {
     public float rotation;
     public float turretRotation;
     public Vector2 directionVector = new Vector2();
+    public Vector2 shotVector = new Vector2();
     public Vector2 tempVector;
 
     private TankAssets tank;

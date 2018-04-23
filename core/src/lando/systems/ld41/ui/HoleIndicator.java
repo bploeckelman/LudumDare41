@@ -34,7 +34,7 @@ public class HoleIndicator {
         if (!hole.isInWorldView(screen))
         {
             size = 35f + MathUtils.sin(accum * 8f) * 5;
-            tempVec.set(hole.pos);
+            tempVec.set(hole.centerPos);
             tempVec.sub(screen.playerTank.position);
             position.set(tempVec.nor().scl(250));
             position.add(screen.hudCamera.position.x, screen.hudCamera.position.y);

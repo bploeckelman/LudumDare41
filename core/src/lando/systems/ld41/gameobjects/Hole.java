@@ -10,31 +10,33 @@ import lando.systems.ld41.screens.GameScreen;
 
 public class Hole extends GameObject {
 
-    public Vector2 pos;
+    public Vector2 centerPos = new Vector2();
 
-    private float width;
+    public float width;
     private float height;
     private TextureRegion texture;
     private Vector3 tempVector3;
 
     public Hole(float x, float y) {
-        this.pos = new Vector2(x, y);
+        this.position = new Vector2(x, y);
         this.texture = LudumDare41.game.assets.hole;
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
         this.tempVector3 = new Vector3();
+
+        centerPos.set(x + width/2, y + height/2);
     }
 
     public boolean isInside(Ball ball) {
-        float dx = (pos.x + width  / 2f) - ball.position.x;
-        float dy = (pos.y + height / 2f) - ball.position.y;
+        float dx = centerPos.x - ball.position.x;
+        float dy = centerPos.y - ball.position.y;
         float d2 = dx*dx + dy*dy;
         return (d2 < (width * width / 4f)+ (ball.radius * ball.radius));
     }
 
     public boolean isInWorldView(GameScreen screen)
     {
-        tempVector3.set(pos.x, pos.y, 0);
+        tempVector3.set(centerPos.x, centerPos.y, 0);
         screen.worldCamera.project(tempVector3);
 
         return ((tempVector3.x > 0 && tempVector3.x < screen.hudCamera.viewportWidth && tempVector3.y > 0 && tempVector3.y < screen.hudCamera.viewportHeight));
@@ -46,7 +48,7 @@ public class Hole extends GameObject {
     @Override
     public void render(SpriteBatch batch) {
         batch.setColor(Color.ORANGE);
-        batch.draw(texture, pos.x, pos.y);
+        batch.draw(texture, position.x, position.y);
         batch.setColor(Color.WHITE);
     }
 }
