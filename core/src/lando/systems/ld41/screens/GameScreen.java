@@ -151,6 +151,9 @@ public class GameScreen extends BaseScreen {
             return;
         }
 
+        if (helpModalWindow.isActive) {
+            return;
+        }
         cameraTargetPos.set(playerTank.position, 0f);
         updateCamera();
         updateTank();
