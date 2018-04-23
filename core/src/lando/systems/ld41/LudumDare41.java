@@ -72,8 +72,6 @@ public class LudumDare41 extends ApplicationAdapter {
             assets = new Assets();
         }
 
-
-
         setScreen(new TitleScreen());
     }
 

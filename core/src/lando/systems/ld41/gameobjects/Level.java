@@ -3,6 +3,9 @@ package lando.systems.ld41.gameobjects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonRegion;
+import com.badlogic.gdx.graphics.g2d.PolygonSprite;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.*;
@@ -13,10 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
-import com.badlogic.gdx.math.Ellipse;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polyline;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import lando.systems.ld41.LudumDare41;
@@ -25,7 +25,7 @@ import lando.systems.ld41.screens.GameScreen;
 public class Level {
     public enum CollisionType {None, Wall, Bumper}
 
-    private boolean showDebug = false;
+    private boolean showDebug = true;
 
     public String name;
     public int par;
@@ -43,6 +43,10 @@ public class Level {
     public Array<EnemyTankInfo> enemyTankInfos;
     public Array<EnemyTurretInfo> enemyTurretInfos;
     public Array<CatapultInfo> catapultInfos;
+    public Array<Polygon> waterRegions;
+//    public Array<Polygon> sandRegions;
+    public Array<PolygonSprite> waterSprites;
+//    public Array<PolygonSprite> sandSprites;
 
     public Array<PolylineMapObject> boundaries;
     public PolylineMapObject exteriorBoundry;
@@ -50,8 +54,10 @@ public class Level {
     Vector2 tempVector;
     Vector2 tempVector2;
     GameScreen screen;
+    PolygonSpriteBatch polys;
 
     public Level(String mapFileName) {
+        polys = LudumDare41.game.assets.polys;
         tempVector = new Vector2();
         tempVector2 = new Vector2();
 
@@ -87,6 +93,8 @@ public class Level {
         enemyTankInfos = new Array<EnemyTankInfo>();
         enemyTurretInfos = new Array<EnemyTurretInfo>();
         catapultInfos = new Array<CatapultInfo>();
+        waterRegions = new Array<Polygon>();
+//        sandRegions = new Array<Polygon>();
         for (MapObject object : objects) {
             final MapProperties props = object.getProperties();
             String type = (String) props.get("type");
@@ -95,7 +103,7 @@ public class Level {
             if (type.equalsIgnoreCase("bumper")) {
                 pinballBumpers.add(new PinballBumper(props.get("x", Float.class), props.get("y", Float.class)));
             }
-            if (type.equalsIgnoreCase("tank")) {
+            else if (type.equalsIgnoreCase("tank")) {
                 if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on tank");
                 if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on tank");
                 if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on tank");
@@ -107,7 +115,7 @@ public class Level {
                     color  = props.get("color", String.class);
                 }});
             }
-            if (type.equalsIgnoreCase("turret")) {
+            else if (type.equalsIgnoreCase("turret")) {
                 if (props.get("x")      == null) throw new GdxRuntimeException("Missing 'x' property on turret");
                 if (props.get("y")      == null) throw new GdxRuntimeException("Missing 'y' property on turret");
                 if (props.get("facing") == null) throw new GdxRuntimeException("Missing 'facing' property on turret");
@@ -117,7 +125,7 @@ public class Level {
                     facing = props.get("facing", Integer.class);
                 }});
             }
-            if (type.equalsIgnoreCase("catapult")) {
+            else if (type.equalsIgnoreCase("catapult")) {
                 if (props.get("x") == null) throw new GdxRuntimeException("Missing 'x' property on catapult");
                 if (props.get("y") == null) throw new GdxRuntimeException("Missing 'y' property on catapult");
                 catapultInfos.add(new CatapultInfo() {{
@@ -125,15 +133,24 @@ public class Level {
                     y = props.get("y", Float.class);
                 }});
             }
-            if (type.equalsIgnoreCase("tee")) {
+            else if (type.equalsIgnoreCase("tee")) {
                 tee = new Tee(props.get("x", Float.class),
                               props.get("y", Float.class),
                               props.get("facing", Integer.class));
             }
-            if (type.equalsIgnoreCase("hole")) {
+            else if (type.equalsIgnoreCase("hole")) {
                 hole = new Hole(props.get("x", Float.class),
                                 props.get("y", Float.class));
             }
+            else if (type.equalsIgnoreCase("water")) {
+                // NOTE: this will blow up if the polyline isn't closed
+                Polyline polyline = ((PolylineMapObject) object).getPolyline();
+                Polygon polygon = new Polygon(polyline.getTransformedVertices());
+                waterRegions.add(polygon);
+            }
+//            else if (type.equalsIgnoreCase("sand")) {
+//                sandRegions.add((PolylineMapObject) object);
+//            }
         }
         if (tee == null) {
             throw new GdxRuntimeException("Map missing 'tee' object");
@@ -157,6 +174,31 @@ public class Level {
             throw new GdxRuntimeException("Forgot to add boundary layer to the map");
         }
 
+        // create polygon sprites for water and sand
+        EarClippingTriangulator triangulator = new EarClippingTriangulator();
+        waterSprites = new Array<PolygonSprite>();
+        for (Polygon waterPoly : waterRegions) {
+            PolygonRegion polyRegion = new PolygonRegion(
+                    LudumDare41.game.assets.testTexture,
+                    waterPoly.getTransformedVertices(),
+                    triangulator.computeTriangles(waterPoly.getTransformedVertices()).toArray()
+            );
+            PolygonSprite sprite = new PolygonSprite(polyRegion);
+            sprite.setOrigin(0, 0);
+            waterSprites.add(sprite);
+        }
+//        sandSprites = new Array<PolygonSprite>();
+//        for (Polygon sandPoly : sandRegions) {
+//            PolygonRegion polyRegion = new PolygonRegion(
+//                    LudumDare41.game.assets.testTexture,
+//                    sandPoly.getTransformedVertices(),
+//                    triangulator.computeTriangles(sandPoly.getTransformedVertices()).toArray()
+//            );
+//            PolygonSprite sprite = new PolygonSprite(polyRegion);
+//            sprite.setOrigin(0, 0);
+//            sandSprites.add(sprite);
+//        }
+
         circles = collisionLayer.getObjects().getByType(EllipseMapObject.class);
     }
 
@@ -176,6 +218,18 @@ public class Level {
     public void render(SpriteBatch batch, OrthographicCamera camera){
         mapRenderer.setView(camera);
         mapRenderer.render();
+
+        polys.setProjectionMatrix(camera.combined);
+        polys.begin();
+        {
+            for (PolygonSprite sprite : waterSprites) {
+                sprite.draw(polys);
+            }
+//            for (PolygonSprite sprite : sandSprites) {
+//                sprite.draw(polys);
+//            }
+        }
+        polys.end();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -209,6 +263,17 @@ public class Level {
                 for (int i = 0; i < circles.size; i++){
                     Ellipse circle = circles.get(i).getEllipse();
                     shapes.circle(circle.x + circle.height/2f, circle.y + circle.height/2f, circle.height / 2);
+                }
+
+                for (int j = 0; j < waterRegions.size; ++j) {
+                    Polygon boundary = waterRegions.get(j);
+                    int vertLength = boundary.getVertices().length;
+                    for (int i = 0; i < vertLength; i += 2) {
+                        tempVector.set(boundary.getTransformedVertices()[i], boundary.getTransformedVertices()[i + 1]);
+                        tempVector2.set(boundary.getTransformedVertices()[(i + 2) % vertLength],
+                                        boundary.getTransformedVertices()[(i + 3) % vertLength]);
+                        shapes.line(tempVector.x, tempVector.y, tempVector2.x, tempVector2.y);
+                    }
                 }
             }
             shapes.end();

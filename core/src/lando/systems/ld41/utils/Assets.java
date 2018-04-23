@@ -1,6 +1,5 @@
 package lando.systems.ld41.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntMap;
 import lando.systems.ld41.LudumDare41;
 
@@ -55,6 +53,7 @@ public class Assets implements Disposable {
 
     public SpriteBatch batch;
     public ShapeRenderer shapes;
+    public PolygonSpriteBatch polys;
     public GlyphLayout layout;
 
     public AssetManager mgr;
@@ -117,6 +116,7 @@ public class Assets implements Disposable {
 
         batch = new SpriteBatch();
         shapes = new ShapeRenderer();
+        polys = new PolygonSpriteBatch();
         layout = new GlyphLayout();
 
         initialized = false;
@@ -289,6 +289,7 @@ public class Assets implements Disposable {
         tankAnimations.clear();
         mgr.clear();
         font.dispose();
+        polys.dispose();
         shapes.dispose();
         batch.dispose();
     }
@@ -296,23 +297,6 @@ public class Assets implements Disposable {
     // ------------------------------------------------------------------------
     // Static helpers methods
     // ------------------------------------------------------------------------
-
-    private static ShaderProgram loadShader(String vertSourcePath, String fragSourcePath) {
-        ShaderProgram.pedantic = false;
-        ShaderProgram shaderProgram = new ShaderProgram(
-                Gdx.files.internal(vertSourcePath),
-                Gdx.files.internal(fragSourcePath));
-        ShaderProgram.pedantic = true;
-
-        if (!shaderProgram.isCompiled()) {
-            Gdx.app.error("LoadShader", "compilation failed:\n" + shaderProgram.getLog());
-            throw new GdxRuntimeException("LoadShader: compilation failed:\n" + shaderProgram.getLog());
-        } else {
-            Gdx.app.debug("LoadShader", "ShaderProgram compilation log:\n" + shaderProgram.getLog());
-        }
-
-        return shaderProgram;
-    }
 
     public static void drawString(SpriteBatch batch, String text,
                                   float x, float y, Color c, float scale, BitmapFont font) {
@@ -344,4 +328,5 @@ public class Assets implements Disposable {
     public static TextureRegion getImage(String imageKey) {
         return LudumDare41.game.assets.assetMap.get(imageKey);
     }
+
 }

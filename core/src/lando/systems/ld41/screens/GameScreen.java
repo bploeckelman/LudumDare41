@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -25,6 +27,7 @@ import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
 import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
+import lando.systems.ld41.utils.Utils;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
 
 
@@ -163,10 +166,13 @@ public class GameScreen extends BaseScreen {
             gameObj.update(dt);
         }
 
-
-
         for (PinballBumper bumper : level.pinballBumpers) {
             bumper.checkForHit(playerTank);
+        }
+        for (Polygon waterPoly : level.waterRegions) {
+            if (Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
+                Gdx.app.log("OVERLAPS", "player tank overlaps with water: " + waterPoly.toString());
+            }
         }
         checkShot();
     }
