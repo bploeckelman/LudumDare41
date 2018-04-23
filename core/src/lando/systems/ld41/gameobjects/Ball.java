@@ -72,7 +72,10 @@ public class Ball {
 
         Level.CollisionType collision = screen.level.checkCollision(oldPosition, newPosition, radius, collisionPoint, normal);
         if (collision != Level.CollisionType.None || checkCollisionWithEnemies()){
-            if (collision == Level.CollisionType.Bumper) velocity.scl(1.3f);
+            if (collision == Level.CollisionType.Bumper) {
+                velocity.scl(1.3f);
+                screen.screenShake.addDamage(.2f);
+            }
             float currentSpeed = velocity.len();
             tempVector.set(velocity);
             // r=d−2(d⋅n)n

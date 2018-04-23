@@ -316,6 +316,7 @@ public class Tank extends GameObject {
     }
 
     public void takeHit() {
+        screen.screenShake.addDamage(.4f);
         // todo play sounds for shield loss and explosion
         if (hasShield) {
             hasShield = false;
@@ -340,6 +341,7 @@ public class Tank extends GameObject {
         directionVector.scl(20 + (5 * power));
 
         isFirstBallFired = true;
+        screen.screenShake.addDamage(power/200f);
         ball.shootBall(tempVector, directionVector);
         shots++;
     }

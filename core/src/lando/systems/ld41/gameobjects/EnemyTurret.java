@@ -42,6 +42,7 @@ public class EnemyTurret extends GameObject{
 
     public void kill() {
         if (killingIt) return;
+        screen.screenShake.addDamage(.4f);
         killingIt = true;
         explodeAnimTime = 0f;
     }

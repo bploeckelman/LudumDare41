@@ -220,6 +220,7 @@ public class EnemyTank extends GameObject {
     public void kill() {
         if (killingIt) return;
         killingIt = true;
+        screen.screenShake.addDamage(.4f);
         explodeAnimTime = 0f;
     }
 

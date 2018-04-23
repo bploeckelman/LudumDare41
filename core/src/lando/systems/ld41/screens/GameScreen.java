@@ -20,6 +20,7 @@ import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.gameobjects.*;
 import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.PowerMeter;
+import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
@@ -48,6 +49,7 @@ public class GameScreen extends BaseScreen {
     private Vector2 bulletCollisionPoint;
     private Vector2 normal;
     private Vector2 tempVec;
+    public ScreenShakeCameraController screenShake;
 
     public static final Array<Bullet> activeBullets = new Array<Bullet>();
     public static final Pool<Bullet> bulletsPool = Pools.get(Bullet.class, 500);
@@ -96,6 +98,7 @@ public class GameScreen extends BaseScreen {
         worldCamera.update();
 
         this.levelTransitioning = false;
+        screenShake = new ScreenShakeCameraController(worldCamera);
         enterLevelZoom();
     }
 
@@ -124,7 +127,7 @@ public class GameScreen extends BaseScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new TitleScreen());
         }
-
+        screenShake.update(dt);
         hud.update(dt);
 
         if (!levelZoomDone){
@@ -226,9 +229,9 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClearColor(57f / 255f, 123f / 255f, 68f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        level.render(batch, worldCamera);
+        level.render(batch, screenShake.getViewCamera());
 
-        batch.setProjectionMatrix(worldCamera.combined);
+        batch.setProjectionMatrix(screenShake.getCombinedMatrix());
         batch.begin();
         {
             batch.setColor(Color.WHITE);
