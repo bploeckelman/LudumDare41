@@ -10,6 +10,7 @@ import lando.systems.ld41.screens.GameScreen;
 
 public class Hole extends GameObject {
 
+    private float holeScale = 1.2f;
     public float width;
     private float height;
     private TextureRegion texture;
@@ -20,8 +21,8 @@ public class Hole extends GameObject {
     public Hole(float x, float y) {
         this.position = new Vector2(x + width/2, y + height/2);
         this.texture = LudumDare41.game.assets.hole;
-        this.width = texture.getRegionWidth();
-        this.height = texture.getRegionHeight();
+        this.width = texture.getRegionWidth() * holeScale;
+        this.height = texture.getRegionHeight() * holeScale;
         this.tempVector3 = new Vector3();
 
         indicator = new Indicator(this, 15);
@@ -53,7 +54,7 @@ public class Hole extends GameObject {
     @Override
     public void render(SpriteBatch batch) {
         batch.setColor(Color.ORANGE);
-        batch.draw(texture, position.x - width/2, position.y - height/2);
+        batch.draw(texture, position.x - width/2, position.y - height/2, width, height);
         batch.setColor(Color.WHITE);
 
         if (!screen.levelZoomDone)
