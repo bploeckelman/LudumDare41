@@ -55,7 +55,6 @@ public class Tank extends GameObject {
     public boolean dead;
     public boolean onSand = false;
     public boolean onWater = false;
-    public boolean hasPontoons = true;
     public String tankName;
     public String treadType;
 
@@ -65,7 +64,7 @@ public class Tank extends GameObject {
 
     // pickups
     public boolean hasShield;
-    public boolean pontoonsAvailable;
+    public boolean hasPontoons = false;
     public boolean isInvincible = false;
     public boolean isVisible = true;
 
@@ -459,7 +458,7 @@ public class Tank extends GameObject {
                 invincibleTimer = 5;
                 break;
             case pontoon:
-                pontoonsAvailable = true;
+                hasPontoons = true;
                 break;
         }
     }
