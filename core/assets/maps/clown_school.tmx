@@ -23,6 +23,6 @@
  <objectgroup name="objects">
   <object id="3" type="tee" gid="183" x="160" y="1120" width="32" height="32"/>
   <object id="4" type="hole" gid="169" x="640" y="320" width="32" height="32"/>
-  <object id="5" gid="190" x="592" y="448" width="128" height="128"/>
+  <object id="5" type="boss" gid="190" x="592" y="448" width="128" height="128"/>
  </objectgroup>
 </map>
