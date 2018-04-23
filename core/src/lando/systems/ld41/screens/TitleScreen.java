@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import lando.systems.ld41.LudumDare41;
-import lando.systems.ld41.utils.Assets;
 import lando.systems.ld41.utils.Config;
 
 public class TitleScreen extends BaseScreen {
@@ -24,8 +23,6 @@ public class TitleScreen extends BaseScreen {
             game.setScreen(new LevelSelectScreen());
         }
 
-        // ...
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             ScoreCard card = new ScoreCard();
             card.setDemoStats();
@@ -42,15 +39,9 @@ public class TitleScreen extends BaseScreen {
         {
             batch.setColor(Config.bgColor);
             batch.draw(LudumDare41.game.assets.whitePixel,0,0, hudCamera.viewportWidth, hudCamera.viewportHeight);
-            batch.setColor(Color.DARK_GRAY);
-            batch.draw(game.assets.whitePixel, hudCamera.viewportWidth / 2f - 150f, hudCamera.viewportHeight / 2f - 150f, 300f, 300f);
 
             batch.setColor(Color.WHITE);
-            batch.draw(game.assets.testTexture, hudCamera.viewportWidth / 2f - 100f, hudCamera.viewportHeight / 2f - 100f, 200f, 200f);
-
-            batch.setColor(Color.WHITE);
-            Assets.drawString(batch, "Ludum Dare 41", 10f, hudCamera.viewportHeight - 20f, Color.CORAL, 1.25f, game.assets.font);
-            Assets.drawString(batch, "A Game of Jams", 10f, hudCamera.viewportHeight - 20f - 100f, Color.MAROON, 0.5f, game.assets.font);
+            batch.draw(game.assets.titleTexture, 0f, 0f, hudCamera.viewportWidth, hudCamera.viewportHeight);
         }
         batch.end();
     }

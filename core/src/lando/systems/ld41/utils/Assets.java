@@ -29,6 +29,7 @@ public class Assets implements Disposable {
 
     // Initialize descriptors for all assets
     private final AssetDescriptor<TextureAtlas> atlasAsset = new AssetDescriptor<TextureAtlas>("images/sprites.atlas", TextureAtlas.class);
+    private final AssetDescriptor<Texture> titleTextureAsset = new AssetDescriptor<Texture>("images/title.png", Texture.class);
     private final AssetDescriptor<Texture> waterTextureAsset = new AssetDescriptor<Texture>("images/water.png", Texture.class, new TextureLoader.TextureParameter() {{
         genMipMaps = true;
         minFilter = Texture.TextureFilter.MipMapLinearLinear;
@@ -87,7 +88,7 @@ public class Assets implements Disposable {
     public TextureRegion refreshButton;
     public TextureRegion helpButton;
 
-
+    public Texture titleTexture;
     public Texture waterTexture;
     public Texture sandTexture;
     public TextureRegion waterTextureRegion;
@@ -141,6 +142,7 @@ public class Assets implements Disposable {
 
         mgr = new AssetManager();
         mgr.load(atlasAsset);
+        mgr.load(titleTextureAsset);
         mgr.load(waterTextureAsset);
         mgr.load(sandTextureAsset);
         mgr.load(distanceFieldFontAsset);
@@ -197,6 +199,7 @@ public class Assets implements Disposable {
         pinballBumperOff = atlas.findRegion("pinballbumper-off");
         pinballBumperOn = atlas.findRegion("pinballbumper-on");
 
+        titleTexture = mgr.get(titleTextureAsset);
         waterTexture = mgr.get(waterTextureAsset);
         sandTexture = mgr.get(sandTextureAsset);
         waterTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
