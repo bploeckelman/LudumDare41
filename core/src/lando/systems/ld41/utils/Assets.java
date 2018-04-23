@@ -97,6 +97,12 @@ public class Assets implements Disposable {
     public TextureRegion keyWASD;
     public TextureRegion keyRTFG;
 
+    // pickups
+    public TextureRegion puCamo;
+    public TextureRegion puShield;
+    public TextureRegion puInvincible;
+    public TextureRegion puPontoon;
+
     public Texture waterTexture;
     public Texture sandTexture;
     public TextureRegion waterTextureRegion;
@@ -226,6 +232,11 @@ public class Assets implements Disposable {
         mouseMiddle = atlas.findRegion("mouse-middle");
         keyWASD = atlas.findRegion("keyboard-wasd");
         keyRTFG = atlas.findRegion("keyboard-rtfg");
+
+        puCamo = atlas.findRegion("pu-camo");
+        puInvincible = atlas.findRegion("pu-invincible");
+        puPontoon = atlas.findRegion("pu-pontoon");
+        puShield = atlas.findRegion("pu-shield");
 
         titleTexture = mgr.get(titleTextureAsset);
         waterTexture = mgr.get(waterTextureAsset);

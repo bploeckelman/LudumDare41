@@ -53,7 +53,6 @@ public class Tank extends GameObject {
     public PlayerBall ball;
     public boolean isFirstBallFired = false;
     public boolean dead;
-    public boolean hasShield;
     public boolean onSand = false;
     public boolean onWater = false;
     public boolean hasPontoons = true;
@@ -63,6 +62,15 @@ public class Tank extends GameObject {
     public int shots;
     public int deaths;
     public int health;
+
+    // pickups
+    public boolean hasShield;
+    public boolean pontoonsAvailable;
+    public boolean isInvincible = false;
+    public boolean isVisible = true;
+
+    private float invincibleTimer = 0;
+    private float camoTimer = 0;
 
     public Tank(GameScreen screen, String body, String treads) {
         this(screen, body, treads, 60, 60, new Vector2(100, 100));
@@ -122,6 +130,20 @@ public class Tank extends GameObject {
 
         ball.update(dt);
         ball.checkCollision(this);
+
+        updatePickups(dt);
+    }
+
+    private void updatePickups(float dt) {
+        if (camoTimer > 0) {
+            camoTimer -= dt;
+        }
+        isVisible = camoTimer <= 0;
+
+        if (invincibleTimer > 0) {
+            invincibleTimer -= dt;
+        }
+        isInvincible = invincibleTimer > 0;
     }
 
     private void handleMovement(float dt) {
@@ -348,10 +370,19 @@ public class Tank extends GameObject {
         float x = position.x - halfX;
         float y = position.y - halfY;
 
+        // can be invisibly dead
+        if (!isVisible) {
+            batch.setColor(1, 1, 1, 0.2f);
+        }
+
         if (dead) {
             batch.draw(tank.dead, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(tank.deadTurret, x, y, halfX, halfY, width, height, 1, 1, turretRotation - 90);
         } else {
+            if (isInvincible) {
+                batch.setColor(Color.RED);
+            }
+
             batch.draw(leftTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
             batch.draw(rightTread, x, y, halfX, halfY, width, height, 1, 1, rotation);
 
@@ -372,7 +403,13 @@ public class Tank extends GameObject {
                 batch.draw(forceShield, x - 15, y - 15, halfX + 15, halfY + 15, width + 30, height + 30, 1, 1, 0);
                 batch.setColor(Color.WHITE);
             }
+
+            //if (isInvincible) {
+            //    batch.draw(screen.game.assets.puInvincible, x - 15, y - 15, 0, 0, 10, 10, 1, 1, rotation);
+            //}
         }
+
+        batch.setColor(Color.WHITE);
         if (health < 2 && !hasShield){
             batch.draw(smoke, x, y, halfX, halfY, width, height, 1, 1, 0);
 
@@ -399,6 +436,23 @@ public class Tank extends GameObject {
     public void pickupBall() {
         directionLength = 0.8f;
         ball.onTank = true;
+    }
+
+    public void pickup(Pickup.PickupType type) {
+        switch (type) {
+            case shield:
+                hasShield = true;
+                break;
+            case camo:
+                camoTimer = 5;
+                break;
+            case invincible:
+                invincibleTimer = 5;
+                break;
+            case pontoon:
+                pontoonsAvailable = true;
+                break;
+        }
     }
 
     public void shootBall(PowerMeter meter){

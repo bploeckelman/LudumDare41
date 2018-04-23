@@ -63,6 +63,7 @@ public class GameScreen extends BaseScreen {
     private HelpModalWindow helpModalWindow;
 
     public Array<GameObject> gameObjects = new Array<GameObject>();
+    public Array<Pickup> pickups = new Array<Pickup>();
 
     private PlayerHud hud;
 
@@ -140,6 +141,15 @@ public class GameScreen extends BaseScreen {
         screenShake.update(dt);
         hud.update(dt);
         particleSystem.update(dt);
+
+        for (int i = pickups.size - 1; i >= 0; i--) {
+            Pickup pu = pickups.get(i);
+            pu.update(dt);
+            pu.checkCollision(playerTank);
+            if (!pu.visible) {
+                pickups.removeIndex(i);
+            }
+        }
 
         level.update(dt);
         if (!levelZoomDone){
@@ -280,6 +290,11 @@ public class GameScreen extends BaseScreen {
         {
             batch.setColor(Color.WHITE);
             particleSystem.renderGround(batch);
+
+            for (Pickup pu : pickups) {
+                pu.render(batch);
+            }
+
             for (GameObject gameObj : gameObjects) {
                 gameObj.render(batch);
             }
@@ -414,6 +429,11 @@ public class GameScreen extends BaseScreen {
 
             // update tank look - temp
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            addPickup(Pickup.PickupType.shield).position.set(200, 100);
+            addPickup(Pickup.PickupType.camo).position.set(300, 100);
+            addPickup(Pickup.PickupType.invincible).position.set(400, 100);
+            addPickup(Pickup.PickupType.pontoon).position.set(500, 100);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             if (++bodyIndex == tankBodies.length) {
                 bodyIndex = 0;
             }
@@ -493,5 +513,11 @@ public class GameScreen extends BaseScreen {
         Bullet b = bulletsPool.obtain();
         b.init(position, dir, owner, tex);
         activeBullets.add(b);
+    }
+
+    public Pickup addPickup(Pickup.PickupType pickupType) {
+        Pickup pickup = new Pickup(this, pickupType);
+        pickups.add(pickup);
+        return pickup;
     }
 }
