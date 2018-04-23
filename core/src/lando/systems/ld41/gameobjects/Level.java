@@ -3,10 +3,7 @@ package lando.systems.ld41.gameobjects;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.PolygonRegion;
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
@@ -232,6 +229,10 @@ public class Level {
         polys.begin();
         {
             for (PolygonSprite sprite : waterSprites) {
+                TextureRegion region = sprite.getRegion().getRegion();
+                region.setV(region.getV()+.01f);
+                region.setV2(region.getV2()+.01f);
+                sprite.setRegion(new PolygonRegion(region, sprite.getRegion().getVertices(), sprite.getRegion().getTriangles()));
                 sprite.draw(polys);
             }
             for (PolygonSprite sprite : sandSprites) {
