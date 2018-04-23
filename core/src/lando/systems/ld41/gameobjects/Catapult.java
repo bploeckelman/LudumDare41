@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Audio;
 
 
 public class Catapult extends GameObject {
@@ -48,6 +49,7 @@ public class Catapult extends GameObject {
     public void kill() {
         if (killingIt) return;
         screen.screenShake.addDamage(.4f);
+        LudumDare41.game.audio.playSound(Audio.Sounds.explosion);
         killingIt = true;
         explodeAnimTime = 0f;
     }
@@ -92,6 +94,8 @@ public class Catapult extends GameObject {
         bulletPosition.set(position.x, position.y);
         tempVec.set(playerTank.position.x - position.x, playerTank.position.y - position.y);
         screen.addBullet(this, bulletPosition, tempVec, Assets.getImage(Assets.Balls.Purple));
+        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
+
     }
 
     @Override

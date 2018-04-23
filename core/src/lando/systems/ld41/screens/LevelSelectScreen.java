@@ -135,7 +135,7 @@ public class LevelSelectScreen extends BaseScreen {
             } else if (currentLevelIdx != levels.size - 1 && arrowRightClickTarget.contains(screenX, screenY)) {
                 currentLevelIdx++;
             } else if (currentClickTarget.contains(unprojected.x, unprojected.y)) {
-                game.setScreen(new GameScreen(currentLevelIdx), LudumDare41.game.assets.circleCropShader, 1f);
+                game.setScreen(new GameScreen(currentLevelIdx), LudumDare41.game.assets.circleCropShader, 1.4f);
             }
         }
 

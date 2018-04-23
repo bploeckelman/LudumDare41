@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Audio;
 
 public class EnemyTurret extends GameObject{
     public static final float FIRE_RATE = 3;
@@ -43,6 +44,7 @@ public class EnemyTurret extends GameObject{
     public void kill() {
         if (killingIt) return;
         screen.screenShake.addDamage(.4f);
+        LudumDare41.game.audio.playSound(Audio.Sounds.explosion);
         killingIt = true;
         explodeAnimTime = 0f;
     }
@@ -77,6 +79,8 @@ public class EnemyTurret extends GameObject{
         if (!alive || killingIt) return;
         bulletPosition.set(position.x, position.y);
         screen.addBullet(this, bulletPosition, directionVector, Assets.getImage(Assets.Balls.Purple));
+        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
+
     }
 
     @Override

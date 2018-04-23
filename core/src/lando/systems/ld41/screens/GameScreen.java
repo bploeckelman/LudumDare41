@@ -22,6 +22,7 @@ import lando.systems.ld41.particles.ParticleSystem;
 import lando.systems.ld41.ui.Button;
 import lando.systems.ld41.ui.PowerMeter;
 import lando.systems.ld41.ui.screenshake.ScreenShakeCameraController;
+import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.TankAssets;
 import lando.systems.ld41.utils.accessors.CameraAccessor;
@@ -209,6 +210,7 @@ public class GameScreen extends BaseScreen {
         levelTransitioning = true;
         addStats(false);
         int nextLevelNum = ((currentLevelNum + 1) % LudumDare41.game.assets.levelNumberToFileNameMap.size);
+        LudumDare41.game.audio.playSound(Audio.Sounds.good_job);
         LudumDare41.game.setScreen(new GameScreen(nextLevelNum));
     }
 

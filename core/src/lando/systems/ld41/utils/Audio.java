@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.primitives.MutableFloat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import lando.systems.ld41.LudumDare41;
 
@@ -13,10 +14,10 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = 0.25f;
+    public static final float MUSIC_VOLUME = 0.15f;
 
     public enum Sounds {
-        sound1, sound2
+        explosion, good_job, lose_level, transition, shot, enemy_shot
     }
 
     public enum Musics {
@@ -30,23 +31,31 @@ public class Audio implements Disposable {
     public MutableFloat musicVolume;
 
     public Audio() {
-        this(false);
+        this(true);
     }
 
     public Audio(boolean playMusic) {
 //        sounds.put(Sounds.sound1, Gdx.audio.newSound(Gdx.files.internal("sounds/sound1.wav")));
-//        sounds.put(Sounds.sound2, Gdx.audio.newSound(Gdx.files.internal("sounds/sound2.wav")));
-//
-//        musics.put(Musics.music1, Gdx.audio.newMusic(Gdx.files.internal("sounds/music1.mp3")));
-//        musics.put(Musics.music2, Gdx.audio.newMusic(Gdx.files.internal("sounds/music2.mp3")));
-//        currentMusic = musics.get(Musics.music1);
-//        currentMusic.setLooping(true);
 
-        musicVolume = new MutableFloat(0);
+        sounds.put(Sounds.explosion, Gdx.audio.newSound(Gdx.files.internal("audio/explosion1.wav")));
+        sounds.put(Sounds.good_job, Gdx.audio.newSound(Gdx.files.internal("audio/good_job.wav")));
+        sounds.put(Sounds.lose_level, Gdx.audio.newSound(Gdx.files.internal("audio/lose_level.wav")));
+        sounds.put(Sounds.shot, Gdx.audio.newSound(Gdx.files.internal("audio/shot.wav")));
+        sounds.put(Sounds.enemy_shot, Gdx.audio.newSound(Gdx.files.internal("audio/shot2.wav")));
+        sounds.put(Sounds.transition, Gdx.audio.newSound(Gdx.files.internal("audio/transition.wav")));
+
+        musics.put(Musics.music1, Gdx.audio.newMusic(Gdx.files.internal("audio/song1.wav")));
+        musics.put(Musics.music2, Gdx.audio.newMusic(Gdx.files.internal("audio/song2.wav")));
+
+        currentMusic = MathUtils.randomBoolean() ? musics.get(Musics.music1) : musics.get(Musics.music2);
+        currentMusic.setLooping(false);
+        currentMusic.setVolume(MUSIC_VOLUME);
+        musicVolume = new MutableFloat(MUSIC_VOLUME);
         if (playMusic) {
             currentMusic.play();
             setMusicVolume(MUSIC_VOLUME, 2f);
         }
+        currentMusic.setOnCompletionListener(nextSong);
     }
 
     public void update(float dt){
@@ -109,4 +118,18 @@ public class Audio implements Disposable {
                 .start(LudumDare41.game.tween);
     }
 
+
+    public Music.OnCompletionListener nextSong = new Music.OnCompletionListener() {
+        @Override
+        public void onCompletion(Music music) {
+            if (currentMusic == musics.get(Musics.music1)){
+                currentMusic = musics.get(Musics.music2);
+            } else {
+                currentMusic = musics.get(Musics.music1);
+            }
+            currentMusic.setVolume(MUSIC_VOLUME);
+            currentMusic.play();
+            currentMusic.setOnCompletionListener(nextSong);
+        }
+    };
 }

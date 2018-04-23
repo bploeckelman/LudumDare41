@@ -9,8 +9,10 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.stats.HoleStats;
+import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.TankAssets;
 
 public class Tank extends GameObject {
@@ -316,6 +318,7 @@ public class Tank extends GameObject {
     }
 
     public void takeHit() {
+        if (health < 1) return;
         screen.screenShake.addDamage(.4f);
         // todo play sounds for shield loss and explosion
         if (hasShield) {
@@ -323,6 +326,7 @@ public class Tank extends GameObject {
         } else {
             health--;
             if (health < 1) {
+                LudumDare41.game.audio.playSound(Audio.Sounds.lose_level);
                 dead = true;
             }
         }
@@ -330,6 +334,8 @@ public class Tank extends GameObject {
 
     public void shootBall(float power){
         if (dead) return;
+        LudumDare41.game.audio.playSound(Audio.Sounds.shot);
+
         recoilTime = 0.3f;
         directionVector.set(0, 1);
         directionVector.setAngle(turretRotation);

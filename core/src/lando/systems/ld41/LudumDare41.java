@@ -53,14 +53,6 @@ public class LudumDare41 extends ApplicationAdapter {
 
         LudumDare41.game = this;
 
-        if (audio == null) {
-            audio = new Audio();
-        }
-
-        if (assets == null) {
-            assets = new Assets();
-        }
-
         if (tween == null) {
             tween = new TweenManager();
             Tween.setWaypointsLimit(4);
@@ -71,6 +63,16 @@ public class LudumDare41 extends ApplicationAdapter {
             Tween.registerAccessor(Vector3.class, new Vector3Accessor());
             Tween.registerAccessor(OrthographicCamera.class, new CameraAccessor());
         }
+
+        if (audio == null) {
+            audio = new Audio();
+        }
+
+        if (assets == null) {
+            assets = new Assets();
+        }
+
+
 
         setScreen(new TitleScreen());
     }
@@ -112,7 +114,7 @@ public class LudumDare41 extends ApplicationAdapter {
     }
 
     public void setScreen(final BaseScreen newScreen){
-        setScreen(newScreen, null, 1f);
+        setScreen(newScreen, null, 1.4f);
     }
 
     public void setScreen(final BaseScreen newScreen, ShaderProgram transitionType, float transitionSpeed){
@@ -121,6 +123,7 @@ public class LudumDare41 extends ApplicationAdapter {
             screen = newScreen;
             Gdx.input.setInputProcessor(screen);
         } else { // transition
+            audio.playSound(Audio.Sounds.transition);
             Gdx.input.setInputProcessor(null);
             if (transitionType == null) {
                 transitionShader = assets.randomTransitions.get(MathUtils.random(assets.randomTransitions.size-1));

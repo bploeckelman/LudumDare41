@@ -19,6 +19,7 @@ import lando.systems.ld41.ai.states.WaitState;
 import lando.systems.ld41.ai.states.WanderState;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.TankAssets;
 
 public class EnemyTank extends GameObject {
@@ -221,6 +222,7 @@ public class EnemyTank extends GameObject {
         if (killingIt) return;
         killingIt = true;
         screen.screenShake.addDamage(.4f);
+        LudumDare41.game.audio.playSound(Audio.Sounds.explosion);
         explodeAnimTime = 0f;
     }
 
@@ -377,6 +379,7 @@ public class EnemyTank extends GameObject {
         directionVector.nor();
         screen.particleSystem.addBarrelSmoke(tempVec.x, tempVec.y, directionVector.x, directionVector.y);
 
+        LudumDare41.game.audio.playSound(Audio.Sounds.enemy_shot);
 
         screen.addBullet(this, tempVec, directionVector, bulletTexture );
 //        ball.shootBall(tempVector, directionVector);
