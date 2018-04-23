@@ -10,9 +10,9 @@ import lando.systems.ld41.utils.Assets;
 
 
 public class Catapult extends GameObject {
-    public final float FIRE_RATE = 7;
-    public final float TURRET_WIDTH = 50;
-    public final float TURRET_HEIGHT = 50;
+    public static final float FIRE_RATE = 7;
+    public static final float TURRET_WIDTH = 50;
+    public static final float TURRET_HEIGHT = 50;
 
     public Vector2 position;
     public Vector2 directionVector;
@@ -68,7 +68,6 @@ public class Catapult extends GameObject {
         else {
             catapultFrame = LudumDare41.game.assets.catapultAnimation.getKeyFrame(2);
         }
-
     }
 
     public void updateBullet(float dt) {

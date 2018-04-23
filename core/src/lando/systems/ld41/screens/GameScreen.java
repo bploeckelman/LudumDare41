@@ -71,7 +71,6 @@ public class GameScreen extends BaseScreen {
 
         gameObjects.add(playerTank);
         for (EnemyTurretInfo info : level.enemyTurretInfos) {
-            // TODO: shift pos to center?
             Vector2 position = new Vector2(info.x + EnemyTurret.TURRET_WIDTH / 2f, info.y + EnemyTurret.TURRET_HEIGHT / 2f);
             Vector2 direction = new Vector2(0f, 1f).rotate(info.facing);
             EnemyTurret turret = new EnemyTurret(this, playerTank, position, direction);
@@ -80,8 +79,8 @@ public class GameScreen extends BaseScreen {
             gameObjects.add(turret);
         }
         for (CatapultInfo info : level.catapultInfos) {
-            // TODO: shift pos to center?
-            Catapult catapult = new Catapult(this, playerTank, new Vector2(info.x, info.y));
+            Vector2 position = new Vector2(info.x + Catapult.TURRET_WIDTH / 2f, info.y + Catapult.TURRET_HEIGHT / 2f);
+            Catapult catapult = new Catapult(this, playerTank, position);
             catapults.add(catapult);
             gameObjects.add(catapult);
         }
