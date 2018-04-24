@@ -5,7 +5,11 @@
 - ** [Desktop/Java !!TODO!! ](https://lando.systems/games/ld40-litterburg/ld41-putt-putt-boom.jar) **
 - ** [Source](https://github.com/bploeckelman/LudumDare41) **
 
-The year is 2048. International relations have soured. The only form of diplomacy in this brutal world is tank-based mini-golf.
+The year is 2048 and *international relations* are in *tatters* ??
+
+The only remaining form of diplomacy is **tank-based mini-golf**
+
+*Diplomats, to your vehicles!*
 
 ![putt-putt-boom-title.gif](///raw/103/z/1285d.gif)
 
@@ -18,6 +22,7 @@ The year is 2048. International relations have soured. The only form of diplomac
 - ** Mouse scroll ** Zoom on the map
 - ** WASD ** Basic control of the tank
 - ** TRFG ** Advanced control of the tank using individual treads
+- ** Escape ** Go back to level select screen
 
 ![screenshot1.jpg](///raw/103/z/12993.jpg)
 
@@ -30,9 +35,9 @@ Here's the general flow of the game:
 - A classic game of Mini Golf, but with tanks... and turrets... and catapults... and maybe one really big tank.
 - Get the ball in the hole to complete the level.
 - Aim with the mouse cursor and left click to charge fire the ball.
-- Each death, including resets, counts as 2 shots.
+- Each death, including resets, is a two stroke penalty.
 - Enemy turrets will only fire in a set direction.  Catapults, on the other hand, will aim and attack when you are in sight.
-- ** You can't move when you have the ball**, so timing is crucial.
+- Like normal golf ** You can't move when you have the ball**, so timing is crucial.
 - Pick up powerful power-ups to assist you in your relaxing time on the greens.
 
 ![screenshot4.jpg](///raw/103/z/1299f.jpg)
@@ -53,6 +58,7 @@ Code:
 - Brian Rossman
 - Jeffrey Hwang
 - Brandon Humboldt
+- Colin Kennedy
 
 Art:
 - Matt Neumann
@@ -70,3 +76,4 @@ Support Shiba:
 
 
 We hope you enjoy playing the game as much as we did making it! :fingers_crossed:
+
