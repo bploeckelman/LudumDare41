@@ -113,7 +113,9 @@ public class Audio implements Disposable {
         if (soundOption == Sounds.explosion) {
             soundOption = MathUtils.randomBoolean() ? Sounds.explosion1 : Sounds.explosion2;
         }
-        return sounds.get(soundOption).play(1f);
+
+        Sound s = sounds.get(soundOption);
+        return (s != null) ? s.play(1f) : 0;
     }
 
     public void playMusic(Musics musicOption) {

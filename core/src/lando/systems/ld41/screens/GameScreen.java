@@ -220,14 +220,15 @@ public class GameScreen extends BaseScreen {
 
         // scale by middle of hole
         float spdScl = 1 - (0.15f* (1 - ball.holeCenterDist/(hole.width/2)));
-        //System.out.println("dist: " + ball.holeCenterDist + " spdScl " + spdScl);
+        System.out.println("dist: " + ball.holeCenterDist + " spdScl " + spdScl);
         ball.velocity.scl(spdScl);
 
         float ballVelocity = ball.velocity.len();
 
-        if (ballVelocity < 10) {
+        if (ballVelocity < 15) {
             ball.visible = false;
             playerScores();
+            return;
         }
 
         float x = ball.holeCenterDist / hole.width/2;

@@ -74,7 +74,7 @@ public class TitleScreen extends BaseScreen {
         if (allowTouch && Gdx.input.justTouched()) {
             game.setScreen(new LevelSelectScreen());
         }
-
+/*
         if (Gdx.app.getType() == Application.ApplicationType.Desktop && Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             ScoreCard card = new ScoreCard();
             card.setDemoStats();
@@ -85,6 +85,7 @@ public class TitleScreen extends BaseScreen {
             EndScreen screen = new EndScreen();
             game.setScreen(screen);
         }
+        */
     }
 
     @Override
