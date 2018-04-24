@@ -479,7 +479,6 @@ public class Tank extends GameObject {
         if (dead) return;
 
         float power = meter.power;
-        LudumDare41.game.audio.playSound(Audio.Sounds.shot);
 
         recoilTime = 0.3f;
         directionVector.set(0, 1);
@@ -492,6 +491,11 @@ public class Tank extends GameObject {
         if (power > 90){
             meter.setSuperShot();
             screen.particleSystem.addBarrelSparks(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
+            LudumDare41.game.audio.playSound(Audio.Sounds.sassy_boom);
+
+        } else {
+            LudumDare41.game.audio.playSound(Audio.Sounds.shot);
+
         }
         directionVector.scl(20 + (8 * power));
 
