@@ -491,7 +491,7 @@ public class Tank extends GameObject {
         if (power > 90){
             meter.setSuperShot();
             screen.particleSystem.addBarrelSparks(tempVector.x, tempVector.y, directionVector.x, directionVector.y);
-            LudumDare41.game.audio.playSound(Audio.Sounds.sassy_boom);
+            LudumDare41.game.audio.playSound(Audio.Sounds.full_power);
 
         } else {
             LudumDare41.game.audio.playSound(Audio.Sounds.shot);

@@ -25,7 +25,7 @@ public class Audio implements Disposable {
         shot, shot1, shot2, shot3,
         pew,
         splash, splash1, splash2,
-        pop, in_the_hole, full_power
+        pop, in_the_hole, noice, full_power
     }
 
     public enum Musics {
@@ -54,7 +54,7 @@ public class Audio implements Disposable {
         sounds.put(Sounds.pop, Gdx.audio.newSound(Gdx.files.internal("audio/beer-bottle-pop.mp3")));
         sounds.put(Sounds.in_the_hole, Gdx.audio.newSound(Gdx.files.internal("audio/yay.mp3")));
         sounds.put(Sounds.transition, Gdx.audio.newSound(Gdx.files.internal("audio/transition.mp3")));
-        sounds.put(Sounds.full_power, Gdx.audio.newSound(Gdx.files.internal("audio/noice.mp3")));
+        sounds.put(Sounds.noice, Gdx.audio.newSound(Gdx.files.internal("audio/noice.mp3")));
         sounds.put(Sounds.bumper, Gdx.audio.newSound(Gdx.files.internal("audio/bumper.mp3")));
         sounds.put(Sounds.sassy_boom, Gdx.audio.newSound(Gdx.files.internal("audio/bewmmm.mp3")));
         sounds.put(Sounds.pew, Gdx.audio.newSound(Gdx.files.internal("audio/pew.mp3")));
@@ -100,6 +100,9 @@ public class Audio implements Disposable {
         if (shutUpYourFace) return -1;
         if (soundOption == Sounds.splash) {
             soundOption = MathUtils.randomBoolean() ? Sounds.splash1 : Sounds.splash2;
+        }
+        if (soundOption == Sounds.full_power) {
+            soundOption = MathUtils.randomBoolean() ? Sounds.sassy_boom : Sounds.noice;
         }
         if (soundOption == Sounds.shot) {
             int id = MathUtils.random(1, 3);
