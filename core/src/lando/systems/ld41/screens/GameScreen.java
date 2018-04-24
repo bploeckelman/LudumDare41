@@ -160,6 +160,9 @@ public class GameScreen extends BaseScreen {
             }
         }
 
+        // debug
+        //updateTank();
+
         level.update(dt);
         if (!levelZoomDone){
             worldCamera.update();
@@ -444,16 +447,14 @@ public class GameScreen extends BaseScreen {
     private int bodyIndex = 0;
     private int treadIndex = 0;
 
-    /*
+/*
     public void updateTank() {
-
-
-            // update tank look - temp
+        // update tank look - temp
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
-//            addPickup(Pickup.PickupType.shield).position.set(200, 100);
-//            addPickup(Pickup.PickupType.camo).position.set(300, 100);
-//            addPickup(Pickup.PickupType.invincible).position.set(400, 100);
-//            addPickup(Pickup.PickupType.pontoon).position.set(500, 100);
+            addPickup(Pickup.PickupType.shield, 200, 100);
+            addPickup(Pickup.PickupType.camo, 300, 100);
+            addPickup(Pickup.PickupType.invincible, 400, 100);
+            addPickup(Pickup.PickupType.pontoon, 500, 100);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             if (++bodyIndex == tankBodies.length) {
                 bodyIndex = 0;
@@ -537,11 +538,13 @@ public class GameScreen extends BaseScreen {
         activeBullets.add(b);
     }
 
-//    public Pickup addPickup(Pickup.PickupType pickupType) {
-//        Pickup pickup = new Pickup(this, pickupType);
-//        pickups.add(pickup);
-//        return pickup;
-//    }
+    /*
+    public Pickup addPickup(Pickup.PickupType pickupType, float x, float y) {
+        Pickup pickup = new Pickup(this, pickupType, x, y);
+        pickups.add(pickup);
+        return pickup;
+    }
+    */
 
     public long getTime() {
         return (long)(System.currentTimeMillis() - time) / 1000;

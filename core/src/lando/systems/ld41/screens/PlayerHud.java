@@ -105,25 +105,26 @@ public class PlayerHud {
         drawString(batch, "Time:", x, y);
         drawString(batch, timeText, x + 45, y);
 
-        y -= 50;
+        x = hudCamera.viewportWidth - width - padding;
+        y -= 45;
         if (player.isInvincible) {
             batch.setColor(getColor(player.invincibleTimer));
-            batch.draw(LudumDare41.game.assets.puInvincible, x + 8, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.draw(LudumDare41.game.assets.puInvincible, x + 8, y, 0, 0, 20, 20, 1, 1, 0);
             batch.setColor(Color.WHITE);
         }
 
         if (!player.isVisible) {
             batch.setColor(getColor(player.camoTimer));
-            batch.draw(LudumDare41.game.assets.puCamo, x + 36, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.draw(LudumDare41.game.assets.puCamo, x + 36, y, 0, 0, 20, 20, 1, 1, 0);
             batch.setColor(Color.WHITE);
         }
 
         if (player.hasPontoons) {
-            batch.draw(LudumDare41.game.assets.puPontoon, x + 92, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.draw(LudumDare41.game.assets.puPontoon, x + 92, y, 0, 0, 20, 20, 1, 1, 0);
         }
 
         if (player.hasShield) {
-            batch.draw(LudumDare41.game.assets.puShield, x + 64, y, 0, 0, 20, 20, 1, 1, 45);
+            batch.draw(LudumDare41.game.assets.puShield, x + 64, y, 0, 0, 20, 20, 1, 1, 0);
         }
     }
 

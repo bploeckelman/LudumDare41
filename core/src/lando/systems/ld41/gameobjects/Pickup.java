@@ -27,7 +27,7 @@ public class Pickup extends GameObject {
     public Pickup(GameScreen screen, PickupType type, float x, float y) {
         this.screen = screen;
         this.type = type;
-        position = new Vector2(100, 100);
+        position = new Vector2(x, y);
         radius = 16;
 
         Assets assets = LudumDare41.game.assets;
@@ -62,7 +62,7 @@ public class Pickup extends GameObject {
         if (!visible) return;
 
         float scale = 0.825f + MathUtils.sin(accum * 4f) * 0.125f;
-        batch.draw(image, position.x - 16, position.y - 16, 16, 16, 32, 32, scale, scale, 45);
+        batch.draw(image, position.x - 16, position.y - 16, 16, 16, 32, 32, scale, scale, 0);
     }
 
     public void checkCollision(Tank tank){
