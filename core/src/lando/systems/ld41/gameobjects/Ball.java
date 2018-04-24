@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import lando.systems.ld41.LudumDare41;
 import lando.systems.ld41.screens.GameScreen;
 import lando.systems.ld41.utils.Assets;
+import lando.systems.ld41.utils.Audio;
 
 public class Ball extends GameObject {
 
@@ -69,6 +71,7 @@ public class Ball extends GameObject {
             if (collision == Level.CollisionType.Bumper) {
                 velocity.scl(1.3f);
                 screen.screenShake.addDamage(.2f);
+                LudumDare41.game.audio.playSound(Audio.Sounds.bumper);
             }
             float currentSpeed = velocity.len();
             tempVector.set(velocity);
@@ -82,7 +85,7 @@ public class Ball extends GameObject {
         // handle water with slow velocity, sink the ball, make a splash sound, re-drop it at the tee
         float tooSlowVel2 = 5000f;
         if ((collision == Level.CollisionType.Water || onWater) && velocity.len2() < tooSlowVel2) {
-            // TODO: splash sound
+            LudumDare41.game.audio.playSound(Audio.Sounds.splash);
             screen.particleSystem.addWaterSplash(position.x, position.y, 0f, 0f);
             newPosition.set(screen.level.tee.pos);
             velocity.set(0f, 0f);

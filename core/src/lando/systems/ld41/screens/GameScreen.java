@@ -252,7 +252,7 @@ public class GameScreen extends BaseScreen {
         // TODO: fancy up the level transition
         if (!levelZoomDone) return;
         levelZoomDone = false;
-        LudumDare41.game.audio.playSound(Audio.Sounds.good_job);
+        LudumDare41.game.audio.playSound(Audio.Sounds.in_the_hole);
         addStats(false);
         removeAllBullets();
         Tween.to(worldCamera, CameraAccessor.XYZ, 2f)

@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = 0.3f;
+    public static final float MUSIC_VOLUME = 0.4f;
     public static final boolean shutUpYourFace = false;
-    public static final boolean shutUpYourTunes = true;
+    public static final boolean shutUpYourTunes = false;
 
     public enum Sounds {
         explosion, explosion1, explosion2,
@@ -59,10 +59,10 @@ public class Audio implements Disposable {
         sounds.put(Sounds.sassy_boom, Gdx.audio.newSound(Gdx.files.internal("audio/bewmmm.mp3")));
         sounds.put(Sounds.pew, Gdx.audio.newSound(Gdx.files.internal("audio/pew.mp3")));
 
-        musics.put(Musics.music1, Gdx.audio.newMusic(Gdx.files.internal("audio/song1.wav")));
-        musics.put(Musics.music2, Gdx.audio.newMusic(Gdx.files.internal("audio/song2.wav")));
+        musics.put(Musics.music1, Gdx.audio.newMusic(Gdx.files.internal("audio/song1.mp3")));
+        musics.put(Musics.music2, Gdx.audio.newMusic(Gdx.files.internal("audio/song2.mp3")));
 
-        currentMusic = MathUtils.randomBoolean() ? musics.get(Musics.music1) : musics.get(Musics.music2);
+        currentMusic = musics.get(Musics.music1);
         currentMusic.setLooping(false);
         currentMusic.setVolume(MUSIC_VOLUME);
         musicVolume = new MutableFloat(MUSIC_VOLUME);
