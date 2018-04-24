@@ -12,6 +12,7 @@ public class DesktopLauncher {
         config.height = Config.gameHeight;
         config.resizable = Config.resizable;
         config.samples = 4;
+        config.title = "Putt-Putt Boom";
         new LwjglApplication(new LudumDare41(), config);
     }
 }
