@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.utils.Audio;
 import lando.systems.ld41.utils.Config;
 import lando.systems.ld41.utils.accessors.Vector2Accessor;
 
@@ -44,6 +45,12 @@ public class TitleScreen extends BaseScreen {
                 .pushPause(.3f)
                 .push(Tween.set(alpha, 1)
                         .target(1))
+                .push(Tween.call(new TweenCallback() {
+                    @Override
+                    public void onEvent(int i, BaseTween<?> baseTween) {
+                        LudumDare41.game.audio.playSound(Audio.Sounds.explosion2);
+                    }
+                }))
                 .push(Tween.set(boomSize, 1)
                         .target(1))
                 .push(Tween.to(alpha, 1, .5f)
