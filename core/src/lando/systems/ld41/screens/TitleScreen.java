@@ -72,6 +72,7 @@ public class TitleScreen extends BaseScreen {
             Gdx.app.exit();
         }
         if (allowTouch && Gdx.input.justTouched()) {
+            allowTouch = false;
             game.setScreen(new LevelSelectScreen());
         }
 /*
