@@ -34,8 +34,8 @@
   <object id="41" type="catapult" gid="171" x="448" y="384" width="32" height="32"/>
   <object id="45" type="bumper" gid="184" x="416" y="288" width="32" height="32"/>
   <object id="46" type="bumper" gid="184" x="224" y="288" width="32" height="32"/>
-  <object id="48" type="water" x="256" y="864">
-   <polyline points="0,0 160,0 160,-160 0,-160 0,0"/>
+  <object id="48" type="water" x="272" y="864">
+   <polyline points="0,0 128,0 128,-224 0,-224 0,0"/>
   </object>
   <object id="49" type="pontoon" gid="172" x="320" y="896" width="32" height="32"/>
   <object id="50" type="sand" x="328" y="448">
