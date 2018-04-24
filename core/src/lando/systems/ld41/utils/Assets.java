@@ -198,18 +198,12 @@ public class Assets implements Disposable {
         levelNumberToFileNameMap.put(3, "maps/troysholeshole4.tmx");
         levelNumberToFileNameMap.put(4, "maps/troysholeshole5.tmx");
         levelNumberToFileNameMap.put(5, "maps/troysholeshole6.tmx");
-        levelNumberToFileNameMap.put(6, "maps/troysholeshole8.tmx");
-        levelNumberToFileNameMap.put(7, "maps/troysholeshole9.tmx");
-        levelNumberToFileNameMap.put(8, "maps/troysholeshole10.tmx");
-        levelNumberToFileNameMap.put(9, "maps/troysholeshole11.tmx");
-        levelNumberToFileNameMap.put(10, "maps/troysholeshole12.tmx");
-        levelNumberToFileNameMap.put(11, "maps/troysholeshole13.tmx");
-        levelNumberToFileNameMap.put(12, "maps/troysholeshole14.tmx");
-        levelNumberToFileNameMap.put(13, "maps/troysholeshole15.tmx");
-        levelNumberToFileNameMap.put(14, "maps/troysholeshole16.tmx");
-        levelNumberToFileNameMap.put(15, "maps/troysholeshole17.tmx");
-        levelNumberToFileNameMap.put(16, "maps/troysholeshole18.tmx");
-        levelNumberToFileNameMap.put(17, "maps/clown_school.tmx");
+        levelNumberToFileNameMap.put(6, "maps/troysholeshole10.tmx");
+        levelNumberToFileNameMap.put(7, "maps/troysholeshole11.tmx");
+        levelNumberToFileNameMap.put(8, "maps/troysholeshole12.tmx");
+//        levelNumberToFileNameMap.put(11, "maps/troysholeshole13.tmx");
+//        levelNumberToFileNameMap.put(14, "maps/troysholeshole16.tmx");
+        levelNumberToFileNameMap.put(9, "maps/clown_school.tmx");
 
         if (loading == Loading.SYNC) {
             mgr.finishLoading();
