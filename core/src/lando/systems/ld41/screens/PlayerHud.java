@@ -23,13 +23,16 @@ public class PlayerHud {
     private NinePatch border = LudumDare41.game.assets.backplateNinePatch;
 
     private int score = -1;
-    private String scoreText;
+    private String scoreText = "";
     private int deaths = -1;
-    private String deathText;
+    private String deathText = "";
     private int kills = -1;
-    private String killText;
+    private String killText = "";
     private long totalTime = 0;
     private String timeText = "";
+
+    private int hole = 0;
+    private String holeText = "";
 
     public PlayerHud(GameScreen screen) {
         this.screen = screen;
@@ -49,6 +52,11 @@ public class PlayerHud {
     private void updateStats() {
         Tank player = screen.playerTank;
         if (player == null) return;
+
+        if (hole != screen.currentLevelNum + 1) {
+            hole = screen.currentLevelNum + 1;
+            holeText = Integer.toString(hole);
+        }
 
         if (score != player.shots) {
             score = player.shots;
@@ -81,7 +89,7 @@ public class PlayerHud {
     private void renderPlayerInfo(SpriteBatch batch, Tank player) {
         if (player == null) return;
 
-        float height = 125;
+        float height = 150;
         float width = 120;
         float padding = 10;
 
@@ -93,6 +101,9 @@ public class PlayerHud {
         // text top down
         y += height - 10;
         x += padding;
+        drawString(batch, "Hole:", x, y);
+        drawString(batch, holeText, x + 70, y);
+        y -= 20;
         drawString(batch, "Shots:", x, y);
         drawString(batch, scoreText, x + 70, y);
         y -= 20;
