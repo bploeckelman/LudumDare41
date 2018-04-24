@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="29" height="29" tilewidth="32" tileheight="32" infinite="0" nextobjectid="85">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="29" height="29" tilewidth="32" tileheight="32" infinite="0" nextobjectid="86">
  <properties>
   <property name="name" value="Sir Bumps-a-Lot"/>
   <property name="par" type="int" value="3"/>
@@ -85,8 +85,8 @@
   <object id="83" type="water" x="192" y="544">
    <polyline points="0,0 160,-64 160,-96 0,-160 0,0"/>
   </object>
-  <object id="84" type="water" x="736" y="384" rotation="180">
-   <polyline points="0,-160 160,-96 160,-64 0,0 0,-160"/>
+  <object id="85" type="water" x="576" y="480">
+   <polyline points="0,0 160,64 160,-96 0,-32 0,0"/>
   </object>
  </objectgroup>
 </map>
