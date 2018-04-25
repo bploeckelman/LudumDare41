@@ -277,7 +277,7 @@ public class LevelSelectScreen extends BaseScreen {
                         }
                     }))
             .push(Tween.to(currentMap, RectangleAccessor.Y, duration/2)
-                .target(currentClickTarget.y)
+                .target(currentClickTarget.y + 10f)
                 .ease(Quad.IN))
             .start(game.tween);
     }
