@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.equations.Cubic;
 import aurelienribon.tweenengine.primitives.MutableFloat;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -12,9 +13,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import lando.systems.ld41.LudumDare41;
+import lando.systems.ld41.utils.Assets;
 import lando.systems.ld41.utils.Audio;
-import lando.systems.ld41.utils.Config;
+import lando.systems.ld41.utils.accessors.ColorAccessor;
 import lando.systems.ld41.utils.accessors.Vector2Accessor;
 
 public class TitleScreen extends BaseScreen {
@@ -25,6 +28,8 @@ public class TitleScreen extends BaseScreen {
     public MutableFloat putt2Size;
     public MutableFloat alpha;
     public MutableFloat boomSize;
+    public MutableFloat clickTextScale;
+    public Color clickTextColor;
 
     public TitleScreen() {
         allowTouch = false;
@@ -33,6 +38,19 @@ public class TitleScreen extends BaseScreen {
         putt2Size = new MutableFloat(0);
         alpha = new MutableFloat(0);
         boomSize = new MutableFloat(0);
+
+        float scaleMax = 0.52f;
+        float scaleMin = 0.48f;
+        clickTextScale = new MutableFloat(scaleMin);
+        clickTextColor = new Color(0xffa50044);
+        Tween.to(clickTextColor, ColorAccessor.A, 0.33f)
+             .target(1f)
+             .repeatYoyo(-1, 0f)
+             .start(game.tween);
+        Tween.to(clickTextScale, -1, 0.33f)
+             .target(scaleMax)
+             .repeatYoyo(-1, 0f)
+             .start(game.tween);
 
         Timeline.createSequence()
                 .pushPause(.4f)
@@ -111,6 +129,13 @@ public class TitleScreen extends BaseScreen {
             if (alpha.floatValue() > 0) {
                 batch.setColor(1, 1, 1, alpha.floatValue());
                 batch.draw(game.assets.whitePixel, 0, 0, hudCamera.viewportWidth, hudCamera.viewportHeight);
+            }
+
+            if (allowTouch) {
+                float width = hudCamera.viewportWidth * (2f / 3f);
+                Assets.drawString(batch, "Click to start!", width, 70,
+                                  clickTextColor, clickTextScale.floatValue(),
+                                  game.assets.font, width, Align.left);
             }
         }
         batch.end();
