@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.equations.Quad;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -126,7 +127,12 @@ public class LevelSelectScreen extends BaseScreen {
         batch.setProjectionMatrix(hudCamera.combined);
         batch.begin();
 
-        // Assets.drawString(batch, "Select a hole", 10f, hudCamera.viewportHeight - 100f, Color.CORAL, .5f, game.assets.font);
+        batch.setColor(Color.DARK_GRAY);
+        signPatch.draw(batch, 0f, hudCamera.viewportHeight - 65f, hudCamera.viewportWidth, 65f);
+        Assets.drawString(game.assets.batch,
+                          "The year is 2048 and international relations are in tatters.\nThe only form of diplomacy remaining is tank-based mini-golf.",
+                          0f, hudCamera.viewportHeight - 10f, Color.WHITE, 0.375f, game.assets.font, hudCamera.viewportWidth, Align.center);
+        batch.setColor(Color.WHITE);
 
         if (
             isCycling && (
@@ -156,6 +162,10 @@ public class LevelSelectScreen extends BaseScreen {
             // Draw right arrow
             batch.draw(arrow, arrowRightClickTarget.x, arrowRightClickTarget.y, arrowSize, arrowSize);
         }
+
+        batch.setColor(Color.DARK_GRAY);
+        signPatch.draw(batch, 0f, 0f, hudCamera.viewportWidth, 40f);
+        Assets.drawString(game.assets.batch, "Choose your diplomatic arena!", 0f, 30f, Color.WHITE, 0.4f, game.assets.font, hudCamera.viewportWidth, Align.center);
 
         batch.end();
     }
