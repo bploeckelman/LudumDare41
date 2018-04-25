@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class Audio implements Disposable {
 
-    public static final float MUSIC_VOLUME = 0.4f;
+    public static final float MUSIC_VOLUME = 1f;
     public static final boolean shutUpYourFace = false;
     public static final boolean shutUpYourTunes = false;
 
