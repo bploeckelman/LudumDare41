@@ -91,6 +91,9 @@ public class TitleScreen extends BaseScreen {
         }
         if (allowTouch && Gdx.input.justTouched()) {
             allowTouch = false;
+            if (!game.audio.currentMusic.isPlaying()) {
+                game.audio.currentMusic.play();
+            }
             game.setScreen(new LevelSelectScreen());
         }
 /*
