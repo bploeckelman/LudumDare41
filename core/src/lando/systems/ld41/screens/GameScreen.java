@@ -196,14 +196,26 @@ public class GameScreen extends BaseScreen {
             bumper.checkForHit(playerTank);
         }
 
+        playerTank.onWater = false;
+        playerTank.ball.onWater = false;
         for (Polygon waterPoly : level.waterRegions) {
-            playerTank.onWater = Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
-            playerTank.ball.onWater = Utils.overlaps(waterPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius);
+            if (Utils.overlaps(waterPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
+                playerTank.onWater = true;
+            }
+            if (Utils.overlaps(waterPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius)) {
+                playerTank.ball.onWater = true;
+            }
         }
 
+        playerTank.onSand = false;
+        playerTank.ball.onSand = false;
         for (Polygon sandPoly : level.sandRegions) {
-            playerTank.onSand = Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius);
-            playerTank.ball.onSand = Utils.overlaps(sandPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius);
+            if (Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
+                playerTank.onSand = true;
+            }
+            if (Utils.overlaps(sandPoly, playerTank.ball.position.x, playerTank.ball.position.y, playerTank.ball.radius)) {
+                playerTank.ball.onSand = true;
+            }
             for (EnemyTank tank : enemyTanks) {
                 tank.onSand = Utils.overlaps(sandPoly, tank.position.x, tank.position.y, tank.radius);
             }
