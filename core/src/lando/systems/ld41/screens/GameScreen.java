@@ -209,6 +209,9 @@ public class GameScreen extends BaseScreen {
 
         playerTank.onSand = false;
         playerTank.ball.onSand = false;
+        for (EnemyTank tank : enemyTanks) {
+            tank.onSand = false;
+        }
         for (Polygon sandPoly : level.sandRegions) {
             if (Utils.overlaps(sandPoly, playerTank.position.x, playerTank.position.y, playerTank.radius)) {
                 playerTank.onSand = true;
@@ -217,7 +220,9 @@ public class GameScreen extends BaseScreen {
                 playerTank.ball.onSand = true;
             }
             for (EnemyTank tank : enemyTanks) {
-                tank.onSand = Utils.overlaps(sandPoly, tank.position.x, tank.position.y, tank.radius);
+                if (Utils.overlaps(sandPoly, tank.position.x, tank.position.y, tank.radius)) {
+                    tank.onSand = true;
+                }
             }
         }
 
