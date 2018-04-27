@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="25" height="35" tilewidth="32" tileheight="32" infinite="0" nextobjectid="40">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="25" height="35" tilewidth="32" tileheight="32" infinite="0" nextobjectid="41">
  <properties>
   <property name="name" value="Nice and Easy"/>
   <property name="par" type="int" value="2"/>
@@ -28,8 +28,8 @@
   </object>
   <object id="17" type="hole" gid="169" x="208" y="192" width="32" height="32"/>
   <object id="37" type="bumper" gid="184" x="208" y="304" width="32" height="32"/>
-  <object id="39" type="sand" x="432" y="832">
-   <polyline points="0,0 16,24 40,32 64,16 72,-8 72,-40 80,-88 80,-120 72,-152 48,-192 24,-224 -24,-248 -56,-256 -96,-240 -128,-216 -144,-192 -152,-176 -160,-160 -168,-144 -48,-144 0,-96 0,0"/>
+  <object id="40" type="sand" x="688" y="672">
+   <polyline points="0,0 -16,24 -40,40 -80,40 -128,24 -160,0 -176,-24 -192,-64 -208,-96 -232,-120 -280,-144 -288,-168 -280,-184 -256,-200 -208,-208 -80,-208 0,-128 0,0"/>
   </object>
  </objectgroup>
 </map>

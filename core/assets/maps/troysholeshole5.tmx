@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="30" height="39" tilewidth="32" tileheight="32" infinite="0" nextobjectid="72">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="30" height="39" tilewidth="32" tileheight="32" infinite="0" nextobjectid="75">
  <properties>
   <property name="name" value=" Portrusion"/>
   <property name="par" type="int" value="3"/>
@@ -81,6 +81,13 @@
   </object>
   <object id="71" type="sand" x="608" y="992">
    <polyline points="0,0 128,0 160,-32 160,-96 -32,-96 -32,-32 0,0"/>
+  </object>
+  <object id="72" type="camo" gid="157" x="672" y="512" width="32" height="32"/>
+  <object id="73" type="water" x="400" y="1048">
+   <polyline points="8,-16 0,16 -16,40 -32,56 -64,64 -96,64 -104,56 -104,40 -96,32 -72,16 -56,-8 -48,-24 -32,-40 -16,-48 0,-48 8,-32 8,-16"/>
+  </object>
+  <object id="74" type="water" x="232" y="1104">
+   <polyline points="8,0 -8,8 -40,8 -64,8 -80,0 -88,-8 -96,-32 -104,-72 -96,-96 -80,-96 -72,-88 -64,-64 -48,-48 -32,-40 -16,-32 0,-24 8,-16 8,0"/>
   </object>
  </objectgroup>
 </map>

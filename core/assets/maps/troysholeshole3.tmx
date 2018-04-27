@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="21" height="38" tilewidth="32" tileheight="32" infinite="0" nextobjectid="51">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="21" height="38" tilewidth="32" tileheight="32" infinite="0" nextobjectid="52">
  <properties>
   <property name="name" value="Fist"/>
   <property name="par" type="int" value="2"/>
@@ -21,7 +21,7 @@
   </object>
  </objectgroup>
  <objectgroup name="objects">
-  <object id="8" type="tee" gid="183" x="320" y="1024" width="32" height="32">
+  <object id="8" type="tee" gid="183" x="336" y="1024" width="32" height="32">
    <properties>
     <property name="facing" type="int" value="0"/>
    </properties>
@@ -34,12 +34,12 @@
   <object id="41" type="catapult" gid="171" x="448" y="384" width="32" height="32"/>
   <object id="45" type="bumper" gid="184" x="416" y="288" width="32" height="32"/>
   <object id="46" type="bumper" gid="184" x="224" y="288" width="32" height="32"/>
-  <object id="48" type="water" x="272" y="864">
-   <polyline points="0,0 128,0 128,-224 0,-224 0,0"/>
-  </object>
-  <object id="49" type="pontoon" gid="172" x="320" y="896" width="32" height="32"/>
+  <object id="49" type="pontoon" gid="172" x="336" y="864" width="32" height="32"/>
   <object id="50" type="sand" x="328" y="448">
    <polyline points="8,8 40,0 64,-24 80,-56 80,-88 64,-136 32,-152 -16,-144 -40,-120 -56,-72 -56,-32 -40,-8 -16,8 8,8"/>
+  </object>
+  <object id="51" type="water" x="288" y="832">
+   <polyline points="-16,32 0,40 16,32 32,8 40,0 48,-8 56,-16 72,-16 80,-8 88,0 104,0 112,-8 120,-24 120,-64 120,-104 120,-144 112,-176 104,-192 96,-208 72,-216 32,-208 8,-184 -16,-144 -24,-96 -24,-56 -24,-8 -16,32"/>
   </object>
  </objectgroup>
 </map>

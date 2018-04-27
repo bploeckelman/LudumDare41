@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="25" height="48" tilewidth="32" tileheight="32" infinite="0" nextobjectid="48">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="25" height="48" tilewidth="32" tileheight="32" infinite="0" nextobjectid="53">
  <properties>
   <property name="name" value="Mind the Gaps"/>
   <property name="par" type="int" value="3"/>
@@ -38,11 +38,15 @@
   <object id="39" type="bumper" gid="184" x="208" y="944" width="32" height="32"/>
   <object id="40" type="catapult" gid="171" x="160" y="1280" width="32" height="32"/>
   <object id="41" type="catapult" gid="171" x="288" y="1280" width="32" height="32"/>
-  <object id="46" type="sand" x="400" y="1256">
-   <polyline points="16,-120 32,-104 32,-8 32,56 56,32 80,-8 96,-56 88,-120 112,-168 96,-208 64,-240 32,-232 8,-224 -8,-208 -32,-176 -72,-128 -80,-72 -64,-16 -32,24 -32,-104 -16,-120 16,-120"/>
+  <object id="49" type="sand" x="688" y="1248">
+   <polyline points="0,0 0,-352 -32,-344 -48,-336 -64,-320 -72,-304 -88,-288 -96,-256 -96,-208 -112,-184 -120,-144 -120,-104 -104,-64 -88,-40 -72,-16 -64,8 -48,24 -32,32 -16,32 -8,24 0,0"/>
   </object>
-  <object id="47" type="sand" x="432" y="544">
-   <polyline points="0,0 8,8 32,8 56,-8 64,-40 56,-88 32,-120 0,-128 -16,-112 -48,-112 -64,-128 -96,-120 -112,-80 -112,-32 -104,0 -88,16 -72,24 -64,24 -64,0 -48,-16 -16,-16 0,0"/>
+  <object id="50" type="water" x="176" y="168">
+   <polyline points="0,0 -16,32 -16,64 0,104 32,112 80,96 120,72 176,48 248,48 304,48 368,72 448,80 472,40 440,-8 328,-24 256,-24 184,-24 112,-16 64,-8 32,-8 0,0"/>
+  </object>
+  <object id="51" type="pontoon" gid="172" x="448" y="288" width="32" height="32"/>
+  <object id="52" type="sand" x="416" y="520">
+   <polyline points="8,-8 24,8 32,24 32,40 48,56 80,64 96,48 104,24 96,-16 96,-56 104,-88 104,-112 96,-128 72,-136 48,-120 32,-96 16,-72 -8,-64 -40,-72 -56,-88 -64,-104 -80,-112 -96,-104 -112,-88 -120,-56 -112,-24 -104,8 -88,24 -72,24 -48,0 -24,-8 8,-8"/>
   </object>
  </objectgroup>
 </map>

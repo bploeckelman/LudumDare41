@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="29" height="29" tilewidth="32" tileheight="32" infinite="0" nextobjectid="69">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="29" height="29" tilewidth="32" tileheight="32" infinite="0" nextobjectid="74">
  <properties>
   <property name="name" value="Corners"/>
   <property name="par" type="int" value="3"/>
@@ -56,8 +56,14 @@
     <property name="facing" type="int" value="270"/>
    </properties>
   </object>
-  <object id="68" type="sand" x="592" y="544">
-   <polyline points="0,0 192,0 192,-160 0,-160 0,0"/>
+  <object id="68" type="sand" x="592" y="528">
+   <polyline points="0,0 192,0 192,-128 0,-128 0,0"/>
+  </object>
+  <object id="72" type="water" x="112" y="624">
+   <polyline points="0,0 0,40 0,72 0,96 8,128 16,144 32,168 64,184 112,200 160,200 184,184 184,168 168,144 128,144 80,120 48,80 48,32 64,8 88,-8 152,-24 184,-32 192,-48 184,-64 152,-72 112,-72 80,-64 40,-40 24,-24 0,0"/>
+  </object>
+  <object id="73" type="sand" x="416" y="336">
+   <polyline points="0,0 96,0 96,-192 0,-192 0,0"/>
   </object>
  </objectgroup>
 </map>

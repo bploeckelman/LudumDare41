@@ -60,7 +60,7 @@
   <object id="76" type="sand" x="144" y="448">
    <polyline points="0,0 128,0 128,-96 0,-96 0,0"/>
   </object>
-  <object id="77" type="shield" gid="172" x="192" y="800" width="32" height="32"/>
+  <object id="77" type="shield" gid="172" x="192" y="928" width="32" height="32"/>
   <object id="78" type="shield" gid="172" x="192" y="416" width="32" height="32"/>
  </objectgroup>
 </map>
